@@ -1,12 +1,29 @@
 #include <Windows.h>
+#include "WindowsMessageMap.h"
 
+// WinMain : 윈도우 응용 프로그램의 진입점.
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	static WindowsMessageMap mm;
+	OutputDebugStringA(mm(msg, wParam, lParam).c_str());
+
 	switch (msg)
 	{
 	case WM_CLOSE:
-			PostQuitMessage(37);
-			break;
+		PostQuitMessage(37);
+		break;
+	case WM_KEYDOWN:
+		if (wParam == 'F')
+		{
+			SetWindowText(hWnd, L"Respects");
+		}
+		break;
+	case WM_KEYUP:
+		if (wParam == 'F')
+		{
+			SetWindowText(hWnd, L"Back to origin");
+		}
+		break;
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
