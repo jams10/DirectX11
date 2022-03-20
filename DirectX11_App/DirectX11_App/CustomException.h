@@ -15,5 +15,6 @@ private:
 	int line;
 	std::string file;
 protected:
-	mutable std::string whatBuffer;
+	mutable std::string whatBuffer; // whatBuffer의 경우 what() 함수에서 그 값을 변경해주는데,
+	                                // what() 함수가 const 함수이므로, const 함수 내에서 그 값을 변경해주기 위해 mutable 키워드로 선언해주었다.
 };
