@@ -1,89 +1,13 @@
-#include <Windows.h>
-#include <sstream>
-#include "WindowsMessageMap.h"
+#include "Window.h"
 
 // WinMain : 윈도우 응용 프로그램의 진입점.
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	static WindowsMessageMap mm;
-	OutputDebugStringA(mm(msg, wParam, lParam).c_str());
-
-	switch (msg)
-	{
-	case WM_CLOSE:
-		PostQuitMessage(37);
-		break;
-	case WM_KEYDOWN:
-		if (wParam == 'F')
-		{
-			SetWindowText(hWnd, L"Respects");
-		}
-		break;
-	case WM_KEYUP:
-		if (wParam == 'F')
-		{
-			SetWindowText(hWnd, L"Back to origin");
-		}
-		break;
-	case WM_CHAR:
-		{
-			static std::wstring title;
-			title.push_back(static_cast<char>(wParam));
-			SetWindowText(hWnd, title.c_str());
-		}
-		break;
-	case WM_LBUTTONDOWN:
-		{
-			const POINTS pt = MAKEPOINTS(lParam);
-			std::wostringstream oss;
-			oss << L"(" << pt.x << L"," << pt.y << L")";
-			SetWindowText(hWnd, oss.str().c_str());
-		}
-		break;
-	}
-	return DefWindowProc(hWnd, msg, wParam, lParam);
-}
-
 int CALLBACK WinMain(
 	HINSTANCE hInstance,     // 우리가 작성한 프로그램 인스턴스에 대한 핸들.
 	HINSTANCE hPrevInstance, // 현재는 사용하지 않음. 무조건 NULL.
 	LPSTR	  lpCmdLine,     // 명령줄. C프로그램 에서의 char** argv의 윈도우 애플리케이션 버전.
 	int       nCmdShow)      // 윈도우를 시작할 때의 형태. 최대/최소화 여부 등을 설정.
 {
-	const wchar_t* pClassName = L"WindowClass";
-
-	// 윈도우 클래스 등록
-	WNDCLASSEX wc = { 0 };
-	wc.cbSize = sizeof(wc);
-	wc.style = CS_OWNDC;
-	wc.lpfnWndProc = WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
-	wc.hIcon = nullptr;
-	wc.hCursor = nullptr;
-	wc.hbrBackground = nullptr;
-	wc.lpszMenuName = nullptr;
-	wc.lpszClassName = pClassName;
-	wc.hIconSm = nullptr;
-	RegisterClassEx(&wc);
-
-	// 윈도우 생성
-	HWND hWnd = CreateWindowEx(
-		0,
-		pClassName,
-		L"윈도우!",
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
-		200, 200,
-		640, 480,
-		nullptr,
-		nullptr,
-		hInstance,
-		nullptr
-	);
-
-	// 윈도우 보이기
-	ShowWindow(hWnd, SW_SHOW);
+	Window wnd(800, 600, L"윈도우!");
 
 	// 메시지 받기
 	MSG msg;
@@ -97,10 +21,8 @@ int CALLBACK WinMain(
 	{
 		return -1;
 	}
-	else
-	{
-		return msg.wParam;
-	}
+
+	return msg.wParam;
 	
 return 0;
 }
