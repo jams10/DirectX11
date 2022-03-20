@@ -1,5 +1,16 @@
 #include <Windows.h>
 
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	switch (msg)
+	{
+	case WM_CLOSE:
+			PostQuitMessage(37);
+			break;
+	}
+	return DefWindowProc(hWnd, msg, wParam, lParam);
+}
+
 int CALLBACK WinMain(
 	HINSTANCE hInstance,     // 우리가 작성한 프로그램 인스턴스에 대한 핸들.
 	HINSTANCE hPrevInstance, // 현재는 사용하지 않음. 무조건 NULL.
@@ -12,7 +23,7 @@ int CALLBACK WinMain(
 	WNDCLASSEX wc = { 0 };
 	wc.cbSize = sizeof(wc);
 	wc.style = CS_OWNDC;
-	wc.lpfnWndProc = DefWindowProc;
+	wc.lpfnWndProc = WndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
@@ -40,7 +51,23 @@ int CALLBACK WinMain(
 
 	// 윈도우 보이기
 	ShowWindow(hWnd, SW_SHOW);
-	while (true);
+
+	// 메시지 받기
+	MSG msg;
+	BOOL gResult;
+	while ((gResult = GetMessage(&msg, nullptr, 0, 0)) > 0)
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	if (gResult == -1)
+	{
+		return -1;
+	}
+	else
+	{
+		return msg.wParam;
+	}
 	
 return 0;
 }
