@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <sstream>
 #include "WindowsMessageMap.h"
 
 // WinMain : 윈도우 응용 프로그램의 진입점.
@@ -22,6 +23,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if (wParam == 'F')
 		{
 			SetWindowText(hWnd, L"Back to origin");
+		}
+		break;
+	case WM_CHAR:
+		{
+			static std::wstring title;
+			title.push_back(static_cast<char>(wParam));
+			SetWindowText(hWnd, title.c_str());
+		}
+		break;
+	case WM_LBUTTONDOWN:
+		{
+			const POINTS pt = MAKEPOINTS(lParam);
+			std::wostringstream oss;
+			oss << L"(" << pt.x << L"," << pt.y << L")";
+			SetWindowText(hWnd, oss.str().c_str());
 		}
 		break;
 	}
