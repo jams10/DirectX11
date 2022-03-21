@@ -152,6 +152,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CustomException.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="CustomException.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="resource.h" />

@@ -83,6 +83,9 @@ Window::Window(int width, int height, const wchar_t* name)
 	
 	// 윈도우 화면에 띄우기.
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+
+	// Graphics 객체 생성.
+	pGfx = std::make_unique<Graphics>(hWnd);
 }
 
 // Window 클래스 소멸자. 생성한 윈도우 파괴.
@@ -120,6 +123,11 @@ std::optional<int> Window::ProcessMessages()
 
 	// 앱을 끝내지 않는 경우 빈 optional을 리턴함. 빈 optional은 nullopt 값. if문으로 체크하면 if(false)와 비슷하게 동작함.
 	return {};
+}
+
+Graphics& Window::Gfx()
+{
+	return *pGfx;
 }
 
 // 직접 만들어준 멤버 함수를 윈도우 프로시져로 사용하기 위한 기본 설정을 담당하는 함수.

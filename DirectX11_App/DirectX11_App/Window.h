@@ -3,7 +3,9 @@
 #include "CustomException.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Graphics.h"
 #include <optional>
+#include <memory>
 
 // Window : 윈도우 생성 및 해제를 담당함.
 class Window
@@ -49,6 +51,7 @@ public:
 	Window& operator=(const Window&) = delete;
 	void SetTitle(const std::wstring& title);
 	static std::optional<int> ProcessMessages(); // 모든 윈도우에 대한 메시지를 처리해야 하므로 static으로 선언함.
+	Graphics& Gfx();
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
@@ -60,6 +63,7 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
+	std::unique_ptr<Graphics> pGfx;
 };
 
 // 에러 예외 헬퍼 매크로

@@ -4,7 +4,7 @@
 
 App::App()
 	:
-	wnd(800, 600, L"The Donkey Fart Box")
+	wnd(800, 600, L"윈도우!")
 {}
 
 // 애플리케이션 루프 함수.
@@ -26,8 +26,7 @@ int App::Go()
 void App::DoFrame()
 {
 	gt.Tick();
-	const float t = gt.GetTotalTime();
-	std::wostringstream oss;
-	oss << L"Time Elapsed : " << std::setprecision(1) << std::fixed << t << L" s";
-	wnd.SetTitle(oss.str());
+	const float c = sin(gt.GetTotalTime() / 2.0f + 0.5f);
+	wnd.Gfx().ClearBuffer(c, c, 1.0f);
+	wnd.Gfx().EndFrame();
 }
