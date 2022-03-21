@@ -114,6 +114,7 @@ void Keyboard::ClearState() noexcept
 	keystates.reset();
 }
 
+// 원소의 개수가 버퍼 크기를 유지하도록 버퍼를 정리해주는 함수.
 template<typename T>
 void Keyboard::TrimBuffer(std::queue<T>& buffer) noexcept
 {

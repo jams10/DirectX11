@@ -50,6 +50,9 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 #pragma region Window
 // Window 클래스 생성자. 윈도우 생성 및 설정
 Window::Window(int width, int height, const wchar_t* name)
+	:
+	width(width),
+	height(height)
 {
 	// 원하는 client 영역 크기에 맞춰서 winodw의 크기를 계산해줌.
 	RECT wr;
@@ -59,7 +62,7 @@ Window::Window(int width, int height, const wchar_t* name)
 	wr.bottom = height + wr.top;
 
 	// 윈도우 사이즈 조절.
-	if (FAILED(AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE))
 	{
 		throw WND_LAST_EXCEPT();
 	}
@@ -85,6 +88,13 @@ Window::Window(int width, int height, const wchar_t* name)
 Window::~Window()
 {
 	DestroyWindow(hWnd);
+}
+void Window::SetTitle(const std::wstring& title)
+{
+	if (SetWindowText(hWnd, title.c_str()) == 0)
+	{
+		throw WND_LAST_EXCEPT();
+	}
 }
 // 직접 만들어준 멤버 함수를 윈도우 프로시져로 사용하기 위한 기본 설정을 담당하는 함수.
 LRESULT CALLBACK Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
@@ -144,6 +154,81 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	case WM_CHAR:
 		kbd.OnChar(static_cast<unsigned char>(wParam));
 		break;
+#pragma endregion
+#pragma region MouseMSG
+	case WM_MOUSEMOVE:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+
+		// 마우스 좌표가 클라이언트 영역 안에 있는 경우
+		if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
+		{
+			mouse.OnMouseMove(pt.x, pt.y);    // 마우스 좌표를 갱신.
+			if (!mouse.IsInWindow())          // 마우스가 이전에 영역안에 있는 상태가 아닌 경우였다면,
+			{
+				SetCapture(hWnd);             // 마우스 캡쳐
+				mouse.OnMouseEnter();         // 마우스를 클라이언트 영역 안에 있는 상태로 바꿔줌.
+			}
+		}
+
+		// 마우스 좌표가 클라이언트 영역 밖에 있는 경우
+		else
+		{
+			if (wParam & (MK_LBUTTON | MK_RBUTTON)) // 만약 마우스가 눌린 상태로 바깥에 나갔다면, 캡쳐를 유지하고, 마우스 좌표 갱신해줌.
+			{
+				mouse.OnMouseMove(pt.x, pt.y);
+			}
+			else                                    // 마우스가 눌리지 않았다면 캡쳐를 풀어주고, 영역 밖으로 나간 상태로 바꿔줌.
+			{
+				ReleaseCapture();
+				mouse.OnMouseLeave();
+			}
+		}
+		break;
+	}
+	case WM_LBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnLeftPressed(pt.x, pt.y);
+		break;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnRightPressed(pt.x, pt.y);
+		break;
+	}
+	case WM_LBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnLeftReleased(pt.x, pt.y);
+		// 영역 밖으로 나갔다면 마우스 캡쳐를 풀어줌.
+		if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height)
+		{
+			ReleaseCapture();
+			mouse.OnMouseLeave();
+		}
+		break;
+	}
+	case WM_RBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.OnRightReleased(pt.x, pt.y);
+		// 영역 밖으로 나갔다면 마우스 캡쳐를 풀어줌.
+		if (pt.x < 0 || pt.x >= width || pt.y < 0 || pt.y >= height)
+		{
+			ReleaseCapture();
+			mouse.OnMouseLeave();
+		}
+		break;
+	}
+	case WM_MOUSEWHEEL:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+		mouse.OnWheelDelta(pt.x, pt.y, delta);
+		break;
+	}
 #pragma endregion
 	}
 
