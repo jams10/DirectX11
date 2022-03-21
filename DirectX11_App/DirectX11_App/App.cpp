@@ -10,18 +10,16 @@ App::App()
 // 애플리케이션 루프 함수.
 int App::Go()
 {
-	MSG msg;
-	BOOL gResult;
-	while ((gResult = GetMessage(&msg, nullptr, 0, 0)) > 0)
+	while (true)
 	{
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-
+		if (const auto ecode = Window::ProcessMessages())
+		{
+			// ProcessMessages() 함수를 통해 값이 들어가 있는 optional 객체를 받는 경우,
+			// 종료할 것임을 의미하므로 exit code를 리턴 해줌.
+			return *ecode; // optional 객체가 들고 있는 값에 접근할 때 *연산자를 사용.
+		}
 		DoFrame();
 	}
-
-	// wParam here is the value passed to PostQuitMessage
-	return msg.wParam;
 }
 
 // 한 프레임에 대한 작업들을 처리하는 함수.

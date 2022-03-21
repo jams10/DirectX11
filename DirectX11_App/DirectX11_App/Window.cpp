@@ -84,11 +84,14 @@ Window::Window(int width, int height, const wchar_t* name)
 	// 윈도우 화면에 띄우기.
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 }
+
 // Window 클래스 소멸자. 생성한 윈도우 파괴.
 Window::~Window()
 {
 	DestroyWindow(hWnd);
 }
+
+// 윈도우 타이틀 이름 변경해주는 함수.
 void Window::SetTitle(const std::wstring& title)
 {
 	if (SetWindowText(hWnd, title.c_str()) == 0)
@@ -96,6 +99,29 @@ void Window::SetTitle(const std::wstring& title)
 		throw WND_LAST_EXCEPT();
 	}
 }
+
+// 윈도우 메시지 루프. 윈도우 메시지를 프로시져로 보내주는 함수.
+std::optional<int> Window::ProcessMessages()
+{
+	MSG msg;
+	// 메시지 큐에 메시지가 있으면, 해당 메시지를 제거하고 프로시져로 보내줌.(큐가 비어있어도 블록 상태에 들어가지 않음.)
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		// GetMessage와 다르게 PeekMessage는 직접 WM_QUIT 메시지에 대해 체크해 주어야 함.
+		if (msg.message == WM_QUIT)
+		{
+			// PostQuitMessage 함수에 지정된 종료 코드가 wParam안에 있는데 이 코드를 들고있는 optional 객체를 리턴함.
+			return msg.wParam;
+		}
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	// 앱을 끝내지 않는 경우 빈 optional을 리턴함. 빈 optional은 nullopt 값. if문으로 체크하면 if(false)와 비슷하게 동작함.
+	return {};
+}
+
 // 직접 만들어준 멤버 함수를 윈도우 프로시져로 사용하기 위한 기본 설정을 담당하는 함수.
 LRESULT CALLBACK Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -119,6 +145,7 @@ LRESULT CALLBACK Window::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 	// WN_NCCREATE 메시지 전에 메시지를 받는다면, 일반 핸들러로 메시지를 처리.
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
+
 // 윈도우 메시지를 우리가 작성한 멤버 함수로 전달하기 위한 함수.
 LRESULT CALLBACK Window::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -128,6 +155,7 @@ LRESULT CALLBACK Window::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 	// window class 핸들러에 메시지를 전달함.
 	return pWnd->HandleMsg(hWnd, msg, wParam, lParam);
 }
+
 // 실제 윈도우 메시지를 처리해 줄 함수.
 LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
@@ -253,6 +281,7 @@ const char* Window::Exception::what() const noexcept
 	whatBuffer = oss.str();
 	return whatBuffer.c_str();
 }
+
 // 예외 타입을 문자열로 리턴하는 함수.
 const char* Window::Exception::GetType() const noexcept
 {
@@ -293,11 +322,13 @@ std::string Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 	LocalFree(pMsgBuf);
 	return errorString;
 }
+
 // 에러 코드를 반환해주는 함수.
 HRESULT Window::Exception::GetErrorCode() const noexcept
 {
 	return hr;
 }
+
 // 에러 코드에 대한 에러 문자열을 반환해주는 함수.
 std::string Window::Exception::GetErrorString() const noexcept
 {
