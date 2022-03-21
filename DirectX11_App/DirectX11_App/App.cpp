@@ -1,4 +1,6 @@
 #include "App.h"
+#include <sstream>
+#include <iomanip>
 
 App::App()
 	:
@@ -25,5 +27,9 @@ int App::Go()
 // 한 프레임에 대한 작업들을 처리하는 함수.
 void App::DoFrame()
 {
-
+	gt.Tick();
+	const float t = gt.GetTotalTime();
+	std::wostringstream oss;
+	oss << L"Time Elapsed : " << std::setprecision(1) << std::fixed << t << L" s";
+	wnd.SetTitle(oss.str());
 }

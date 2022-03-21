@@ -3,7 +3,7 @@
 GameTimer::GameTimer() noexcept
     :
     hasStopped(false),
-    pausedTime(0.0)
+    pausedTime(0.0f)
 {
     initialTimePoint = std::chrono::steady_clock::now();
     startTimePoint = initialTimePoint;
@@ -41,7 +41,7 @@ void GameTimer::ReStartTotalTimer() noexcept
     if (hasStopped)
     {
         // 일시 정지된 기간 계산.
-        std::chrono::duration<double> timePerFrame = startTimePoint - stopTimePoint;
+        std::chrono::duration<float> timePerFrame = startTimePoint - stopTimePoint;
 
         // 일시 정지된 시간 누적.
         pausedTime += timePerFrame.count();

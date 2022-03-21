@@ -1,5 +1,6 @@
 #pragma once
 #include "Window.h"
+#include "GameTimer.h"
 
 class App
 {
@@ -10,4 +11,5 @@ private:
 	void DoFrame();
 private:
 	Window wnd;
+	GameTimer gt;
 };
