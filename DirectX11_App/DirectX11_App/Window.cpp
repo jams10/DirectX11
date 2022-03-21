@@ -62,7 +62,7 @@ Window::Window(int width, int height, const wchar_t* name)
 	wr.bottom = height + wr.top;
 
 	// 윈도우 사이즈 조절.
-	if (AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE))
+	if (!AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE))
 	{
 		throw WND_LAST_EXCEPT();
 	}
@@ -271,11 +271,11 @@ std::string Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 		FORMAT_MESSAGE_FROM_SYSTEM     : os로 부터 에러 메시지 가져옴.
 		FORMAT_MESSAGE_IGNORE_INSERTS  : 메시지 정의 삽입 시퀀스 무시.
 	*/
-	const DWORD nMsgLen = FormatMessage(
+	const DWORD nMsgLen = FormatMessageA( // WinMain에서 MessageBoxA로 멀티바이트 버전을 사용하고 있어 FormatMessage도 멀티바이트 버전을 사용함.
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		nullptr, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		reinterpret_cast<LPWSTR>(&pMsgBuf), 0, nullptr
+		reinterpret_cast<LPSTR>(&pMsgBuf), 0, nullptr
 	);
 	// 문자열 길이가 0이면 실패를 나타냄.
 	if (nMsgLen == 0)
