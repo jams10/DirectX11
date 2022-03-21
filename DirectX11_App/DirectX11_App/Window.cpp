@@ -124,11 +124,27 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	switch (msg)
 	{
 	case WM_CLOSE:
-		PostQuitMessage(0);  // 0을 리턴해 while 문을 빠져나가고, Window 클래스의 소멸자를 호출 하여 DestroyWindow 함수로 한 번만 윈도우를 제거해 줌.
-                             // PostQuitMessage 함수는 스레드의 메시지 큐에 WM_QUIT 메시지를 전달하고 즉시 리턴함.
-		                     // QUIT 메시지를 전달하고 DefWindowProc가 DestroyWindow를 호출하는게 아니라, 
-							 // WindowManager 객체가 소멸 될 때 DestroyWindow를 호출하도록 해 중복으로 DestroyWindow를 호출하지 않도록 함.
+		PostQuitMessage(0);                    	 
 		return 0;
+	case WM_KILLFOCUS:    // 윈도우에 대한 포커스를 잃어버리면 키 입력 상태를 모두 초기화 해줌.
+		kbd.ClearState();
+		break;
+#pragma region KeyboardMSG
+	case WM_KEYDOWN:
+	case WM_SYSKEYDOWN:
+		if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled())
+		{
+			kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
+		}
+		break;
+	case WM_KEYUP:
+	case WM_SYSKEYUP:
+		kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
+		break;
+	case WM_CHAR:
+		kbd.OnChar(static_cast<unsigned char>(wParam));
+		break;
+#pragma endregion
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
