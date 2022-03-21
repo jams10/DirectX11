@@ -16,40 +16,43 @@
     <Filter Include="Input">
       <UniqueIdentifier>{f036a5ce-fb29-4216-b328-1e02f18c8dd9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{92d029f9-d43b-4d56-a442-19b848596147}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ErrorHandling">
+      <UniqueIdentifier>{a4f6e0ed-e058-4457-b1c7-5415f375c3dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{18f90212-b1dd-49c0-aea4-0496f1649c09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowsMessageMap.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="CustomException.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Keyboard.cpp">
       <Filter>Input</Filter>
     </ClCompile>
     <ClCompile Include="Mouse.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsMessageMap.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomException.cpp">
+      <Filter>ErrorHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTimer.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WindowsMessageMap.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowsHeader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="CustomException.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -57,7 +60,25 @@
       <Filter>Input</Filter>
     </ClInclude>
     <ClInclude Include="Mouse.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsHeader.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsMessageMap.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomException.h">
+      <Filter>ErrorHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTimer.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
