@@ -104,7 +104,7 @@ void Window::SetTitle(const std::wstring& title)
 }
 
 // 윈도우 메시지 루프. 윈도우 메시지를 프로시져로 보내주는 함수.
-std::optional<int> Window::ProcessMessages()
+std::optional<int> Window::ProcessMessages() noexcept
 {
 	MSG msg;
 	// 메시지 큐에 메시지가 있으면, 해당 메시지를 제거하고 프로시져로 보내줌.(큐가 비어있어도 블록 상태에 들어가지 않음.)
@@ -125,8 +125,13 @@ std::optional<int> Window::ProcessMessages()
 	return {};
 }
 
+// Graphics 객체에 대한 참조를 리턴해주는 함수.
 Graphics& Window::Gfx()
 {
+	if (!pGfx)
+	{
+		throw WND_NOGFX_EXCEPT();
+	}
 	return *pGfx;
 }
 
@@ -273,29 +278,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 #pragma endregion
 
 #pragma region Exception
-Window::Exception::Exception(int line, const char* file, HRESULT hr) noexcept
-	:
-	CustomException(line, file),
-	hr(hr)
-{}
-// what() : 출력할 에러 문자열을 생성해 리턴하는 함수.
-const char* Window::Exception::what() const noexcept
-{
-	std::ostringstream oss;
-	oss << GetType() << std::endl
-		<< "[Error Code] " << GetErrorCode() << std::endl
-		<< "[Description] " << GetErrorString() << std::endl
-		<< GetOriginString();
-	whatBuffer = oss.str();
-	return whatBuffer.c_str();
-}
-
-// 예외 타입을 문자열로 리턴하는 함수.
-const char* Window::Exception::GetType() const noexcept
-{
-	return "Custom Window Exception";
-}
-
 // 에러 코드를 문자열로 변환해주는 함수.
 std::string Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 {
@@ -331,15 +313,46 @@ std::string Window::Exception::TranslateErrorCode(HRESULT hr) noexcept
 	return errorString;
 }
 
-// 에러 코드를 반환해주는 함수.
-HRESULT Window::Exception::GetErrorCode() const noexcept
+Window::HrException::HrException(int line, const char* file, HRESULT hr) noexcept
+	:
+	Exception(line, file),
+	hr(hr)
+{}
+
+// what() : 출력할 에러 문자열을 생성해 리턴하는 함수. std::exception으로 부터 오버라이딩.
+const char* Window::HrException::what() const noexcept
+{
+	std::ostringstream oss;
+	oss << GetType() << std::endl
+		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
+		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
+		<< "[Description] " << GetErrorDescription() << std::endl
+		<< GetOriginString();
+	whatBuffer = oss.str();
+	return whatBuffer.c_str();
+}
+
+// 예외 타입 문자열을 리턴해주는 함수.
+const char* Window::HrException::GetType() const noexcept
+{
+	return "Custom Window Exception";
+}
+
+// 에러 코드(HRESULT)를 리턴해주는 함수.
+HRESULT Window::HrException::GetErrorCode() const noexcept
 {
 	return hr;
 }
 
-// 에러 코드에 대한 에러 문자열을 반환해주는 함수.
-std::string Window::Exception::GetErrorString() const noexcept
+// dxerr 라이브러리를 통해 에러에 관한 설명 문자열을 리턴해주는 함수.
+std::string Window::HrException::GetErrorDescription() const noexcept
 {
-	return TranslateErrorCode(hr);
+	return Exception::TranslateErrorCode(hr);
+}
+
+// 예외 타입 문자열을 리턴해주는 함수.
+const char* Window::NoGfxException::GetType() const noexcept
+{
+	return "Custom Window Exception [No Graphics]";
 }
 #pragma endregion

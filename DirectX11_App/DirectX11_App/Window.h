@@ -14,15 +14,28 @@ class Window
 public:
 	class Exception : public CustomException
 	{
+		using CustomException::CustomException;
 	public:
-		Exception(int line, const char* file, HRESULT hr) noexcept;
-		const char* what() const noexcept override;
-		virtual const char* GetType() const noexcept;
 		static std::string TranslateErrorCode(HRESULT hr) noexcept;
+	};
+	// HrException : HRESULT로 넘어오는 에러에 대한 예외 처리 클래스.
+	class HrException : public Exception
+	{
+	public:
+		HrException(int line, const char* file, HRESULT hr) noexcept;
+		const char* what() const noexcept override;
+		const char* GetType() const noexcept override;
 		HRESULT GetErrorCode() const noexcept;
-		std::string GetErrorString() const noexcept;
+		std::string GetErrorDescription() const noexcept;
 	private:
 		HRESULT hr;
+	};
+	// NoGfxException : Graphics 객체가 nullptr인 경우를 따로 처리해줄 예외 클래스.
+	class NoGfxException : public Exception
+	{
+	public:
+		using Exception::Exception;
+		const char* GetType() const noexcept override;
 	};
 #pragma endregion
 #pragma region WindowClass
@@ -50,7 +63,7 @@ public:
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
 	void SetTitle(const std::wstring& title);
-	static std::optional<int> ProcessMessages(); // 모든 윈도우에 대한 메시지를 처리해야 하므로 static으로 선언함.
+	static std::optional<int> ProcessMessages() noexcept; // 모든 윈도우에 대한 메시지를 처리해야 하므로 static으로 선언함.
 	Graphics& Gfx();
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
@@ -67,5 +80,6 @@ private:
 };
 
 // 에러 예외 헬퍼 매크로
-#define WND_EXCEPT( hr ) Window::Exception( __LINE__,__FILE__,hr )
-#define WND_LAST_EXCEPT() Window::Exception( __LINE__,__FILE__,GetLastError() )
+#define WND_EXCEPT( hr ) Window::HrException( __LINE__,__FILE__,(hr) )
+#define WND_LAST_EXCEPT() Window::HrException( __LINE__,__FILE__,GetLastError() )
+#define WND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ ) 
