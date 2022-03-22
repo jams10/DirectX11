@@ -28,6 +28,6 @@ void App::DoFrame()
 	gt.Tick();
 	const float c = sin(gt.GetTotalTime() / 2.0f + 0.5f);
 	wnd.Gfx().ClearBuffer(c, c, 1.0f);
-	wnd.Gfx().DrawTestTriangle();
+	wnd.Gfx().DrawTestTriangle(gt.GetTotalTime());
 	wnd.Gfx().EndFrame();
 }

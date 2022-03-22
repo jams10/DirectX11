@@ -2,6 +2,7 @@
 #include "dxerr.h"
 #include <sstream>
 #include <d3dcompiler.h>
+#include <cmath>
 
 #pragma comment(lib,"d3d11.lib")        // Direct3D 함수들이 정의된 라이브러리를 링크해줌.
 #pragma comment(lib, "D3DCompiler.lib") // 셰이더를 런타임에 컴파일 해줄 때 사용할 수 있지만, 우리는 셰이더를 불러오는 함수를 사용하기 위해 연결해줬음. 
@@ -101,7 +102,7 @@ void Graphics::ClearBuffer(float red, float green, float blue) noexcept
 	pTarget.GetAddressOf();
 }
 
-void Graphics::DrawTestTriangle()
+void Graphics::DrawTestTriangle(float angle)
 {
 	// 정점 구조체 생성.
 	struct Vertex
@@ -175,6 +176,38 @@ void Graphics::DrawTestTriangle()
 
 	// 인덱스 버퍼 파이프라인에 묶기.
 	pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+
+	// 변환 행렬을 위한 상수 버퍼 생성.
+	struct ConstantBuffer
+	{
+		struct
+		{
+			float element[4][4];
+		} transformation;
+	};
+	const ConstantBuffer cb =
+	{
+		{
+			std::cos(angle),	std::sin(angle),	0.0f,	0.0f,
+			-std::sin(angle),	std::cos(angle),	0.0f,	0.0f,
+			0.0f,				0.0f,				1.0f,	0.0f,
+			0.0f,				0.0f,				0.0f,	1.0f,
+		}
+	};
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
+	D3D11_BUFFER_DESC cbd;
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.Usage = D3D11_USAGE_DYNAMIC;             //  우리가 matrix를 매 프레임마다 업데이트 해줄것이기 때문에 DYNAMIC으로 설정.
+	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPU에서 값을 계속해서 행렬 값을 업데이트 해줄 것이기 때문에 CPU_ACCESS_WRITE로 설정.
+	cbd.MiscFlags = 0u;
+	cbd.ByteWidth = sizeof(cb);
+	cbd.StructureByteStride = 0u;                // 우리가 vertex buffer나 index buffer 처럼 배열로 구성된게 아니기 때문에 0u로 설정.
+	D3D11_SUBRESOURCE_DATA csd = {};
+	csd.pSysMem = &cb;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
+
+	// 픽셀 셰이더에 상수 버퍼 묶기.
+	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
 
 	// 픽셀 셰이더 생성.
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
