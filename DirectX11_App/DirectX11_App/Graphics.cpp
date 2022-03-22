@@ -34,7 +34,7 @@ Graphics::Graphics(HWND hWnd)
 		nullptr,                  // IDXGIAdapter를 nullptr로 설정해, 기본 어댑터를 선택해줌.
 		D3D_DRIVER_TYPE_HARDWARE, // 생성할 드라이버 타입.
 		nullptr,                  // 소프트웨어 래스터라이저를 구현하는 DLL에 대한 핸들.
-		0,                        // 디버그 모드의 경우 D3D11_CREATE_DEVICE_DEBUG를 설정해, 디버깅 분석 정보를 얻을 수 있음.
+		D3D11_CREATE_DEVICE_DEBUG,// 디버그 모드의 경우 D3D11_CREATE_DEVICE_DEBUG를 설정해, 디버깅 분석 정보를 얻을 수 있음.
 		nullptr,                  // D3D_FEATURE_LEVEL. D3D 장치 피쳐 레벨. nullptr로 주면, 기본 6가지 피쳐 레벨을 사용.
 		0,                        // pFeatureLevels에 있는 원소들의 개수.
 		D3D11_SDK_VERSION,        // SDK_VERSION. 피쳐 레벨과는 다름.
