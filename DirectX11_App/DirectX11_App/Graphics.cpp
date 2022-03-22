@@ -106,16 +106,29 @@ void Graphics::DrawTestTriangle()
 	// 정점 구조체 생성.
 	struct Vertex
 	{
-		float x;
-		float y;
+		struct
+		{
+			float x;
+			float y;
+		} pos;
+		struct
+		{
+			unsigned char r;
+			unsigned char g;
+			unsigned char b;
+			unsigned char a;
+		} color;
 	};
 
 	// 삼각형을 구성할 정점 배열 생성. 좌표 변환 없이 그냥 곧바로 NDC 좌표로 찍어줌.
 	const Vertex vertices[] =
 	{
-		{0.0f,0.5f},
-		{0.5f, -0.5f},
-		{-0.5f, -0.5f}
+		{ 0.0f,0.5f,255,0,0,0 },
+		{ 0.5f,-0.5f,0,255,0,0 },
+		{ -0.5f,-0.5f,0,0,255,0 },
+		{ -0.3f,0.3f,0,255,0,0 },
+		{ 0.3f,0.3f,0,0,255,0 },
+		{ 0.0f,-0.8f,255,0,0,0 },
 	};
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -140,6 +153,29 @@ void Graphics::DrawTestTriangle()
 	// 정점 버퍼 파이프라인에 묶기.
 	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offest);
 
+	// 인덱스 버퍼 생성
+	const unsigned short indices[] =
+	{
+		0,1,2,
+		0,2,3,
+		0,4,1,
+		2,1,5,
+	};
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
+	D3D11_BUFFER_DESC ibd = {};
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.Usage = D3D11_USAGE_DEFAULT;
+	ibd.CPUAccessFlags = 0u;
+	ibd.MiscFlags = 0u;
+	ibd.ByteWidth = sizeof(indices);
+	ibd.StructureByteStride = sizeof(unsigned short);
+	D3D11_SUBRESOURCE_DATA isd = {};
+	isd.pSysMem = indices;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer));
+
+	// 인덱스 버퍼 파이프라인에 묶기.
+	pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+
 	// 픽셀 셰이더 생성.
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
 	Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
@@ -162,6 +198,7 @@ void Graphics::DrawTestTriangle()
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
 	// 입력 레이아웃 생성.
@@ -191,7 +228,7 @@ void Graphics::DrawTestTriangle()
 	vp.TopLeftY = 0;
 	pContext->RSSetViewports(1u, &vp);
 
-	GFX_THROW_INFO_ONLY(pContext->Draw(static_cast<UINT>(std::size(vertices)), 0u)); // Draw는 HRESULT를 리턴하지 않음. 그래서 다른 매크로를 사용.
+	GFX_THROW_INFO_ONLY(pContext->DrawIndexed((UINT)std::size(indices), 0u, 0u));
 }
 
 #pragma region Exception
