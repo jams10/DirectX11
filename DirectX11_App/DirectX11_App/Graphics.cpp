@@ -62,31 +62,9 @@ Graphics::Graphics(HWND hWnd)
 	));
 
 	// 스왑 체인 내부에 들고 있는 텍스쳐 자원(back buffer)에 대한 접근을 얻어옴.
-	ID3D11Resource* pBackBuffer = nullptr;
-	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)));
-	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pTarget));
-	pBackBuffer->Release();
-}
-
-Graphics::~Graphics()
-{
-	// 객체들의 Release를 호출 해 레퍼런스 카운트를 줄여줌.	
-	if (pTarget != nullptr)
-	{
-		pTarget->Release();
-	}
-	if (pContext != nullptr)
-	{
-		pContext->Release();
-	}
-	if (pSwap != nullptr)
-	{
-		pSwap->Release();
-	}
-	if (pDevice != nullptr)
-	{
-		pDevice->Release();
-	}
+	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
+	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
+	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTarget));
 }
 
 // 프레임 최종 결과 단계를 의미하는 함수. 프레임 끝에 처리해 줄 것들을 담고 있음.(스왑 체인 Present)
@@ -115,7 +93,8 @@ void Graphics::EndFrame()
 void Graphics::ClearBuffer(float red, float green, float blue) noexcept
 {
 	const float color[] = { red,green,blue,1.0f };
-	pContext->ClearRenderTargetView(pTarget, color); // 렌더 타겟 뷰를 초기화.
+	pContext->ClearRenderTargetView(pTarget.Get(), color); // 렌더 타겟 뷰를 초기화.
+	pTarget.GetAddressOf();
 }
 
 #pragma region Exception

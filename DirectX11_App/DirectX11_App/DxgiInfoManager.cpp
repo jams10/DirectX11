@@ -1,7 +1,6 @@
 #include "DxgiInfoManager.h"
 #include "Window.h"
 #include "Graphics.h"
-#include <dxgidebug.h>
 #include <memory>
 
 #pragma comment(lib, "dxguid.lib")
@@ -31,7 +30,8 @@ DxgiInfoManager::DxgiInfoManager()
 	}
 
 	HRESULT hr;
-	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), reinterpret_cast<void**>(&pDxgiInfoQueue)));
+	// 우리가 가져온 dll에 있는 DXGIGetDebugInterface 함수를 통해 IDXGIInfoQueue를 받아와 ComPtr에 넣어줌.
+	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), &pDxgiInfoQueue));
 }
 
 DxgiInfoManager::~DxgiInfoManager()
