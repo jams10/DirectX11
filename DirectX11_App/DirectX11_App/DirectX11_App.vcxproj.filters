@@ -25,6 +25,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{18f90212-b1dd-49c0-aea4-0496f1649c09}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dxerr">
+      <UniqueIdentifier>{3b2a1f7f-9ac1-42c1-a0df-c1ba6fa2746e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -53,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="dxerr.cpp">
+      <Filter>dxerr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +92,9 @@
     <ClInclude Include="Graphics.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="dxerr.h">
+      <Filter>dxerr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX11_App.rc">
@@ -96,5 +105,16 @@
     <Image Include="Win.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DXGetErrorString.inl">
+      <Filter>dxerr</Filter>
+    </None>
+    <None Include="DXTrace.inl">
+      <Filter>dxerr</Filter>
+    </None>
+    <None Include="DXGetErrorDescription.inl">
+      <Filter>dxerr</Filter>
+    </None>
   </ItemGroup>
 </Project>
