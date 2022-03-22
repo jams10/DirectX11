@@ -34,14 +34,6 @@ DxgiInfoManager::DxgiInfoManager()
 	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), &pDxgiInfoQueue));
 }
 
-DxgiInfoManager::~DxgiInfoManager()
-{
-	if (pDxgiInfoQueue != nullptr)
-	{
-		pDxgiInfoQueue->Release();
-	}
-}
-
 // 디버그 메시지 범위 설정 함수.
 void DxgiInfoManager::Set() noexcept
 {
