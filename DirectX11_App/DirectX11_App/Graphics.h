@@ -3,6 +3,8 @@
 #include "WindowsHeader.h"
 #include "CustomException.h"
 #include <d3d11.h> // 우리가 WindowsHeader에서 매크로를 통해 어떤 API를 제외할지에 대한 설정을 적용해주기 위해 WindowsHeader 헤더파일 다음에 include 함.
+#include <vector>
+#include "DxgiInfoManager.h"
 
 class Graphics
 {
@@ -16,14 +18,16 @@ public:
 	class HrException : public Exception
 	{
 	public:
-		HrException(int line, const char* file, HRESULT hr) noexcept;
+		HrException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMsgs = {}) noexcept;
 		const char* what() const noexcept override;
 		const char* GetType() const noexcept override;
 		HRESULT GetErrorCode() const noexcept;
 		std::string GetErrorString() const noexcept;
 		std::string GetErrorDescription() const noexcept;
+		std::string GetErrorInfo() const noexcept;
 	private:
 		HRESULT hr;
+		std::string info;
 	};
 	// DeviceRemovedException : HRESULT가 DXGI_ERROR_DEVICE_REMOVED인 경우 따로 처리해줄 예외 클래스.
 	class DeviceRemovedException : public HrException
@@ -31,6 +35,8 @@ public:
 		using HrException::HrException;
 	public:
 		const char* GetType() const noexcept override;
+	private:
+		std::string reason;
 	};
 #pragma endregion
 public:
@@ -40,6 +46,10 @@ public:
 	~Graphics();
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue) noexcept;
+private:
+#ifndef NDEBUG
+	DxgiInfoManager infoManager; // 디버그 모드일 때만 DxgiInfoManager 객체를 들고 있게 함.
+#endif
 private:
 	ID3D11Device* pDevice = nullptr;
 	IDXGISwapChain* pSwap = nullptr;

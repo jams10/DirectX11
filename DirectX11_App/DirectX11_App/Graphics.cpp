@@ -4,8 +4,19 @@
 
 #pragma comment(lib,"d3d11.lib") // Direct3D 함수들이 정의된 라이브러리를 링크해줌.
 
-#define GFX_THROW_FAILED(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__,__FILE__,hr )
+// 그래픽스 관련 예외 검사/던지기 매크로들.
+#define GFX_EXCEPT_NOINFO(hr) Graphics::HrException( __LINE__,__FILE__,(hr) )
+#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__,__FILE__,hr )
+
+#ifndef NDEBUG // 디버그 모드인 경우 추가적인 정보(디버그 출력창의 정보)도 함께 넘겨줌.
+#define GFX_EXCEPT(hr) Graphics::HrException( __LINE__,__FILE__,(hr),infoManager.GetMessages() )
+#define GFX_THROW_INFO(hrcall) infoManager.Set(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
+#define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,__FILE__,(hr),infoManager.GetMessages() )
+#else
+#define GFX_EXCEPT(hr) Graphics::HrException( __LINE__,__FILE__,(hr) )
+#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,__FILE__,(hr) )
+#endif
 
 Graphics::Graphics(HWND hWnd)
 {
@@ -27,14 +38,19 @@ Graphics::Graphics(HWND hWnd)
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;          // IDXGISwapChain1::Present1 호출 후에 디스플레이 화면에 있는 픽셀들을 어떻게 처리할 것인가? 여기서는 그냥 버림.
 	sd.Flags = 0;                                      // 추가적인 플래그들.
 
+	UINT swapCreateFlags = 0u;
+#ifndef NDEBUG
+	swapCreateFlags |= D3D11_CREATE_DEVICE_DEBUG;      // 디버그 모드인 경우에 디바이스 생성 플래그를 D3D11_CREATE_DEVICE_DEBUG로 설정해줌.
+#endif
+
 	HRESULT hr; // API 함수가 리턴하는 HRESULT를 받아와 저장해 두기 위함.
 
 	// device와 swap chain, device context를 생성함.
-	GFX_THROW_FAILED(D3D11CreateDeviceAndSwapChain(
+	GFX_THROW_INFO(D3D11CreateDeviceAndSwapChain(
 		nullptr,                  // IDXGIAdapter를 nullptr로 설정해, 기본 어댑터를 선택해줌.
 		D3D_DRIVER_TYPE_HARDWARE, // 생성할 드라이버 타입.
 		nullptr,                  // 소프트웨어 래스터라이저를 구현하는 DLL에 대한 핸들.
-		D3D11_CREATE_DEVICE_DEBUG,// 디버그 모드의 경우 D3D11_CREATE_DEVICE_DEBUG를 설정해, 디버깅 분석 정보를 얻을 수 있음.
+		swapCreateFlags,          // 디버그 모드의 경우 D3D11_CREATE_DEVICE_DEBUG를 설정해, 디버깅 분석 정보를 얻을 수 있음.
 		nullptr,                  // D3D_FEATURE_LEVEL. D3D 장치 피쳐 레벨. nullptr로 주면, 기본 6가지 피쳐 레벨을 사용.
 		0,                        // pFeatureLevels에 있는 원소들의 개수.
 		D3D11_SDK_VERSION,        // SDK_VERSION. 피쳐 레벨과는 다름.
@@ -47,8 +63,8 @@ Graphics::Graphics(HWND hWnd)
 
 	// 스왑 체인 내부에 들고 있는 텍스쳐 자원(back buffer)에 대한 접근을 얻어옴.
 	ID3D11Resource* pBackBuffer = nullptr;
-	GFX_THROW_FAILED(pSwap->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)));
-	GFX_THROW_FAILED(pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pTarget));
+	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)));
+	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pTarget));
 	pBackBuffer->Release();
 }
 
@@ -77,6 +93,11 @@ Graphics::~Graphics()
 void Graphics::EndFrame()
 {
 	HRESULT hr;
+#ifndef NDEBUG
+	infoManager.Set(); // DXGI_ERROR_DEVICE_REMOVED는 GetDeviceRemovedReason() 함수로 그 이유를 알 수 있음.
+	                   // 이 이유에 관한 추가적인 정보를 메시지 박스로 넘겨받기 위해 이 시점에서 Set()을 해서
+					   // 꺼내올 에러 메시지 큐 인덱스를 이동 시킨 다음에 아래에서 에러가 발생하면 해당 에러에 대해서만 받아볼 수 있도록 함.
+#endif
 	if (FAILED(hr = pSwap->Present(1u, 0u)))
 	{
 		if (hr == DXGI_ERROR_DEVICE_REMOVED) // DXGI_ERROR_DEVICE_REMOVED 에러인 경우에 따로 처리해줌.
@@ -85,7 +106,7 @@ void Graphics::EndFrame()
 		}
 		else
 		{
-			GFX_THROW_FAILED(hr);
+			throw GFX_EXCEPT(hr);
 		}
 	}
 }
@@ -98,11 +119,22 @@ void Graphics::ClearBuffer(float red, float green, float blue) noexcept
 }
 
 #pragma region Exception
-Graphics::HrException::HrException(int line, const char* file, HRESULT hr) noexcept
+Graphics::HrException::HrException(int line, const char* file, HRESULT hr, std::vector<std::string> infoMsgs) noexcept
 	:
 	Exception(line, file),
 	hr(hr)
-{}
+{
+	for (const auto& m : infoMsgs)
+	{
+		info += m;
+		info.push_back('\n');
+	}
+	// remove final newline if exists
+	if (!info.empty())
+	{
+		info.pop_back();
+	}
+}
 
 // what() : 출력할 에러 문자열을 생성해 리턴하는 함수. std::exception으로 부터 오버라이딩.
 const char* Graphics::HrException::what() const noexcept
@@ -112,8 +144,14 @@ const char* Graphics::HrException::what() const noexcept
 		<< "[Error Code] 0x" << std::hex << std::uppercase << GetErrorCode()
 		<< std::dec << " (" << (unsigned long)GetErrorCode() << ")" << std::endl
 		<< "[Error String] " << GetErrorString() << std::endl
-		<< "[Description] " << GetErrorDescription() << std::endl
-		<< GetOriginString();
+		<< "[Description] " << GetErrorDescription() << std::endl;
+	
+	if (!info.empty()) // 디버그 출력창의 추가적인 정보 또한 포함시켜서 넘겨주도록 함.
+	{
+		oss << "\n[Error Info]\n" << GetErrorInfo() << std::endl << std::endl;
+	}
+	
+	oss << GetOriginString();
 	whatBuffer = oss.str();
 	return whatBuffer.c_str();
 }
@@ -142,6 +180,12 @@ std::string Graphics::HrException::GetErrorDescription() const noexcept
 	char buf[512];
 	DXGetErrorDescriptionA(hr, buf, sizeof(buf));
 	return buf;
+}
+
+// 에러 정보 문자열을 리턴하는 함수.
+std::string Graphics::HrException::GetErrorInfo() const noexcept
+{
+	return info;
 }
 
 // 예외 타입 문자열을 리턴해주는 함수.

@@ -152,6 +152,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="CustomException.cpp" />
     <ClCompile Include="dxerr.cpp" />
+    <ClCompile Include="DxgiInfoManager.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Keyboard.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="CustomException.h" />
     <ClInclude Include="dxerr.h" />
+    <ClInclude Include="DxgiInfoManager.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Keyboard.h" />

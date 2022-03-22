@@ -60,6 +60,9 @@
     <ClCompile Include="dxerr.cpp">
       <Filter>dxerr</Filter>
     </ClCompile>
+    <ClCompile Include="DxgiInfoManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="dxerr.h">
       <Filter>dxerr</Filter>
+    </ClInclude>
+    <ClInclude Include="DxgiInfoManager.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
