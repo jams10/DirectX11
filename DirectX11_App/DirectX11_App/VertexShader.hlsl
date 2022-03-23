@@ -6,7 +6,7 @@ struct VSOUT
 
 cbuffer CBUF
 {
-	row_major matrix transform; // matrix 키워드는 4 * 4 자료형을 의미.
+	matrix transform; // matrix 키워드는 4 * 4 자료형을 의미.
 };
 
 VSOUT main(float2 pos : POSITION, float4 color : COLOR)
