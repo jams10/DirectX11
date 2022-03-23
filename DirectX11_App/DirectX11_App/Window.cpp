@@ -1,6 +1,7 @@
 #include "Window.h"
 #include <sstream>
 #include "resource.h" // 아이콘을 비롯 여러 자원들을 얻어오기 위함.
+#include "WindowsThrowMacros.h"
 
 #pragma region WindowClass
 // 윈도우 클래스

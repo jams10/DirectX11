@@ -6,6 +6,7 @@
 #include "Graphics.h"
 #include <optional>
 #include <memory>
+#include "WindowsThrowMacros.h"
 
 // Window : 윈도우 생성 및 해제를 담당함.
 class Window
@@ -79,7 +80,3 @@ private:
 	std::unique_ptr<Graphics> pGfx;
 };
 
-// 에러 예외 헬퍼 매크로
-#define WND_EXCEPT( hr ) Window::HrException( __LINE__,__FILE__,(hr) )
-#define WND_LAST_EXCEPT() Window::HrException( __LINE__,__FILE__,GetLastError() )
-#define WND_NOGFX_EXCEPT() Window::NoGfxException( __LINE__,__FILE__ ) 
