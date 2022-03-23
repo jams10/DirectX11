@@ -1,7 +1,6 @@
 #include "Graphics.h"
 #include "dxerr.h"
 #include <sstream>
-#include <d3dcompiler.h>
 #include <cmath>
 #include <DirectXMath.h>
 #include "GraphicsThrowMacros.h"
@@ -93,6 +92,16 @@ Graphics::Graphics(HWND hWnd)
 
 	// 출력 병합기에 렌더 타겟과 깊이 스텐실 뷰 묶기.
 	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+
+	// 뷰포트 설정.
+	D3D11_VIEWPORT vp;
+	vp.Width = 800.0f;
+	vp.Height = 600.0f;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	pContext->RSSetViewports(1u, &vp);
 }
 
 // 프레임 최종 결과 단계를 의미하는 함수. 프레임 끝에 처리해 줄 것들을 담고 있음.(스왑 체인 Present)
@@ -125,199 +134,19 @@ void Graphics::ClearBuffer(float red, float green, float blue) noexcept
 	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
-void Graphics::DrawTestTriangle(float angle, float x, float z)
+void Graphics::DrawIndexed(UINT count) noexcept(!IS_DEBUG)
 {
-	// 정점 구조체 생성.
-	struct Vertex
-	{
-		struct
-		{
-			float x;
-			float y;
-			float z;
-		} pos;
-	};
+	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
+}
 
-	// 삼각형을 구성할 정점 배열 생성. 좌표 변환 없이 그냥 곧바로 NDC 좌표로 찍어줌.
-	const Vertex vertices[] =
-	{
-		{ -1.0f,-1.0f,-1.0f },
-		{ 1.0f,-1.0f,-1.0f  },
-		{ -1.0f,1.0f,-1.0f	},
-		{ 1.0f,1.0f,-1.0f	},
-		{ -1.0f,-1.0f,1.0f	},
-		{ 1.0f,-1.0f,1.0f	},
-		{ -1.0f,1.0f,1.0f	},
-		{ 1.0f,1.0f,1.0f	},
-	};
+void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
+{
+	projection = proj;
+}
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-	D3D11_BUFFER_DESC bd = {}; // 버퍼 서술자.
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.CPUAccessFlags = 0u;
-	bd.MiscFlags = 0u;
-	bd.ByteWidth = sizeof(vertices);
-	bd.StructureByteStride = sizeof(Vertex);
-
-	D3D11_SUBRESOURCE_DATA sd = {};
-	sd.pSysMem = vertices;
-
-	HRESULT hr;
-	// 정점 버퍼 생성.
-	GFX_THROW_INFO(pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
-	
-	const UINT stride = sizeof(Vertex);
-	const UINT offest = 0u;
-
-	// 정점 버퍼 파이프라인에 묶기.
-	pContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offest);
-
-	// 인덱스 버퍼 생성
-	const unsigned short indices[] =
-	{
-		0,2,1, 2,3,1,
-		1,3,5, 3,7,5,
-		2,6,3, 3,6,7,
-		4,5,7, 4,7,6,
-		0,4,2, 2,4,6,
-		0,1,4, 1,5,4
-	};
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
-	D3D11_BUFFER_DESC ibd = {};
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.Usage = D3D11_USAGE_DEFAULT;
-	ibd.CPUAccessFlags = 0u;
-	ibd.MiscFlags = 0u;
-	ibd.ByteWidth = sizeof(indices);
-	ibd.StructureByteStride = sizeof(unsigned short);
-	D3D11_SUBRESOURCE_DATA isd = {};
-	isd.pSysMem = indices;
-	GFX_THROW_INFO(pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer));
-
-	// 인덱스 버퍼 파이프라인에 묶기.
-	pContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
-
-	// 변환 행렬을 위한 상수 버퍼 생성.
-	struct ConstantBuffer
-	{
-		DirectX::XMMATRIX transform;
-	};
-	const ConstantBuffer cb =
-	{
-		{
-			DirectX::XMMatrixTranspose(
-				DirectX::XMMatrixRotationZ(angle) *
-				DirectX::XMMatrixRotationX(angle) *
-				DirectX::XMMatrixTranslation(x, 0.0f, z + 5.0f) *
-				DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f/4.0f, 0.5f, 10.f)
-			)
-		}
-	};	
-
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffer;
-	D3D11_BUFFER_DESC cbd;
-	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd.Usage = D3D11_USAGE_DYNAMIC;             //  우리가 matrix를 매 프레임마다 업데이트 해줄것이기 때문에 DYNAMIC으로 설정.
-	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPU에서 값을 계속해서 행렬 값을 업데이트 해줄 것이기 때문에 CPU_ACCESS_WRITE로 설정.
-	cbd.MiscFlags = 0u;
-	cbd.ByteWidth = sizeof(cb);
-	cbd.StructureByteStride = 0u;                // 우리가 vertex buffer나 index buffer 처럼 배열로 구성된게 아니기 때문에 0u로 설정.
-	D3D11_SUBRESOURCE_DATA csd = {};
-	csd.pSysMem = &cb;
-	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
-
-	// 정점 셰이더에 상수 버퍼 묶기.
-	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
-
-	// 픽셀 셰이더에서 참고할 색상 값 상수 버퍼 만들어줌.
-	struct ConstantBuffer2
-	{
-		struct
-		{
-			float r;
-			float g;
-			float b;
-			float a;
-		}face_colors[6];
-	};
-
-	const ConstantBuffer2 cb2 =
-	{
-		{
-			{1.0f, 0.0f, 1.0f},
-			{1.0f, 0.0f, 0.0f},
-			{0.0f, 1.0f, 0.0f},
-			{0.0f, 0.0f, 1.0f},
-			{1.0f, 1.0f, 0.0f},
-			{0.0f, 1.0f, 1.0f},
-		}
-	};
-
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffe2;
-	D3D11_BUFFER_DESC cbd2;
-	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbd2.Usage = D3D11_USAGE_DEFAULT;               // 변환 행렬을 위한 상수 버퍼와 달리, 한 번만 값 넣어주고 셰이더에 보내줄 것이기 때문에 DYNAMIC이 아님.         
-	cbd2.CPUAccessFlags = 0u;                       // DYNAMIC 아니므로 CPU 접근 플래그 설정 안해줌.
-	cbd2.MiscFlags = 0u;
-	cbd2.ByteWidth = sizeof(cb2);
-	cbd2.StructureByteStride = 0u;                
-	D3D11_SUBRESOURCE_DATA csd2 = {};
-	csd2.pSysMem = &cb2;
-	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffe2));
-
-	// 픽셀 셰이더에 상수 버퍼 묶어줌.
-	pContext->PSSetConstantBuffers(0u, 1u, pConstantBuffe2.GetAddressOf());
-
-	// 픽셀 셰이더 생성.
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-	Microsoft::WRL::ComPtr<ID3DBlob> pBlob;
-	GFX_THROW_INFO(D3DReadFileToBlob(L"PixelShader.cso", &pBlob));
-	GFX_THROW_INFO(pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
-
-	// 픽셀 셰이더 파이프라인에 묶기.
-	pContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
-
-	// 정점 셰이더 생성.
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-	GFX_THROW_INFO(D3DReadFileToBlob(L"VertexShader.cso", &pBlob)); // 셰이더의 바이트 코드를 불러옴.
-	GFX_THROW_INFO(pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
-
-	// 정점 셰이더 파이프라인에 묶기.
-	pContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
-
-	// 입력 레이아웃 서술자.
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
-	const D3D11_INPUT_ELEMENT_DESC ied[] =
-	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
-	};
-
-	// 입력 레이아웃 생성.
-	GFX_THROW_INFO(pDevice->CreateInputLayout(
-		ied, (UINT)std::size(ied),
-		pBlob->GetBufferPointer(), // 정점 셰이더의 바이트 코드를 넘겨줌.
-		pBlob->GetBufferSize(),
-		&pInputLayout
-	));
-
-	// 입력 레이아웃 파이프라인에 묶기.
-	pContext->IASetInputLayout(pInputLayout.Get());
-
-	// 기본 도형을 triangle list로 설정.
-	pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	// 뷰포트 설정
-	D3D11_VIEWPORT vp;
-	vp.Width = 800;
-	vp.Height = 600;
-	vp.MinDepth = 0;
-	vp.MaxDepth = 1;
-	vp.TopLeftX = 0; // 렌더 타겟의 뷰포트 위치.
-	vp.TopLeftY = 0;
-	pContext->RSSetViewports(1u, &vp);
-
-	GFX_THROW_INFO_ONLY(pContext->DrawIndexed((UINT)std::size(indices), 0u, 0u));
+DirectX::XMMATRIX Graphics::GetProjection() const noexcept
+{
+	return projection;
 }
 
 #pragma region Exception

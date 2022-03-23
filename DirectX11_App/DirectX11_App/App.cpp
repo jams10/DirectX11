@@ -1,11 +1,25 @@
 #include "App.h"
-#include <sstream>
-#include <iomanip>
+#include "Box.h"
+#include <memory>
 
 App::App()
 	:
 	wnd(800, 600, L"윈도우!")
-{}
+{
+	std::mt19937 rng(std::random_device{}());
+	std::uniform_real_distribution<float> adist(0.0f, 3.1415f * 2.0f);
+	std::uniform_real_distribution<float> ddist(0.0f, 3.1415f * 2.0f);
+	std::uniform_real_distribution<float> odist(0.0f, 3.1415f * 0.3f);
+	std::uniform_real_distribution<float> rdist(6.0f, 20.0f);
+	for (auto i = 0; i < 80; i++)
+	{
+		boxes.push_back(std::make_unique<Box>(
+			wnd.Gfx(), rng, adist,
+			ddist, odist, rdist
+			));
+	}
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+}
 
 // 애플리케이션 루프 함수.
 int App::Go()
@@ -22,21 +36,19 @@ int App::Go()
 	}
 }
 
+App::~App()
+{}
+
 // 한 프레임에 대한 작업들을 처리하는 함수.
 void App::DoFrame()
 {
 	gt.Tick();
-	const float c = sin(gt.GetTotalTime() / 2.0f + 0.5f);
-	wnd.Gfx().ClearBuffer(c, c, 1.0f);
-	wnd.Gfx().DrawTestTriangle(
-		-gt.GetTotalTime(),
-		0.0f,
-		0.0f
-	);
-	wnd.Gfx().DrawTestTriangle(
-		gt.GetTotalTime(),
-		wnd.mouse.GetPosX() / 400.f - 1.0f,
-		-wnd.mouse.GetPosY() / 300.f + 1.0f
-	);
+	float dt = gt.GetDeltaTime();
+	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
+	for (auto& b : boxes)
+	{
+		b->Update(dt);
+		b->Draw(wnd.Gfx());
+	}
 	wnd.Gfx().EndFrame();
 }

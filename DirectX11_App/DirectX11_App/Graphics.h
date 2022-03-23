@@ -4,10 +4,15 @@
 #include "CustomException.h"
 #include <d3d11.h> // 우리가 WindowsHeader에서 매크로를 통해 어떤 API를 제외할지에 대한 설정을 적용해주기 위해 WindowsHeader 헤더파일 다음에 include 함.
 #include <vector>
+#include <memory>
+#include <random>
+#include <DirectXMath.h>
+#include <d3dcompiler.h>
 #include "DxgiInfoManager.h"
 
 class Graphics
 {
+	friend class Bindable;
 #pragma region Exception
 public:
 	class Exception : public CustomException
@@ -57,7 +62,11 @@ public:
 	~Graphics() = default; // ComPtr을 사용하게 되면서 Com 객체들이 알아서 Release 되므로 기본 소멸자로 바꿔줌.
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue) noexcept;
-	void DrawTestTriangle(float angle, float x, float z);
+	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
+	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
+private:
+	DirectX::XMMATRIX projection; // 투영 행렬
 private:
 #ifndef NDEBUG
 	DxgiInfoManager infoManager; // 디버그 모드일 때만 DxgiInfoManager 객체를 들고 있게 함.

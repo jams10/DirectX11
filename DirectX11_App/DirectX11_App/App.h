@@ -8,9 +8,11 @@ class App
 public:
 	App();
 	int Go();
+	~App();
 private:
 	void DoFrame();
 private:
 	Window wnd;
 	GameTimer gt;
+	std::vector<std::unique_ptr<class Box>> boxes;
 };
