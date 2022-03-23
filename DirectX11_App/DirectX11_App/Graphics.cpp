@@ -112,25 +112,21 @@ void Graphics::DrawTestTriangle(float angle, float x, float y)
 		{
 			float x;
 			float y;
+			float z;
 		} pos;
-		struct
-		{
-			unsigned char r;
-			unsigned char g;
-			unsigned char b;
-			unsigned char a;
-		} color;
 	};
 
 	// 삼각형을 구성할 정점 배열 생성. 좌표 변환 없이 그냥 곧바로 NDC 좌표로 찍어줌.
 	const Vertex vertices[] =
 	{
-		{ 0.0f,0.5f,255,0,0,0 },
-		{ 0.5f,-0.5f,0,255,0,0 },
-		{ -0.5f,-0.5f,0,0,255,0 },
-		{ -0.3f,0.3f,0,255,0,0 },
-		{ 0.3f,0.3f,0,0,255,0 },
-		{ 0.0f,-0.8f,255,0,0,0 },
+		{ -1.0f,-1.0f,-1.0f },
+		{ 1.0f,-1.0f,-1.0f  },
+		{ -1.0f,1.0f,-1.0f	},
+		{ 1.0f,1.0f,-1.0f	},
+		{ -1.0f,-1.0f,1.0f	},
+		{ 1.0f,-1.0f,1.0f	},
+		{ -1.0f,1.0f,1.0f	},
+		{ 1.0f,1.0f,1.0f	},
 	};
 
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -158,10 +154,12 @@ void Graphics::DrawTestTriangle(float angle, float x, float y)
 	// 인덱스 버퍼 생성
 	const unsigned short indices[] =
 	{
-		0,1,2,
-		0,2,3,
-		0,4,1,
-		2,1,5,
+		0,2,1, 2,3,1,
+		1,3,5, 3,7,5,
+		2,6,3, 3,6,7,
+		4,5,7, 4,7,6,
+		0,4,2, 2,4,6,
+		0,1,4, 1,5,4
 	};
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
 	D3D11_BUFFER_DESC ibd = {};
@@ -188,8 +186,9 @@ void Graphics::DrawTestTriangle(float angle, float x, float y)
 		{
 			DirectX::XMMatrixTranspose(
 				DirectX::XMMatrixRotationZ(angle) *
-				DirectX::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f) *
-				DirectX::XMMatrixTranslation(x, y, 1.0f)
+				DirectX::XMMatrixRotationX(angle) *
+				DirectX::XMMatrixTranslation(x, y, 5.0f) *
+				DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f/4.0f, 0.5f, 10.f)
 			)
 		}
 	};	
@@ -206,8 +205,47 @@ void Graphics::DrawTestTriangle(float angle, float x, float y)
 	csd.pSysMem = &cb;
 	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd, &csd, &pConstantBuffer));
 
-	// 픽셀 셰이더에 상수 버퍼 묶기.
+	// 정점 셰이더에 상수 버퍼 묶기.
 	pContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
+
+	// 픽셀 셰이더에서 참고할 색상 값 상수 버퍼 만들어줌.
+	struct ConstantBuffer2
+	{
+		struct
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		}face_colors[6];
+	};
+
+	const ConstantBuffer2 cb2 =
+	{
+		{
+			{1.0f, 0.0f, 1.0f},
+			{1.0f, 0.0f, 0.0f},
+			{0.0f, 1.0f, 0.0f},
+			{0.0f, 0.0f, 1.0f},
+			{1.0f, 1.0f, 0.0f},
+			{0.0f, 1.0f, 1.0f},
+		}
+	};
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstantBuffe2;
+	D3D11_BUFFER_DESC cbd2;
+	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd2.Usage = D3D11_USAGE_DEFAULT;               // 변환 행렬을 위한 상수 버퍼와 달리, 한 번만 값 넣어주고 셰이더에 보내줄 것이기 때문에 DYNAMIC이 아님.         
+	cbd2.CPUAccessFlags = 0u;                       // DYNAMIC 아니므로 CPU 접근 플래그 설정 안해줌.
+	cbd2.MiscFlags = 0u;
+	cbd2.ByteWidth = sizeof(cb2);
+	cbd2.StructureByteStride = 0u;                
+	D3D11_SUBRESOURCE_DATA csd2 = {};
+	csd2.pSysMem = &cb2;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd2, &csd2, &pConstantBuffe2));
+
+	// 픽셀 셰이더에 상수 버퍼 묶어줌.
+	pContext->PSSetConstantBuffers(0u, 1u, pConstantBuffe2.GetAddressOf());
 
 	// 픽셀 셰이더 생성.
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
@@ -230,8 +268,7 @@ void Graphics::DrawTestTriangle(float angle, float x, float y)
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
 	// 입력 레이아웃 생성.
