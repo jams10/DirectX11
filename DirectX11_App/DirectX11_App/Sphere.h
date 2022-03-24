@@ -3,49 +3,51 @@
 #include <DirectXMath.h>
 #include "CustomMath.h"
 
+// Sphere : IndexedTriangleList 클래스를 이용, 구체를 위한 정점과 인덱스를 구성해주는 클래스.
 class Sphere
 {
 public:
+	// 구체를 위한 정점과 인덱스를 구성해주는 템플릿 클래스. latDiv : 위도(y축) 분할 정점 개수 / longDiv : 경도(x축) 분할 정점 개수.
 	template<class V>
 	static IndexedTriangleList<V> MakeTesselated(int latDiv, int longDiv)
 	{
-		namespace dx = DirectX;
 		assert(latDiv >= 3);
 		assert(longDiv >= 3);
 
 		constexpr float radius = 1.0f;
-		const auto base = dx::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
+		const auto base = DirectX::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
 		const float lattitudeAngle = PI / latDiv;
 		const float longitudeAngle = 2.0f * PI / longDiv;
 
 		std::vector<V> vertices;
 		for (int iLat = 1; iLat < latDiv; iLat++)
 		{
-			const auto latBase = dx::XMVector3Transform(
+			const auto latBase = DirectX::XMVector3Transform(
 				base,
-				dx::XMMatrixRotationX(lattitudeAngle * iLat)
+				DirectX::XMMatrixRotationX(lattitudeAngle * iLat)
 			);
 			for (int iLong = 0; iLong < longDiv; iLong++)
 			{
 				vertices.emplace_back();
-				auto v = dx::XMVector3Transform(
+				auto v = DirectX::XMVector3Transform(
 					latBase,
-					dx::XMMatrixRotationZ(longitudeAngle * iLong)
+					DirectX::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
-				dx::XMStoreFloat3(&vertices.back().pos, v);
+				DirectX::XMStoreFloat3(&vertices.back().pos, v);
 			}
 		}
 
-		// add the cap vertices
-		const auto iNorthPole = (unsigned short)vertices.size();
+		// 위 뚜껑을 덮어주기 위한 정점들을 만들어줌.
+		const auto iNorthPole = (unsigned short)vertices.size(); // 위쪽 뚜껑 가운데 정점.
 		vertices.emplace_back();
-		dx::XMStoreFloat3(&vertices.back().pos, base);
-		const auto iSouthPole = (unsigned short)vertices.size();
+		DirectX::XMStoreFloat3(&vertices.back().pos, base);
+		const auto iSouthPole = (unsigned short)vertices.size(); // 아래쪽 뚜껑 가운데 정점.
 		vertices.emplace_back();
-		dx::XMStoreFloat3(&vertices.back().pos, dx::XMVectorNegate(base));
+		DirectX::XMStoreFloat3(&vertices.back().pos, DirectX::XMVectorNegate(base));
 
-		const auto calcIdx = [latDiv, longDiv](unsigned short iLat, unsigned short iLong)
+		const auto calcIdx = [latDiv, longDiv](unsigned short iLat, unsigned short iLong) // 인덱스 계산을 위한 람다 함수.
 		{ return iLat * longDiv + iLong; };
+
 		std::vector<unsigned short> indices;
 		for (unsigned short iLat = 0; iLat < latDiv - 2; iLat++)
 		{

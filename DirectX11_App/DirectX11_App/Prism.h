@@ -3,17 +3,18 @@
 #include <DirectXMath.h>
 #include "CustomMath.h"
 
+// Prism : IndexedTriangleList를 이용, 각기둥을 위한 정점과 인덱스를 구성해주는 클래스.
 class Prism
 {
 public:
+	// 각기둥을 그리기 위한 정점과 인덱스를 구성해주는 템플릿 함수. longDiv : 밑면을 구성할 정점의 개수.
 	template<class V>
 	static IndexedTriangleList<V> MakeTesselated(int longDiv)
 	{
-		namespace dx = DirectX;
 		assert(longDiv >= 3);
 
-		const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
-		const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
+		const auto base = DirectX::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);  // 밑면.
+		const auto offset = DirectX::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f); // far base를 위한 z축 오프셋.
 		const float longitudeAngle = 2.0f * PI / longDiv;
 
 		// near center
@@ -32,21 +33,21 @@ public:
 			// near base
 			{
 				vertices.emplace_back();
-				auto v = dx::XMVector3Transform(
+				auto v = DirectX::XMVector3Transform(
 					base,
-					dx::XMMatrixRotationZ(longitudeAngle * iLong)
+					DirectX::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
-				dx::XMStoreFloat3(&vertices.back().pos, v);
+				DirectX::XMStoreFloat3(&vertices.back().pos, v);
 			}
 			// far base
 			{
 				vertices.emplace_back();
-				auto v = dx::XMVector3Transform(
+				auto v = DirectX::XMVector3Transform(
 					base,
-					dx::XMMatrixRotationZ(longitudeAngle * iLong)
+					DirectX::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
-				v = dx::XMVectorAdd(v, offset);
-				dx::XMStoreFloat3(&vertices.back().pos, v);
+				v = dx::XMVectorAdd(v, offset); // far base 이므로 offset을 더해줌.
+				DirectX::XMStoreFloat3(&vertices.back().pos, v);
 			}
 		}
 
