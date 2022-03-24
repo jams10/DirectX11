@@ -1,9 +1,9 @@
 #include "Graphics.h"
-#include "dxerr.h"
+#include "../ErrorHandling/dxerr.h"
 #include <sstream>
 #include <cmath>
 #include <DirectXMath.h>
-#include "GraphicsThrowMacros.h"
+#include "../ErrorHandling/GraphicsThrowMacros.h"
 
 #pragma comment(lib,"d3d11.lib")        // Direct3D 함수들이 정의된 라이브러리를 링크해줌.
 #pragma comment(lib, "D3DCompiler.lib") // 셰이더를 런타임에 컴파일 해줄 때 사용할 수 있지만, 우리는 셰이더를 불러오는 함수를 사용하기 위해 연결해줬음. 

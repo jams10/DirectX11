@@ -1,6 +1,6 @@
 #include "DxgiInfoManager.h"
-#include "Window.h"
-#include "Graphics.h"
+#include "../Windows/Window.h"
+#include "../Graphics.h"
 #include <memory>
 #include "GraphicsThrowMacros.h"
 #include "WindowsThrowMacros.h"

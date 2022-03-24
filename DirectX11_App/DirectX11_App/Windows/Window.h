@@ -1,12 +1,12 @@
 #pragma once
 #include "WindowsHeader.h" // 이 헤더 파일을 최상단에 include 해야 Windows.h 헤더 파일에서 제외하려고 한 기능들이 포함되는 걸 방지할 수 있음.(매크로가 먼저 들어가므로)
-#include "CustomException.h"
-#include "Keyboard.h"
-#include "Mouse.h"
-#include "Graphics.h"
+#include "../ErrorHandling/CustomException.h"
+#include "../Input/Keyboard.h"
+#include "../Input/Mouse.h"
+#include "../Graphics.h"
 #include <optional>
 #include <memory>
-#include "WindowsThrowMacros.h"
+#include "../ErrorHandling/WindowsThrowMacros.h"
 
 // Window : 윈도우 생성 및 해제를 담당함.
 class Window
