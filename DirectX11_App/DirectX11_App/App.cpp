@@ -4,12 +4,16 @@
 #include "Melon.h"
 #include "CustomMath.h"
 #include <memory>
+#include "GDI+\Surface.h"
+#include "GDI+\GDIPlusManager.h"
+
+GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
 App::App()
 	:
 	wnd(800, 600, L"윈도우!")
 {
-	class Factory // 여러 가지 도형을 생성해 줄 일종의 팩토리 functor 클래스.
+	class Factory
 	{
 	public:
 		Factory(Graphics& gfx)
@@ -55,7 +59,9 @@ App::App()
 
 	Factory f(wnd.Gfx());
 	drawables.reserve(nDrawables);
-	std::generate_n(std::back_inserter(drawables), nDrawables, f); // 마지막 인자로 팩토리 fuctor를 받아서 Drawable 객체 생성.
+	std::generate_n(std::back_inserter(drawables), nDrawables, f);
+
+	const auto s = Surface::FromFile("Images\\doge.jpg");
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 };

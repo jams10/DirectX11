@@ -166,6 +166,8 @@
     <ClCompile Include="ErrorHandling\CustomException.cpp" />
     <ClCompile Include="ErrorHandling\dxerr.cpp" />
     <ClCompile Include="ErrorHandling\DxgiInfoManager.cpp" />
+    <ClCompile Include="GDI+\GDIPlusManager.cpp" />
+    <ClCompile Include="GDI+\Surface.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
@@ -202,6 +204,8 @@
     <ClInclude Include="ErrorHandling\DxgiInfoManager.h" />
     <ClInclude Include="ErrorHandling\GraphicsThrowMacros.h" />
     <ClInclude Include="ErrorHandling\WindowsThrowMacros.h" />
+    <ClInclude Include="GDI+\GDIPlusManager.h" />
+    <ClInclude Include="GDI+\Surface.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Mouse.h" />
