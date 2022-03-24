@@ -2,10 +2,11 @@
 #include "Box.h"
 #include "Pyramid.h"
 #include "Melon.h"
+#include "Sheet.h"
 #include "CustomMath.h"
 #include <memory>
-#include "GDI+\Surface.h"
-#include "GDI+\GDIPlusManager.h"
+#include "Surface.h"
+#include "GDIPlusManager.h"
 
 GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
@@ -39,6 +40,11 @@ App::App()
 					gfx, rng, adist, ddist,
 					odist, rdist, longdist, latdist
 					);
+			case 3:
+				return std::make_unique<Sheet>(
+					gfx, rng, adist, ddist,
+					odist, rdist
+					);
 			default:
 				assert(false && "bad drawable type in factory");
 				return {};
@@ -54,14 +60,12 @@ App::App()
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
 		std::uniform_int_distribution<int> latdist{ 5,20 };
 		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,2 };
+		std::uniform_int_distribution<int> typedist{ 0,3 }; // 도형 타입 랜덤 숫자 생성 범위
 	};
 
 	Factory f(wnd.Gfx());
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, f);
-
-	const auto s = Surface::FromFile("Images\\doge.jpg");
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 };
@@ -73,7 +77,7 @@ void App::DoFrame()
 	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
 	for (auto& d : drawables)
 	{
-		d->Update(dt);
+		d->Update(wnd.kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
 		d->Draw(wnd.Gfx());
 	}
 	wnd.Gfx().EndFrame();

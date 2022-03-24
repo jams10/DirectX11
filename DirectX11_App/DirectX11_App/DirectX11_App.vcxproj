@@ -121,7 +121,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\GDI+;$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -155,6 +155,8 @@
     <ClCompile Include="Bindable\IndexBuffer.cpp" />
     <ClCompile Include="Bindable\InputLayout.cpp" />
     <ClCompile Include="Bindable\PixelShader.cpp" />
+    <ClCompile Include="Bindable\Sampler.cpp" />
+    <ClCompile Include="Bindable\Texture.cpp" />
     <ClCompile Include="Bindable\Topology.cpp" />
     <ClCompile Include="Bindable\TransformCbuf.cpp" />
     <ClCompile Include="Bindable\VertexBuffer.cpp" />
@@ -163,6 +165,7 @@
     <ClCompile Include="Drawable\Drawable.cpp" />
     <ClCompile Include="Drawable\Melon.cpp" />
     <ClCompile Include="Drawable\Pyramid.cpp" />
+    <ClCompile Include="Drawable\Sheet.cpp" />
     <ClCompile Include="ErrorHandling\CustomException.cpp" />
     <ClCompile Include="ErrorHandling\dxerr.cpp" />
     <ClCompile Include="ErrorHandling\DxgiInfoManager.cpp" />
@@ -184,6 +187,8 @@
     <ClInclude Include="Bindable\IndexBuffer.h" />
     <ClInclude Include="Bindable\InputLayout.h" />
     <ClInclude Include="Bindable\PixelShader.h" />
+    <ClInclude Include="Bindable\Sampler.h" />
+    <ClInclude Include="Bindable\Texture.h" />
     <ClInclude Include="Bindable\Topology.h" />
     <ClInclude Include="Bindable\TransformCbuf.h" />
     <ClInclude Include="Bindable\VertexBuffer.h" />
@@ -199,6 +204,7 @@
     <ClInclude Include="Drawable\Primitive\Prism.h" />
     <ClInclude Include="Drawable\Primitive\Sphere.h" />
     <ClInclude Include="Drawable\Pyramid.h" />
+    <ClInclude Include="Drawable\Sheet.h" />
     <ClInclude Include="ErrorHandling\CustomException.h" />
     <ClInclude Include="ErrorHandling\dxerr.h" />
     <ClInclude Include="ErrorHandling\DxgiInfoManager.h" />
@@ -241,6 +247,20 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="TexturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="TextureVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

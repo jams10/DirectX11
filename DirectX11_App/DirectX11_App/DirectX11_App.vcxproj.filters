@@ -23,9 +23,6 @@
     <Filter Include="Drawable">
       <UniqueIdentifier>{a4951758-8e7f-4684-93f4-d704fca600b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Primitive">
-      <UniqueIdentifier>{ebb4dafc-6b87-491f-86b7-1af10932143e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ErrorHandling">
       <UniqueIdentifier>{3996aca6-f6fa-48a0-b5ad-2e84d09c8d2a}</UniqueIdentifier>
     </Filter>
@@ -34,6 +31,9 @@
     </Filter>
     <Filter Include="GDI+">
       <UniqueIdentifier>{80573802-48a4-48cf-b031-04c61a539a49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawable\Primitive">
+      <UniqueIdentifier>{ebb4dafc-6b87-491f-86b7-1af10932143e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +111,15 @@
     </ClCompile>
     <ClCompile Include="GDI+\GDIPlusManager.cpp">
       <Filter>GDI+</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\Texture.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\Sampler.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable\Sheet.cpp">
+      <Filter>Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,22 +205,22 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Primitive\IndexedTriangleList.h">
-      <Filter>Primitive</Filter>
+      <Filter>Drawable\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Primitive\Plane.h">
-      <Filter>Primitive</Filter>
+      <Filter>Drawable\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Primitive\Prism.h">
-      <Filter>Primitive</Filter>
+      <Filter>Drawable\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Primitive\Sphere.h">
-      <Filter>Primitive</Filter>
+      <Filter>Drawable\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Primitive\Cone.h">
-      <Filter>Primitive</Filter>
+      <Filter>Drawable\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Primitive\Cube.h">
-      <Filter>Primitive</Filter>
+      <Filter>Drawable\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Input\Keyboard.h">
       <Filter>Input</Filter>
@@ -227,6 +236,15 @@
     </ClInclude>
     <ClInclude Include="GDI+\GDIPlusManager.h">
       <Filter>GDI+</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\Texture.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\Sampler.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\Sheet.h">
+      <Filter>Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -251,6 +269,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\ColorBlendPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturePS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
