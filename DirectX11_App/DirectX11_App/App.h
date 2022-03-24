@@ -14,5 +14,6 @@ private:
 private:
 	Window wnd;
 	GameTimer gt;
-	std::vector<std::unique_ptr<class Box>> boxes;
+	std::vector<std::unique_ptr<class Drawable>> drawables; // 그려줄 도형 클래스들이 Drawable을 상속받기 때문에, Drawable 타입으로 접근할 수 있음.
+	static constexpr size_t nDrawables = 180;
 };

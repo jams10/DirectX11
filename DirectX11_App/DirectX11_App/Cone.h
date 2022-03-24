@@ -13,7 +13,7 @@ public:
 	{
 		assert(longDiv >= 3); // 각뿔의 기본은 삼각뿔이므로, longDiv 값이 3 이상이어야 함.
 
-		const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
+		const auto base = DirectX::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
 		const float longitudeAngle = 2.0f * PI / longDiv;
 
 		// 밑면을 구성할 정점들.
