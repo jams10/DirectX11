@@ -3,6 +3,7 @@
 #include "Pyramid.h"
 #include "Melon.h"
 #include "Sheet.h"
+#include "SkinnedBox.h"
 #include "CustomMath.h"
 #include <memory>
 #include "Surface.h"
@@ -45,6 +46,11 @@ App::App()
 					gfx, rng, adist, ddist,
 					odist, rdist
 					);
+			case 4:
+				return std::make_unique<SkinnedBox>(
+					gfx, rng, adist, ddist,
+					odist, rdist
+					);
 			default:
 				assert(false && "bad drawable type in factory");
 				return {};
@@ -60,12 +66,11 @@ App::App()
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
 		std::uniform_int_distribution<int> latdist{ 5,20 };
 		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,3 }; // 도형 타입 랜덤 숫자 생성 범위
+		std::uniform_int_distribution<int> typedist{ 0,4 }; // 도형 타입 랜덤 숫자 생성 범위
 	};
 
-	Factory f(wnd.Gfx());
 	drawables.reserve(nDrawables);
-	std::generate_n(std::back_inserter(drawables), nDrawables, f);
+	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 };

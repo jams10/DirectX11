@@ -121,7 +121,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\GDI+;$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\GDI+;$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Bindable\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -174,6 +174,7 @@
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
+    <ClCompile Include="SkinnedBox.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
     <ClCompile Include="Windows\Window.cpp" />
     <ClCompile Include="Windows\WindowsMessageMap.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SkinnedBox.h" />
     <ClInclude Include="Utils\CustomMath.h" />
     <ClInclude Include="Utils\GameTimer.h" />
     <ClInclude Include="Windows\Window.h" />
