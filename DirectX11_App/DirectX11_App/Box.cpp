@@ -1,6 +1,7 @@
 #include "Box.h"
 #include "BindableHeaders.h"
 #include "GraphicsThrowMacros.h"
+#include "Sphere.h"
 
 Box::Box(Graphics& gfx,
 	std::mt19937& rng,
@@ -24,45 +25,27 @@ Box::Box(Graphics& gfx,
 	{
 		struct Vertex
 		{
-			struct
-			{
-				float x;
-				float y;
-				float z;
-			} pos;
+			DirectX::XMFLOAT3 pos;
 		};
-		const std::vector<Vertex> vertices =
-		{
-			{ -1.0f,-1.0f,-1.0f },
-			{ 1.0f,-1.0f,-1.0f },
-			{ -1.0f,1.0f,-1.0f },
-			{ 1.0f,1.0f,-1.0f },
-			{ -1.0f,-1.0f,1.0f },
-			{ 1.0f,-1.0f,1.0f },
-			{ -1.0f,1.0f,1.0f },
-			{ 1.0f,1.0f,1.0f },
-		};
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, vertices));
 
-		// 정점 셰이더의 경우 바이트코드가 입력 레이아웃 생성시 필요하기 때문에 
-		// 내부에 바이트 코드를 들고 있게 하고, 이를 리턴해주는 함수인 GetBytecode()를 만들어 주었음.
+		// 정점 버퍼
+		auto model = Sphere::Make<Vertex>(); // 구체를 구성하는 정점, 인덱스로 구성된 IndexedTriangleList 객체를 받아옴.
+		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
+
+		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+
+		// 정점 셰이더
 		auto pvs = std::make_unique<VertexShader>(gfx, L"VertexShader.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
+		// 픽셀 셰이더
 		AddStaticBind(std::make_unique<PixelShader>(gfx, L"PixelShader.cso"));
 
-		const std::vector<unsigned short> indices =
-		{
-			0,2,1, 2,3,1,
-			1,3,5, 3,7,5,
-			2,6,3, 3,6,7,
-			4,5,7, 4,7,6,
-			0,4,2, 2,4,6,
-			0,1,4, 1,5,4
-		};
-		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, indices));
+		// 인덱스 버퍼
+		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));	
 
+		// 픽셀 상수 버퍼
 		struct ConstantBuffer2
 		{
 			struct
@@ -86,12 +69,14 @@ Box::Box(Graphics& gfx,
 		};
 		AddStaticBind(std::make_unique<PixelConstantBuffer<ConstantBuffer2>>(gfx, cb2));
 
+		// 입력 레이아웃
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
 
+		// 기본 도형
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	}
 	else
@@ -99,6 +84,7 @@ Box::Box(Graphics& gfx,
 		SetIndexFromStatic();
 	}
 
+	// 정점 상수 버퍼
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
 }
 
