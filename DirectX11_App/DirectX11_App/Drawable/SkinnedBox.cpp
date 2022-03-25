@@ -5,7 +5,6 @@
 #include "Surface.h"
 #include "Texture.h"
 
-
 SkinnedBox::SkinnedBox(Graphics& gfx,
 	std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
