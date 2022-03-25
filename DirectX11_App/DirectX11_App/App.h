@@ -18,5 +18,6 @@ private:
 	GameTimer gt;
 	std::vector<std::unique_ptr<class Drawable>> drawables; // 그려줄 도형 클래스들이 Drawable을 상속받기 때문에, Drawable 타입으로 접근할 수 있음.
 	bool show_demo_window = true;
+	float speed_factor = 1.0f;
 	static constexpr size_t nDrawables = 180;
 };

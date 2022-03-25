@@ -81,7 +81,7 @@ App::App()
 void App::DoFrame()
 {
 	gt.Tick();
-	const auto dt = gt.GetDeltaTime();
+	const auto dt = gt.GetDeltaTime() * speed_factor;
 
 	if (wnd.kbd.KeyIsPressed(VK_SPACE))
 	{
@@ -101,12 +101,17 @@ void App::DoFrame()
 		d->Draw(wnd.Gfx());
 	}
 
-	// imgui 데모 창 출력
-	if (show_demo_window)
+	static char buffer[1024];
+
+	// 시뮬레이션 속도를 컨트롤 하기 위한 imgui
+	if(ImGui::Begin("Simulation Speed")) // Begin
 	{
-		ImGui::ShowDemoWindow(&show_demo_window);
+		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::InputText("Butts", buffer, sizeof(buffer));
 	}
-	
+	ImGui::End();                        // End
+
 	wnd.Gfx().EndFrame();
 }
 
