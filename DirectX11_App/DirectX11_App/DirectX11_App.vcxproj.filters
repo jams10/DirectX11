@@ -145,6 +145,9 @@
     <ClCompile Include="Imgui\imgui_impl_win32.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\ImguiManager.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -295,6 +298,9 @@
       <Filter>Imgui</Filter>
     </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_dx11.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="Imgui\ImguiManager.h">
       <Filter>Imgui</Filter>
     </ClInclude>
   </ItemGroup>
