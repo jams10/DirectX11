@@ -185,6 +185,8 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		return true;
 	}
 
+	const auto imio = ImGui::GetIO();
+
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -196,6 +198,11 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 #pragma region KeyboardMSG
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
 		if (!(lParam & 0x40000000) || kbd.AutorepeatIsEnabled())
 		{
 			kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
@@ -203,15 +210,31 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		break;
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
 		kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
 		break;
 	case WM_CHAR:
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
 		kbd.OnChar(static_cast<unsigned char>(wParam));
 		break;
 #pragma endregion
 #pragma region MouseMSG
 	case WM_MOUSEMOVE:
 	{
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
+
 		const POINTS pt = MAKEPOINTS(lParam);
 
 		// 마우스 좌표가 클라이언트 영역 안에 있는 경우
@@ -242,18 +265,36 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	}
 	case WM_LBUTTONDOWN:
 	{
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
+
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnLeftPressed(pt.x, pt.y);
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
+
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnRightPressed(pt.x, pt.y);
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
+
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnLeftReleased(pt.x, pt.y);
 		// 영역 밖으로 나갔다면 마우스 캡쳐를 풀어줌.
@@ -266,6 +307,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	}
 	case WM_RBUTTONUP:
 	{
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
+
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.OnRightReleased(pt.x, pt.y);
 		// 영역 밖으로 나갔다면 마우스 캡쳐를 풀어줌.
@@ -278,6 +325,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	}
 	case WM_MOUSEWHEEL:
 	{
+		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
+		if (imio.WantCaptureKeyboard)
+		{
+			break;
+		}
+
 		const POINTS pt = MAKEPOINTS(lParam);
 		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 		mouse.OnWheelDelta(pt.x, pt.y, delta);

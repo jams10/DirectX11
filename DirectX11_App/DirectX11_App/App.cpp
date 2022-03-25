@@ -84,15 +84,6 @@ void App::DoFrame()
 	gt.Tick();
 	const auto dt = gt.GetDeltaTime() * speed_factor;
 
-	if (wnd.kbd.KeyIsPressed(VK_SPACE))
-	{
-		wnd.Gfx().DisableImgui();
-	}
-	else
-	{
-		wnd.Gfx().EnableImgui();
-	}
-
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 
 	// 도형들 렌더링
