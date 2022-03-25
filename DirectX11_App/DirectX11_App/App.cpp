@@ -82,26 +82,30 @@ void App::DoFrame()
 {
 	gt.Tick();
 	const auto dt = gt.GetDeltaTime();
-	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
+
+	if (wnd.kbd.KeyIsPressed(VK_SPACE))
+	{
+		wnd.Gfx().DisableImgui();
+	}
+	else
+	{
+		wnd.Gfx().EnableImgui();
+	}
+
+	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+
+	// 도형들 렌더링
 	for (auto& d : drawables)
 	{
 		d->Update(wnd.kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
 		d->Draw(wnd.Gfx());
 	}
 
-	// imgui
-	ImGui_ImplDX11_NewFrame(); // 새 프레임을 그려주기 전에 호출해 주어야 함.
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();         
-
-	// imgui demo 창을 보여줌.
-	static bool show_demo_window = true;
+	// imgui 데모 창 출력
 	if (show_demo_window)
 	{
 		ImGui::ShowDemoWindow(&show_demo_window);
 	}
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	
 	wnd.Gfx().EndFrame();
 }

@@ -60,12 +60,18 @@ public:
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics() = default; // ComPtr을 사용하게 되면서 Com 객체들이 알아서 Release 되므로 기본 소멸자로 바꿔줌.
+	void BeginFrame(float red, float green, float blue) noexcept;
 	void EndFrame();
-	void ClearBuffer(float red, float green, float blue) noexcept;
 	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
+
+	// Imgui
+	void EnableImgui() noexcept;
+	void DisableImgui() noexcept;
+	bool IsImguiEnabled() const noexcept;
 private:
+	bool imguiEnabled = true;     // imgui 사용 허용 여부.
 	DirectX::XMMATRIX projection; // 투영 행렬
 private:
 #ifndef NDEBUG

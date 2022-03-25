@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include "../ErrorHandling/GraphicsThrowMacros.h"
 #include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
 
 #pragma comment(lib,"d3d11.lib")        // Direct3D 함수들이 정의된 라이브러리를 링크해줌.
 #pragma comment(lib, "D3DCompiler.lib") // 셰이더를 런타임에 컴파일 해줄 때 사용할 수 있지만, 우리는 셰이더를 불러오는 함수를 사용하기 위해 연결해줬음. 
@@ -108,9 +109,32 @@ Graphics::Graphics(HWND hWnd, UINT width, UINT height)
 	ImGui_ImplDX11_Init(pDevice.Get(), pContext.Get());
 }
 
+// 렌더링 작업을 위한 사전 준비 작업을 처리해주는 함수.
+void Graphics::BeginFrame(float red, float green, float blue) noexcept
+{
+	// imgui가 사용이 허용된 경우, 새 프레임을 렌더링 하기 위한 사전 작업 수행.
+	if (imguiEnabled)
+	{
+		ImGui_ImplDX11_NewFrame(); // 새 프레임을 그려주기 전에 호출해 주어야 함.
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();         // 새 프레임 만들어줌.
+	}
+
+	const float color[] = { red,green,blue,1.0f };
+	pContext->ClearRenderTargetView(pTarget.Get(), color);
+	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+}
+
 // 프레임 최종 결과 단계를 의미하는 함수. 프레임 끝에 처리해 줄 것들을 담고 있음.(스왑 체인 Present)
 void Graphics::EndFrame()
 {
+	// imgui가 사용이 허용된 경우, imgui를 화면에 렌더링 해줌.
+	if (imguiEnabled)
+	{
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	}
+
 	HRESULT hr;
 #ifndef NDEBUG
 	infoManager.Set(); // DXGI_ERROR_DEVICE_REMOVED는 GetDeviceRemovedReason() 함수로 그 이유를 알 수 있음.
@@ -130,14 +154,6 @@ void Graphics::EndFrame()
 	}
 }
 
-// 새 프레임을 그리기 위해 화면을 정리. 각종 버퍼를 초기화해주는 함수.
-void Graphics::ClearBuffer(float red, float green, float blue) noexcept
-{
-	const float color[] = { red,green,blue,1.0f };
-	pContext->ClearRenderTargetView(pTarget.Get(), color); // 렌더 타겟 뷰를 초기화.
-	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-}
-
 void Graphics::DrawIndexed(UINT count) noexcept(!IS_DEBUG)
 {
 	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
@@ -151,6 +167,21 @@ void Graphics::SetProjection(DirectX::FXMMATRIX proj) noexcept
 DirectX::XMMATRIX Graphics::GetProjection() const noexcept
 {
 	return projection;
+}
+
+void Graphics::EnableImgui() noexcept
+{
+	imguiEnabled = true;
+}
+
+void Graphics::DisableImgui() noexcept
+{
+	imguiEnabled = false;
+}
+
+bool Graphics::IsImguiEnabled() const noexcept
+{
+	return imguiEnabled;
 }
 
 #pragma region Exception
