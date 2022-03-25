@@ -306,6 +306,9 @@
     <ClInclude Include="Imgui\ImguiManager.h">
       <Filter>Imgui</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\StringEncoding.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

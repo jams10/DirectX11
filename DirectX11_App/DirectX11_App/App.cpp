@@ -11,6 +11,7 @@
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+#include "StringEncoding.h"
 
 GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
@@ -104,13 +105,13 @@ void App::DoFrame()
 	static char buffer[1024];
 
 	// 시뮬레이션 속도를 컨트롤 하기 위한 imgui
-	if(ImGui::Begin("Simulation Speed")) // Begin
+	if(ImGui::Begin(WideToMultiU8(L"프로그램 상태").c_str()))  // Begin
 	{
 		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::InputText("Butts", buffer, sizeof(buffer));
+		ImGui::Text(WideToMultiU8(L"프로그램 평균 %.3f ms/frame (%.1f FPS)").c_str(), 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::InputText(WideToMultiU8(L"텍스트 입력").c_str(), buffer, sizeof(buffer));
 	}
-	ImGui::End();                        // End
+	ImGui::End();                                              // End
 
 	wnd.Gfx().EndFrame();
 }
