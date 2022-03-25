@@ -4,16 +4,17 @@
 #include <cmath>
 #include <DirectXMath.h>
 #include "../ErrorHandling/GraphicsThrowMacros.h"
+#include "imgui_impl_dx11.h"
 
 #pragma comment(lib,"d3d11.lib")        // Direct3D 함수들이 정의된 라이브러리를 링크해줌.
 #pragma comment(lib, "D3DCompiler.lib") // 셰이더를 런타임에 컴파일 해줄 때 사용할 수 있지만, 우리는 셰이더를 불러오는 함수를 사용하기 위해 연결해줬음. 
 
-Graphics::Graphics(HWND hWnd)
+Graphics::Graphics(HWND hWnd, UINT width, UINT height)
 {
 	// 스왑 체인의 설정 정보를 담은 구조체
 	DXGI_SWAP_CHAIN_DESC sd = {};
-	sd.BufferDesc.Width = 0;						   // backbuffer 너비
-	sd.BufferDesc.Height = 0;						   // backbuffer 높이
+	sd.BufferDesc.Width = width;					   // backbuffer 너비 0이면, 런타임에 알아서 출력 윈도우에 크기에 따라 잡아줌.
+	sd.BufferDesc.Height = height;					   // backbuffer 높이
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // 픽셀 형식
 	sd.BufferDesc.RefreshRate.Numerator = 0;           // hz의 refresh rate 분자
 	sd.BufferDesc.RefreshRate.Denominator = 0;         // hz의 refresh rate 분모
@@ -66,12 +67,12 @@ Graphics::Graphics(HWND hWnd)
 
 	// 출력 병합기에 depth state 묶기.
 	pContext->OMSetDepthStencilState(pDSState.Get(), 1u);
-
+	
 	// 깊이 스텐실용 텍스쳐 생성.
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC descDepth = {};
-	descDepth.Width = 800u;                // 텍스쳐 크기는 스왑 체인의 프레임 버퍼와 맞춰줌.
-	descDepth.Height = 600u;
+	descDepth.Width = width;                // 텍스쳐 크기는 스왑 체인의 프레임 버퍼와 맞춰줌.
+	descDepth.Height = height;
 	descDepth.MipLevels = 1u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -95,13 +96,16 @@ Graphics::Graphics(HWND hWnd)
 
 	// 뷰포트 설정.
 	D3D11_VIEWPORT vp;
-	vp.Width = 800.0f;
-	vp.Height = 600.0f;
+	vp.Width = width;
+	vp.Height = height;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
 	pContext->RSSetViewports(1u, &vp);
+
+	// imgui d3d 구현을 초기화
+	ImGui_ImplDX11_Init(pDevice.Get(), pContext.Get());
 }
 
 // 프레임 최종 결과 단계를 의미하는 함수. 프레임 끝에 처리해 줄 것들을 담고 있음.(스왑 체인 Present)

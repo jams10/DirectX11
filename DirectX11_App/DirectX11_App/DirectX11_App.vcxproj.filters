@@ -148,6 +148,9 @@
     <ClCompile Include="Imgui\ImguiManager.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Imgui\imgui_demo.cpp">
+      <Filter>Imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">

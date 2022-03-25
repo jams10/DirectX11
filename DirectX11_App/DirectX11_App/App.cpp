@@ -8,12 +8,15 @@
 #include <memory>
 #include "Surface.h"
 #include "GDIPlusManager.h"
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
 
 GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
 App::App()
 	:
-	wnd(800, 600, L"윈도우!")
+	wnd(1080, 720, L"윈도우!")
 {
 	class Factory
 	{
@@ -72,7 +75,7 @@ App::App()
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1080.0f, 0.5f, 40.0f));
 };
 
 void App::DoFrame()
@@ -85,6 +88,21 @@ void App::DoFrame()
 		d->Update(wnd.kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
 		d->Draw(wnd.Gfx());
 	}
+
+	// imgui
+	ImGui_ImplDX11_NewFrame(); // 새 프레임을 그려주기 전에 호출해 주어야 함.
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();         
+
+	// imgui demo 창을 보여줌.
+	static bool show_demo_window = true;
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	
 	wnd.Gfx().EndFrame();
 }
 

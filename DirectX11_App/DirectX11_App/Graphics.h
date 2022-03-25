@@ -56,7 +56,7 @@ public:
 	};
 #pragma endregion
 public:
-	Graphics(HWND hWnd);
+	Graphics(HWND hWnd, UINT width, UINT height);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics() = default; // ComPtr을 사용하게 되면서 Com 객체들이 알아서 Release 되므로 기본 소멸자로 바꿔줌.
