@@ -17,7 +17,10 @@ GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함
 
 App::App()
 	:
-	wnd(1080, 720, L"윈도우!")
+	wnd(1080, 720, L"윈도우!"),
+	viewHeight(720.f / 1080.f),
+	nearZ(0.5f),
+	farZ(40.f)
 {
 	class Factory
 	{
@@ -76,7 +79,8 @@ App::App()
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 720.0f / 1080.0f, 0.5f, 40.0f));
+	// 투영 행렬
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, viewHeight, nearZ, farZ));
 };
 
 void App::DoFrame()
@@ -85,6 +89,12 @@ void App::DoFrame()
 	const auto dt = gt.GetDeltaTime() * speed_factor;
 
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+	wnd.Gfx().SetCamera(cam.GetMatrix()); // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.
+	
+	// 윈도우 크기가 변하면 Projection 행렬 값도 변해야 함.
+	std::pair<UINT, UINT> windowSize = wnd.GetWindowSize();
+	viewHeight = static_cast<float>(windowSize.second) / windowSize.first;
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, viewHeight, nearZ, farZ));
 
 	// 도형들 렌더링
 	for (auto& d : drawables)
@@ -95,14 +105,17 @@ void App::DoFrame()
 
 	static char buffer[1024];
 
-	// 시뮬레이션 속도를 컨트롤 하기 위한 imgui
+	// 시뮬레이션 속도를 컨트롤 하기 위한 ui 생성.
 	if(ImGui::Begin(WideToMultiU8(L"프로그램 상태").c_str()))  // Begin
 	{
 		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
 		ImGui::Text(WideToMultiU8(L"프로그램 평균 %.3f ms/frame (%.1f FPS)").c_str(), 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::InputText(WideToMultiU8(L"텍스트 입력").c_str(), buffer, sizeof(buffer));
+		ImGui::Text("Status: %s", wnd.kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (hold spacebar to pause)");
 	}
 	ImGui::End();                                              // End
+
+	// 카메라를 조작할 ui 생성.
+	cam.SpawnControlWindow();
 
 	wnd.Gfx().EndFrame();
 }

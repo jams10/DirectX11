@@ -64,7 +64,7 @@ Window::Window(int width, int height, const wchar_t* name)
 	wr.bottom = height + wr.top;
 
 	// 윈도우 사이즈 조절.
-	if (!AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE))
+	if (!AdjustWindowRect(&wr, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_THICKFRAME, FALSE))
 	{
 		throw WND_LAST_EXCEPT();
 	}
@@ -72,7 +72,7 @@ Window::Window(int width, int height, const wchar_t* name)
 	// 윈도우를 생성하고 윈도우에 대한 핸들을 얻어옴.
 	hWnd = CreateWindow(
 		WindowClass::GetName(), name,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_THICKFRAME,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this
 	);
@@ -90,7 +90,7 @@ Window::Window(int width, int height, const wchar_t* name)
 	ImGui_ImplWin32_Init(hWnd);
 
 	// Graphics 객체 생성.
-	pGfx = std::make_unique<Graphics>(hWnd, width, height);
+	pGfx = std::make_unique<Graphics>(hWnd);
 }
 
 // Window 클래스 소멸자. 생성한 윈도우 파괴.
@@ -129,6 +129,13 @@ std::optional<int> Window::ProcessMessages() noexcept
 
 	// 앱을 끝내지 않는 경우 빈 optional을 리턴함. 빈 optional은 nullopt 값. if문으로 체크하면 if(false)와 비슷하게 동작함.
 	return {};
+}
+
+std::pair<UINT,UINT> Window::GetWindowSize() noexcept
+{
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+	return std::pair(rect.right - rect.left, rect.bottom - rect.top);
 }
 
 // Graphics 객체에 대한 참조를 리턴해주는 함수.
@@ -337,6 +344,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		break;
 	}
 #pragma endregion
+	case WM_SIZE : // 윈도우 창 크기 재설정
+		if (pGfx)
+		{
+			pGfx->ResizeWindow();
+		}
+		break;
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);

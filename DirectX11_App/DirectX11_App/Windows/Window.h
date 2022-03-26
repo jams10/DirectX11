@@ -65,6 +65,8 @@ public:
 	Window& operator=(const Window&) = delete;
 	void SetTitle(const std::wstring& title);
 	static std::optional<int> ProcessMessages() noexcept; // 모든 윈도우에 대한 메시지를 처리해야 하므로 static으로 선언함.
+	std::pair<UINT, UINT> GetWindowSize() noexcept;
+
 	Graphics& Gfx();
 private:
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;

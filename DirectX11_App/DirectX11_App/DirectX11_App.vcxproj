@@ -161,6 +161,7 @@
     <ClCompile Include="Bindable\TransformCbuf.cpp" />
     <ClCompile Include="Bindable\VertexBuffer.cpp" />
     <ClCompile Include="Bindable\VertexShader.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable\Box.cpp" />
     <ClCompile Include="Drawable\Drawable.cpp" />
     <ClCompile Include="Drawable\Melon.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Bindable\TransformCbuf.h" />
     <ClInclude Include="Bindable\VertexBuffer.h" />
     <ClInclude Include="Bindable\VertexShader.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Drawable\Box.h" />
     <ClInclude Include="Drawable\Drawable.h" />
     <ClInclude Include="Drawable\DrawableBase.h" />

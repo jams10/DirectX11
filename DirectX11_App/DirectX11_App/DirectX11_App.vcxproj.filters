@@ -151,6 +151,9 @@
     <ClCompile Include="Imgui\imgui_demo.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -308,6 +311,9 @@
     </ClInclude>
     <ClInclude Include="Utils\StringEncoding.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -56,7 +56,7 @@ public:
 	};
 #pragma endregion
 public:
-	Graphics(HWND hWnd, UINT width, UINT height);
+	Graphics(HWND hWnd);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics() = default; // ComPtr을 사용하게 되면서 Com 객체들이 알아서 Release 되므로 기본 소멸자로 바꿔줌.
@@ -65,14 +65,20 @@ public:
 	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
+	void SetCamera(DirectX::FXMMATRIX cam) noexcept;
+	DirectX::XMMATRIX GetCamera() const noexcept;
+
+	void ResizeWindow();
 
 	// Imgui
 	void EnableImgui() noexcept;
 	void DisableImgui() noexcept;
 	bool IsImguiEnabled() const noexcept;
 private:
-	bool imguiEnabled = true;     // imgui 사용 허용 여부.
 	DirectX::XMMATRIX projection; // 투영 행렬
+	DirectX::XMMATRIX camera;     // 뷰(카메라) 행렬
+	bool imguiEnabled = true;     // imgui 사용 허용 여부.
+	HWND hWnd;
 private:
 #ifndef NDEBUG
 	DxgiInfoManager infoManager; // 디버그 모드일 때만 DxgiInfoManager 객체를 들고 있게 함.
