@@ -27,54 +27,39 @@ Box::Box(Graphics& gfx,
 		struct Vertex
 		{
 			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 n;
 		};
 
 		// 정점 버퍼
-		const auto model = Cube::Make<Vertex>();
+		auto model = Cube::MakeIndependent<Vertex>();
+		model.SetNormalsIndependentFlat(); // 노말 벡터 추가.
 
 		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
 		// 정점 셰이더
-		auto pvs = std::make_unique<VertexShader>(gfx, L"Shader\\ColorIndexVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
 		// 픽셀 셰이더
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"Shader\\ColorIndexPS.cso"));
+		AddStaticBind(std::make_unique<PixelShader>(gfx, L"PhongPS.cso"));
 
 		// 인덱스 버퍼
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));	
 
 		// 픽셀 상수 버퍼
-		struct PixelShaderConstants
+		struct PSLightConstants
 		{
-			struct
-			{
-				float r;
-				float g;
-				float b;
-				float a;
-			} face_colors[8];
+			DirectX::XMVECTOR pos;
 		};
-		const PixelShaderConstants cb2 =
-		{
-			{
-				{ 1.0f,1.0f,1.0f },
-				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,1.0f,0.0f },
-				{ 1.0f,1.0f,0.0f },
-				{ 0.0f,0.0f,1.0f },
-				{ 1.0f,0.0f,1.0f },
-				{ 0.0f,1.0f,1.0f },
-				{ 0.0f,0.0f,0.0f },
-			}
-		};
-		AddStaticBind(std::make_unique<PixelConstantBuffer<PixelShaderConstants>>(gfx, cb2));
+
+		AddStaticBind(std::make_unique<PixelConstantBuffer<PSLightConstants>>(gfx));
 
 		// 입력 레이아웃
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
 
