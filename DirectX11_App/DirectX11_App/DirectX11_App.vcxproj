@@ -168,6 +168,7 @@
     <ClCompile Include="Drawable\Pyramid.cpp" />
     <ClCompile Include="Drawable\Sheet.cpp" />
     <ClCompile Include="Drawable\SkinnedBox.cpp" />
+    <ClCompile Include="Drawable\SolidSphere.cpp" />
     <ClCompile Include="ErrorHandling\CustomException.cpp" />
     <ClCompile Include="ErrorHandling\dxerr.cpp" />
     <ClCompile Include="ErrorHandling\DxgiInfoManager.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
+    <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
     <ClCompile Include="Windows\Window.cpp" />
     <ClCompile Include="Windows\WindowsMessageMap.cpp" />
@@ -217,6 +219,7 @@
     <ClInclude Include="Drawable\Pyramid.h" />
     <ClInclude Include="Drawable\Sheet.h" />
     <ClInclude Include="Drawable\SkinnedBox.h" />
+    <ClInclude Include="Drawable\SolidSphere.h" />
     <ClInclude Include="ErrorHandling\CustomException.h" />
     <ClInclude Include="ErrorHandling\dxerr.h" />
     <ClInclude Include="ErrorHandling\DxgiInfoManager.h" />
@@ -236,6 +239,7 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Utils\CustomMath.h" />
     <ClInclude Include="Utils\GameTimer.h" />
@@ -283,6 +287,22 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="Shader\PhongVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shader\SolidPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shader\SolidVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>

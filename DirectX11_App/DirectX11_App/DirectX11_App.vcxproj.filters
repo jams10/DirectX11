@@ -38,6 +38,9 @@
     <Filter Include="Imgui">
       <UniqueIdentifier>{905af3c1-b806-4c3e-b946-1d6becf30882}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Light">
+      <UniqueIdentifier>{069563d9-8548-47b1-a5c8-ffb73ffffaca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bindable\InputLayout.cpp">
@@ -153,6 +156,12 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable\SolidSphere.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Light\PointLight.cpp">
+      <Filter>Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,6 +324,12 @@
     <ClInclude Include="Camera.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Drawable\SolidSphere.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Light\PointLight.h">
+      <Filter>Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">
@@ -350,6 +365,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PhongPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\SolidVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\SolidPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
