@@ -1,6 +1,6 @@
 #include "TransformCbuf.h"
 
-std::unique_ptr<VertexConstantBuffer<DirectX::XMMATRIX>> TransformCbuf::pVcbuf; // static 멤버의 경우 구현부에 정의.
+std::unique_ptr<VertexConstantBuffer<TransformCbuf::Transforms>> TransformCbuf::pVcbuf;
 
 TransformCbuf::TransformCbuf(Graphics& gfx, const Drawable& parent)
 	:
@@ -8,18 +8,23 @@ TransformCbuf::TransformCbuf(Graphics& gfx, const Drawable& parent)
 {
 	if (!pVcbuf)
 	{
-		pVcbuf = std::make_unique<VertexConstantBuffer<DirectX::XMMATRIX>>(gfx);
+		pVcbuf = std::make_unique<VertexConstantBuffer<Transforms>>(gfx);
 	}
 }
 
 void TransformCbuf::Bind(Graphics& gfx) noexcept
 {
-	pVcbuf->Update(gfx,
+	const auto model = parent.GetTransformXM();
+	const Transforms tf =
+	{
+		DirectX::XMMatrixTranspose(model), // 월드 변환
 		DirectX::XMMatrixTranspose(
-			parent.GetTransformXM() * // 월드
-			gfx.GetCamera() *         // 뷰
-			gfx.GetProjection()       // 투영
+			parent.GetTransformXM() *      // 모델+뷰+투영 변환
+			model *
+			gfx.GetCamera() *
+			gfx.GetProjection()
 		)
-	);
+	};
+	pVcbuf->Update(gfx, tf);
 	pVcbuf->Bind(gfx);
 }
