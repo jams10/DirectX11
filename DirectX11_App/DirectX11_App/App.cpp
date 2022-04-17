@@ -20,7 +20,8 @@ App::App()
 	wnd(1080, 720, L"윈도우!"),
 	viewHeight(720.f / 1080.f),
 	nearZ(0.5f),
-	farZ(40.f)
+	farZ(40.f),
+	light(wnd.Gfx())
 {
 	class Factory
 	{
@@ -31,37 +32,10 @@ App::App()
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
-			switch (typedist(rng))
-			{
-			case 0:
-				return std::make_unique<Pyramid>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-			case 1:
-				return std::make_unique<Box>(
-					gfx, rng, adist, ddist,
-					odist, rdist, bdist
-					);
-			case 2:
-				return std::make_unique<Melon>(
-					gfx, rng, adist, ddist,
-					odist, rdist, longdist, latdist
-					);
-			case 3:
-				return std::make_unique<Sheet>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-			case 4:
-				return std::make_unique<SkinnedBox>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-					);
-			default:
-				assert(false && "bad drawable type in factory");
-				return {};
-			}
+			return std::make_unique<Box>(
+				gfx, rng, adist, ddist,
+				odist, rdist, bdist
+				);
 		}
 	private:
 		Graphics& gfx;
@@ -71,9 +45,6 @@ App::App()
 		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
-		std::uniform_int_distribution<int> latdist{ 5,20 };
-		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,4 }; // 도형 타입 랜덤 숫자 생성 범위
 	};
 
 	drawables.reserve(nDrawables);
@@ -90,6 +61,7 @@ void App::DoFrame()
 
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	wnd.Gfx().SetCamera(cam.GetMatrix()); // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.
+	light.Bind(wnd.Gfx());                // 라이트 업데이트.
 	
 	// 윈도우 크기가 변하면 Projection 행렬 값도 변해야 함.
 	std::pair<UINT, UINT> windowSize = wnd.GetWindowSize();
@@ -102,6 +74,7 @@ void App::DoFrame()
 		d->Update(wnd.kbd.KeyIsPressed(VK_SPACE) ? 0.0f : dt);
 		d->Draw(wnd.Gfx());
 	}
+	light.Draw(wnd.Gfx());
 
 	static char buffer[1024];
 
@@ -114,8 +87,9 @@ void App::DoFrame()
 	}
 	ImGui::End();                                              // End
 
-	// 카메라를 조작할 ui 생성.
+	// 카메라와 라이트를 조작할 ui 생성.
 	cam.SpawnControlWindow();
+	light.SpawnControlWindow();
 
 	wnd.Gfx().EndFrame();
 }

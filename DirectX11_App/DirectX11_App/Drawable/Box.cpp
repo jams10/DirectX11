@@ -37,12 +37,12 @@ Box::Box(Graphics& gfx,
 		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
 		// ¡§¡° ºŒ¿Ã¥ı
-		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"Shader\\PhongVS.cso");
 		auto pvsbc = pvs->GetBytecode();
 		AddStaticBind(std::move(pvs));
 
 		// «»ºø ºŒ¿Ã¥ı
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"PhongPS.cso"));
+		AddStaticBind(std::make_unique<PixelShader>(gfx, L"Shader\\PhongPS.cso"));
 
 		// ¿Œµ¶Ω∫ πˆ∆€
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));	
