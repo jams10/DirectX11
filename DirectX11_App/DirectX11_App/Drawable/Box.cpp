@@ -47,14 +47,6 @@ Box::Box(Graphics& gfx,
 		// 인덱스 버퍼
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));	
 
-		// 픽셀 상수 버퍼
-		struct PSLightConstants
-		{
-			DirectX::XMVECTOR pos;
-		};
-
-		AddStaticBind(std::make_unique<PixelConstantBuffer<PSLightConstants>>(gfx));
-
 		// 입력 레이아웃
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{

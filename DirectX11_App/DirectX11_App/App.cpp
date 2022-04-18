@@ -59,15 +59,15 @@ void App::DoFrame()
 	gt.Tick();
 	const auto dt = gt.GetDeltaTime() * speed_factor;
 
-	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	wnd.Gfx().SetCamera(cam.GetMatrix()); // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.
-	light.Bind(wnd.Gfx());                // 라이트 업데이트.
-	
 	// 윈도우 크기가 변하면 Projection 행렬 값도 변해야 함.
 	std::pair<UINT, UINT> windowSize = wnd.GetWindowSize();
 	viewHeight = static_cast<float>(windowSize.second) / windowSize.first;
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, viewHeight, nearZ, farZ));
 
+	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+	wnd.Gfx().SetCamera(cam.GetMatrix()); // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.
+	light.Bind(wnd.Gfx());                // 라이트 업데이트.
+	
 	// 도형들 렌더링
 	for (auto& d : drawables)
 	{
