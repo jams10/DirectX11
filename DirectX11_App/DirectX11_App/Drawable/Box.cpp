@@ -9,7 +9,8 @@ Box::Box(Graphics& gfx,
 	std::uniform_real_distribution<float>& ddist,
 	std::uniform_real_distribution<float>& odist,
 	std::uniform_real_distribution<float>& rdist,
-	std::uniform_real_distribution<float>& bdist)
+	std::uniform_real_distribution<float>& bdist,
+	DirectX::XMFLOAT3 material)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -65,6 +66,15 @@ Box::Box(Graphics& gfx,
 
 	// 정점 상수 버퍼
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
+
+	// material 색상을 담은 상수 버퍼를 픽셀 셰이더에 바인딩.
+	struct PSMaterialConstant
+	{
+		DirectX::XMFLOAT3 color;
+		float padding;
+	} colorConst;
+	colorConst.color = material;
+	AddBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
 
 	// 각 인스턴스 당 달리 갖게 될 스케일 변환값.
 	DirectX::XMStoreFloat3x3(
