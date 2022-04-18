@@ -14,14 +14,13 @@ TransformCbuf::TransformCbuf(Graphics& gfx, const Drawable& parent, UINT slot)
 
 void TransformCbuf::Bind(Graphics& gfx) noexcept
 {
-	const auto model = parent.GetTransformXM();
+	const auto modelView = parent.GetTransformXM() * gfx.GetCamera();
 	const Transforms tf =
 	{
-		DirectX::XMMatrixTranspose(model), // 월드 변환
+		DirectX::XMMatrixTranspose(modelView), // 월드 + 뷰 변환
 		DirectX::XMMatrixTranspose(
-			parent.GetTransformXM() *      // 모델+뷰+투영 변환
-			model *
-			gfx.GetCamera() *
+			parent.GetTransformXM() *      // 월드+뷰+투영 변환
+			modelView *
 			gfx.GetProjection()
 		)
 	};

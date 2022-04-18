@@ -68,8 +68,8 @@ void App::DoFrame()
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, viewHeight, nearZ, farZ));
 
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	wnd.Gfx().SetCamera(cam.GetMatrix()); // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.
-	light.Bind(wnd.Gfx());                // 라이트 업데이트.
+	wnd.Gfx().SetCamera(cam.GetMatrix());   // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.
+	light.Bind(wnd.Gfx(), cam.GetMatrix()); // 라이트 업데이트.
 	
 	// 도형들 렌더링
 	for (auto& d : drawables)
