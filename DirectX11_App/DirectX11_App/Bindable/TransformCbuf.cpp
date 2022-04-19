@@ -18,8 +18,7 @@ void TransformCbuf::Bind(Graphics& gfx) noexcept
 	const Transforms tf =
 	{
 		DirectX::XMMatrixTranspose(modelView), // 월드 + 뷰 변환
-		DirectX::XMMatrixTranspose(
-			parent.GetTransformXM() *      // 월드+뷰+투영 변환
+		DirectX::XMMatrixTranspose(            // 월드+뷰+투영 변환
 			modelView *
 			gfx.GetProjection()
 		)

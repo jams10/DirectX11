@@ -18,8 +18,8 @@ GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함
 
 App::App()
 	:
-	wnd(1080, 720, L"윈도우!"),
-	viewHeight(720.f / 1080.f),
+	wnd(800, 600, L"윈도우!"),
+	aspectRatio(800.f / 600.f),
 	nearZ(0.5f),
 	farZ(40.f),
 	light(wnd.Gfx())
@@ -70,7 +70,7 @@ App::App()
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
 	// 투영 행렬
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, viewHeight, nearZ, farZ));
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
 
 void App::DoFrame()
@@ -80,8 +80,9 @@ void App::DoFrame()
 
 	// 윈도우 크기가 변하면 Projection 행렬 값도 변해야 함.
 	std::pair<UINT, UINT> windowSize = wnd.GetWindowSize();
-	viewHeight = static_cast<float>(windowSize.second) / windowSize.first;
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, viewHeight, nearZ, farZ));
+	aspectRatio = static_cast<float>(windowSize.first) / windowSize.second;
+	// FOVLH가 함수가 아님. 첫번째 매개변수가 view width, 두번째 매개변수가 view height
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 1.f / aspectRatio, nearZ, farZ));
 
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	wnd.Gfx().SetCamera(cam.GetMatrix());   // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.

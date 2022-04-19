@@ -25,7 +25,7 @@ private:
 	PointLight light;
 	static constexpr size_t nDrawables = 180;
 private:
-	float viewHeight;
+	float aspectRatio;
 	float nearZ;
 	float farZ;
 };
