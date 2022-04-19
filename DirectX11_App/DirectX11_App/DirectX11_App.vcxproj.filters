@@ -330,6 +330,9 @@
     <ClInclude Include="Light\PointLight.h">
       <Filter>Light</Filter>
     </ClInclude>
+    <ClInclude Include="Drawable\TestObject.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

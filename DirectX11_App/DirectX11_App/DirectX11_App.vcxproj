@@ -220,6 +220,7 @@
     <ClInclude Include="Drawable\Sheet.h" />
     <ClInclude Include="Drawable\SkinnedBox.h" />
     <ClInclude Include="Drawable\SolidSphere.h" />
+    <ClInclude Include="Drawable\TestObject.h" />
     <ClInclude Include="ErrorHandling\CustomException.h" />
     <ClInclude Include="ErrorHandling\dxerr.h" />
     <ClInclude Include="ErrorHandling\DxgiInfoManager.h" />
