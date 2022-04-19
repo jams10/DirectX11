@@ -163,6 +163,9 @@
     <ClCompile Include="Light\PointLight.cpp">
       <Filter>Light</Filter>
     </ClCompile>
+    <ClCompile Include="Drawable\Cylinder.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -333,6 +336,9 @@
     <ClInclude Include="Drawable\TestObject.h">
       <Filter>Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Drawable\Cylinder.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">
@@ -374,6 +380,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\SolidPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\IndexedPhongPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
