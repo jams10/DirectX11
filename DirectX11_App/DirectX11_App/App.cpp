@@ -80,6 +80,15 @@ App::App()
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
+	// Box 인스턴스들의 material 파라미터를 수정하기 위해 인스턴스들에 대한 포인터를 미리 얻어와 저장.
+	for (auto& pd : drawables)
+	{
+		if (auto pb = dynamic_cast<Box*>(pd.get()))
+		{
+			boxes.push_back(pb);
+		}
+	}
+
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -107,22 +116,72 @@ void App::DoFrame()
 	}
 	light.Draw(wnd.Gfx());
 
-	static char buffer[1024];
-
-	// 시뮬레이션 속도를 컨트롤 하기 위한 ui 생성.
-	if(ImGui::Begin(WideToMultiU8(L"프로그램 상태").c_str()))  // Begin
-	{
-		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
-		ImGui::Text(WideToMultiU8(L"프로그램 평균 %.3f ms/frame (%.1f FPS)").c_str(), 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::Text("Status: %s", wnd.kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (hold spacebar to pause)");
-	}
-	ImGui::End();                                              // End
-
-	// 카메라와 라이트를 조작할 ui 생성.
+	// imgui windows
+	SpawnSimulationWindow();
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
+	SpawnBoxWindowManagerWindow();
+	SpawnBoxWindows();
 
 	wnd.Gfx().EndFrame();
+}
+
+void App::SpawnSimulationWindow() noexcept
+{
+	if (ImGui::Begin("Simulation Speed"))
+	{
+		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 6.0f, "%.4f", 0);
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::Text("Status: %s", wnd.kbd.KeyIsPressed(VK_SPACE) ? "PAUSED" : "RUNNING (hold spacebar to pause)");
+	}
+	ImGui::End();
+}
+
+void App::SpawnBoxWindowManagerWindow() noexcept
+{
+	if (ImGui::Begin("Boxes"))
+	{
+		using namespace std::string_literals;
+		const auto preview = comboBoxIndex ? std::to_string(*comboBoxIndex) : "Choose a box..."s;
+		if (ImGui::BeginCombo("Box Number", preview.c_str()))
+		{
+			for (int i = 0; i < boxes.size(); i++)
+			{
+				bool selected = false;
+				if (comboBoxIndex.has_value()) selected = true;
+				if (ImGui::Selectable(std::to_string(i).c_str(), selected))
+				{
+					comboBoxIndex = i;
+				}
+				if (selected)
+				{
+					ImGui::SetItemDefaultFocus();
+				}
+			}
+			ImGui::EndCombo();
+		}
+		if (ImGui::Button("Spawn Control Window") && comboBoxIndex)
+		{
+			boxControlIds.insert(*comboBoxIndex);
+			comboBoxIndex.reset();
+		}
+	}
+	ImGui::End();
+}
+
+void App::SpawnBoxWindows() noexcept
+{
+	for (auto i = boxControlIds.begin(); i != boxControlIds.end(); )
+	{
+		if (!boxes[*i]->SpawnControlWindow(*i, wnd.Gfx()))
+		{
+			i = boxControlIds.erase(i);
+		}
+		else
+		{
+			i++;
+		}
+	}
 }
 
 App::~App()

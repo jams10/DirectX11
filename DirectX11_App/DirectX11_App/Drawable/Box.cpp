@@ -3,6 +3,8 @@
 #include "../ErrorHandling/GraphicsThrowMacros.h"
 #include "Primitive\Cube.h"
 
+#include "../Imgui/imgui.h"
+
 Box::Box(Graphics& gfx,
 	std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
@@ -59,15 +61,8 @@ Box::Box(Graphics& gfx,
 	AddBind(std::make_unique<TransformCbuf>(gfx, *this));
 
 	// material 색상을 담은 상수 버퍼를 픽셀 셰이더에 바인딩.
-	struct PSMaterialConstant
-	{
-		DirectX::XMFLOAT3 color;
-		float specularIntensity = 0.6f;
-		float specularPower = 30.0f;
-		float padding[3];
-	} colorConst;
-	colorConst.color = material;
-	AddBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
+	materialConstants.color = material;
+	AddBind(std::make_unique<MaterialCbuf>(gfx, materialConstants, 1u));
 
 	// 각 인스턴스 당 달리 갖게 될 스케일 변환값.
 	DirectX::XMStoreFloat3x3(
@@ -79,4 +74,34 @@ Box::Box(Graphics& gfx,
 DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 {
 	return DirectX::XMLoadFloat3x3(&mt) * TestObject::GetTransformXM();
+}
+
+bool Box::SpawnControlWindow(int id, Graphics& gfx) noexcept
+{
+	using namespace std::string_literals;
+
+	bool dirty = false;
+	bool open = true;
+	if (ImGui::Begin(("Box "s + std::to_string(id)).c_str(), &open, 0))
+	{
+		const auto cd = ImGui::ColorEdit3("Material Color", &materialConstants.color.x);
+		const auto sid = ImGui::SliderFloat("Specular Intensity", &materialConstants.specularIntensity, 0.05f, 4.0f, "%.2f", 0);
+		const auto spd = ImGui::SliderFloat("Specular Power", &materialConstants.specularPower, 1.0f, 200.0f, "%.2f", 0);
+		dirty = cd || sid || spd;
+	}
+	ImGui::End();
+
+	if (dirty)
+	{
+		SyncMaterial(gfx);
+	}
+
+	return open;
+}
+
+void Box::SyncMaterial(Graphics& gfx) noexcept(!IS_DEBUG)
+{
+	auto pConstPS = QueryBindable<MaterialCbuf>();
+	assert(pConstPS != nullptr);
+	pConstPS->Update(gfx, materialConstants);
 }
