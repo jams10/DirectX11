@@ -14,6 +14,9 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include "StringEncoding.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
@@ -25,6 +28,12 @@ App::App()
 	farZ(40.f),
 	light(wnd.Gfx())
 {
+	Assimp::Importer imp;
+	auto model = imp.ReadFile("models\\suzanne.obj",
+			aiProcess_Triangulate |
+			aiProcess_JoinIdenticalVertices
+		);
+
 	class Factory
 	{
 	public:

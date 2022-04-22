@@ -121,7 +121,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\Imgui;$(ProjectDir)\GDI+;$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Bindable\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Models;$(ProjectDir)\Imgui;$(ProjectDir)\assimp\include;$(ProjectDir)\GDI+;$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Bindable\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -141,6 +141,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Models;$(ProjectDir)\Imgui;$(ProjectDir)\assimp\include;$(ProjectDir)\GDI+;$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Bindable\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
