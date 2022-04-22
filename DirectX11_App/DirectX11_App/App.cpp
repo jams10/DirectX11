@@ -1,4 +1,5 @@
 #include "App.h"
+#include <memory>
 #include "Box.h"
 #include "Pyramid.h"
 #include "Melon.h"
@@ -7,16 +8,13 @@
 #include "Cylinder.h"
 #include "CustomMath.h"
 #include "Pyramid.h"
-#include <memory>
 #include "Surface.h"
+#include "ImportModelTest.h"
 #include "GDIPlusManager.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include "StringEncoding.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 
 GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
@@ -28,11 +26,6 @@ App::App()
 	farZ(40.f),
 	light(wnd.Gfx())
 {
-	Assimp::Importer imp;
-	auto model = imp.ReadFile("models\\suzanne.obj",
-			aiProcess_Triangulate |
-			aiProcess_JoinIdenticalVertices
-		);
 
 	class Factory
 	{
@@ -54,19 +47,14 @@ App::App()
 					odist, rdist, bdist, mat
 					);
 			case 1:
-				return std::make_unique<Cylinder>(
-					gfx, rng, adist, ddist, odist,
-					rdist, bdist, tdist
-					);
-			case 2:
-				return std::make_unique<Pyramid>(
-					gfx, rng, adist, ddist, odist,
-					rdist, tdist
-					);
-			case 3:
 				return std::make_unique<SkinnedBox>(
 					gfx, rng, adist, ddist,
 					odist, rdist
+					);
+			case 2:
+				return std::make_unique<ImportModelTest>(
+					gfx, rng, adist, ddist,
+					odist, rdist, mat, 1.5f
 					);
 			default:
 				assert(false && "impossible drawable option in factory");
@@ -76,7 +64,7 @@ App::App()
 	private:
 		Graphics& gfx;
 		std::mt19937 rng{ std::random_device{}() };
-		std::uniform_int_distribution<int> sdist{ 0,3 };
+		std::uniform_int_distribution<int> sdist{ 0,2 };
 		std::uniform_real_distribution<float> adist{ 0.0f,PI * 2.0f };
 		std::uniform_real_distribution<float> ddist{ 0.0f,PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
