@@ -345,6 +345,9 @@
     <ClInclude Include="Drawable\ImportModelTest.h">
       <Filter>Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="VertexLayout.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">
