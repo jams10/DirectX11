@@ -193,7 +193,7 @@
     <ClInclude Include="Utils\CustomMath.h" />
     <ClInclude Include="Utils\GameTimer.h" />
     <ClInclude Include="Utils\StringEncoding.h" />
-    <ClInclude Include="VertexLayout.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="Windows\Window.h" />
     <ClInclude Include="Windows\WindowsHeader.h" />
     <ClInclude Include="Windows\WindowsMessageMap.h" />
