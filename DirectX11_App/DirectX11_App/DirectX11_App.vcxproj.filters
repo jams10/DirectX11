@@ -345,7 +345,7 @@
     <ClInclude Include="Drawable\ImportModelTest.h">
       <Filter>Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="Vertex.h">
+    <ClInclude Include="Bindable\Vertex.h">
       <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>

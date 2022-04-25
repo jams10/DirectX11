@@ -149,6 +149,7 @@
     <ClInclude Include="Bindable\Texture.h" />
     <ClInclude Include="Bindable\Topology.h" />
     <ClInclude Include="Bindable\TransformCbuf.h" />
+    <ClInclude Include="Bindable\Vertex.h" />
     <ClInclude Include="Bindable\VertexBuffer.h" />
     <ClInclude Include="Bindable\VertexShader.h" />
     <ClInclude Include="Camera.h" />
@@ -193,7 +194,6 @@
     <ClInclude Include="Utils\CustomMath.h" />
     <ClInclude Include="Utils\GameTimer.h" />
     <ClInclude Include="Utils\StringEncoding.h" />
-    <ClInclude Include="Vertex.h" />
     <ClInclude Include="Windows\Window.h" />
     <ClInclude Include="Windows\WindowsHeader.h" />
     <ClInclude Include="Windows\WindowsMessageMap.h" />
