@@ -29,7 +29,7 @@ public:
 		}
 	}
 	// 물체의 각 표면을 구성하는 정점들에 노말 벡터를 추가해주는 함수. 
-	void SetNormalsIndependentFlat() noexcept(!IS_DEBUG)
+	void SetNormalsIndependentFlat() noxnd
 	{
 		using namespace DirectX;
 		assert(indices.size() % 3 == 0 && indices.size() > 0);

@@ -67,15 +67,6 @@
     <ClCompile Include="Bindable\IndexBuffer.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable\Melon.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawable\Pyramid.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawable\Box.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Drawable\Drawable.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
@@ -124,12 +115,6 @@
     <ClCompile Include="Bindable\Sampler.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable\Sheet.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
-    <ClCompile Include="Drawable\SkinnedBox.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Imgui\imgui_tables.cpp">
       <Filter>Imgui</Filter>
     </ClCompile>
@@ -163,14 +148,14 @@
     <ClCompile Include="Light\PointLight.cpp">
       <Filter>Light</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable\Cylinder.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Drawable\ImportModelTest.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="Mesh.cpp">
       <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\Vertex.cpp">
+      <Filter>Bindable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -195,7 +180,7 @@
     <ClInclude Include="Bindable\Bindable.h">
       <Filter>Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Bindable\BindableHeaders.h">
+    <ClInclude Include="Bindable\BindableCommon.h">
       <Filter>Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Bindable\ConstantBuffers.h">
@@ -203,15 +188,6 @@
     </ClInclude>
     <ClInclude Include="Bindable\IndexBuffer.h">
       <Filter>Bindable</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\Melon.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\Pyramid.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\Box.h">
-      <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Drawable.h">
       <Filter>Drawable</Filter>
@@ -294,12 +270,6 @@
     <ClInclude Include="Bindable\Sampler.h">
       <Filter>Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable\Sheet.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\SkinnedBox.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="Imgui\imgui_impl_win32.h">
       <Filter>Imgui</Filter>
     </ClInclude>
@@ -342,17 +312,20 @@
     <ClInclude Include="Drawable\TestObject.h">
       <Filter>Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable\Cylinder.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="Drawable\ImportModelTest.h">
       <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Bindable\Vertex.h">
       <Filter>Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable\Model.h">
+    <ClInclude Include="Drawable\Mesh.h">
       <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="ConditionalNoexcept.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -367,22 +340,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\ColorBlendVS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\ColorIndexPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\ColorIndexVS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\ColorBlendPS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="TextureVS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="TexturePS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PhongVS.hlsl">
@@ -395,21 +356,6 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\SolidPS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\IndexedPhongPS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\BlendedPhongVS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\BlendedPhongPS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\TexturedPhongPS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\TexturedPhongVS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

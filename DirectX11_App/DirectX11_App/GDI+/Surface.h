@@ -4,6 +4,7 @@
 #include <string>
 #include <assert.h>
 #include <memory>
+#include "../ConditionalNoexcept.h"
 
 // Surface : 이미지 파일을 코드에서 다루기 위해 형상화한 클래스.
 class Surface
@@ -130,8 +131,8 @@ public:
 	// Color 값 관련
 	//
 	void Clear(Color fillValue) noexcept;
-	void PutPixel(unsigned int x, unsigned int y, Color c) noexcept(!IS_DEBUG);
-	Color GetPixel(unsigned int x, unsigned int y) const noexcept(!IS_DEBUG);
+	void PutPixel(unsigned int x, unsigned int y, Color c) noxnd;
+	Color GetPixel(unsigned int x, unsigned int y) const noxnd;
 	unsigned int GetWidth() const noexcept;
 	unsigned int GetHeight() const noexcept;
 	Color* GetBufferPtr() noexcept;
@@ -142,7 +143,7 @@ public:
 	//
 	static Surface FromFile(const std::string& name);
 	void Save(const std::string& filename) const;
-	void Copy(const Surface& src) noexcept(!IS_DEBUG);
+	void Copy(const Surface& src) noxnd;
 private:
 	Surface(unsigned int width, unsigned int height, std::unique_ptr<Color[]> pBufferParam) noexcept;
 private:

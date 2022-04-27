@@ -4,7 +4,9 @@
 #include <cassert>
 #include <typeinfo>
 
-void Drawable::Draw(Graphics& gfx) const noexcept(!IS_DEBUG)
+using namespace Bind;
+
+void Drawable::Draw(Graphics& gfx) const noxnd
 {
 	for (auto& b : binds)
 	{
@@ -17,14 +19,14 @@ void Drawable::Draw(Graphics& gfx) const noexcept(!IS_DEBUG)
 	gfx.DrawIndexed(pIndexBuffer->GetCount());
 }
 
-void Drawable::AddBind(std::unique_ptr<Bindable> bind) noexcept(!IS_DEBUG)
+void Drawable::AddBind(std::unique_ptr<Bindable> bind) noxnd
 {
 	// 인덱스 버퍼를 넣으려고 하면 assert 발생 시킴.
 	assert("*Must* use AddIndexBuffer to bind index buffer" && typeid(*bind) != typeid(IndexBuffer));
 	binds.push_back(std::move(bind));
 }
 
-void Drawable::AddIndexBuffer(std::unique_ptr<IndexBuffer> ibuf) noexcept(!IS_DEBUG)
+void Drawable::AddIndexBuffer(std::unique_ptr<IndexBuffer> ibuf) noxnd
 {
 	// 인덱스 버퍼가 아닌 다른 것들을 넣으려고 하면 assert 발생 시킴.
 	assert("Attempting to add index buffer a second time" && pIndexBuffer == nullptr);

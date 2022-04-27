@@ -1,10 +1,12 @@
 #include "ImportModelTest.h"
-#include "../BindableHeaders.h"
+#include "../BindableCommon.h"
 #include "GraphicsThrowMacros.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "../Bindable/Vertex.h"
+
+using namespace Bind;
 
 ImportModelTest::ImportModelTest(Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,

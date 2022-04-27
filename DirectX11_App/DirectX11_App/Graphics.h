@@ -9,10 +9,16 @@
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
 #include "../ErrorHandling/DxgiInfoManager.h"
+#include "ConditionalNoexcept.h"
+
+namespace Bind
+{
+	class Bindable;
+}
 
 class Graphics
 {
-	friend class Bindable;
+	friend Bind::Bindable;
 #pragma region Exception
 public:
 	class Exception : public CustomException
@@ -62,7 +68,7 @@ public:
 	~Graphics() = default; // ComPtr을 사용하게 되면서 Com 객체들이 알아서 Release 되므로 기본 소멸자로 바꿔줌.
 	void BeginFrame(float red, float green, float blue) noexcept;
 	void EndFrame();
-	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
+	void DrawIndexed(UINT count) noxnd;
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
 	void SetCamera(DirectX::FXMMATRIX cam) noexcept;

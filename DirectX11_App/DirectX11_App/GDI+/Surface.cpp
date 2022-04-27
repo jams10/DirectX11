@@ -45,7 +45,7 @@ void Surface::Clear(Color fillValue) noexcept
 	memset(pBuffer.get(), fillValue.dword, width * height * sizeof(Color));
 }
 // 특정 위치의 색상 값을 바꾸는 함수.
-void Surface::PutPixel(unsigned int x, unsigned int y, Color c) noexcept(!IS_DEBUG)
+void Surface::PutPixel(unsigned int x, unsigned int y, Color c) noxnd
 {
 	assert(x >= 0);
 	assert(y >= 0);
@@ -54,7 +54,7 @@ void Surface::PutPixel(unsigned int x, unsigned int y, Color c) noexcept(!IS_DEB
 	pBuffer[y * width + x] = c;
 }
 // 특정 위치의 색상 값을 리턴하는 함수.
-Surface::Color Surface::GetPixel(unsigned int x, unsigned int y) const noexcept(!IS_DEBUG)
+Surface::Color Surface::GetPixel(unsigned int x, unsigned int y) const noxnd
 {
 	assert(x >= 0);
 	assert(y >= 0);
@@ -197,7 +197,7 @@ void Surface::Save(const std::string& filename) const
 	}
 }
 // Surface 객체를 복사해주는 함수.
-void Surface::Copy(const Surface& src) noexcept(!IS_DEBUG)
+void Surface::Copy(const Surface& src) noxnd
 {
 	assert(width == src.width);
 	assert(height == src.height);
