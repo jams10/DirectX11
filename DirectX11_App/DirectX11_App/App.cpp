@@ -45,14 +45,38 @@ void App::DoFrame()
 	wnd.Gfx().SetCamera(cam.GetMatrix());   // 카메라 행렬을 얻어옴. 카메라를 이동하면 뷰 변환 행렬도 달라지기 때문에 매 프레임 마다 얻어옴.
 	light.Bind(wnd.Gfx(), cam.GetMatrix()); // 라이트 업데이트.
 	
-	nano.Draw(wnd.Gfx());
+	// 3D 모델 그리기
+	const auto transform = DirectX::XMMatrixRotationRollPitchYaw(pos.roll, pos.pitch, pos.yaw) *
+						   DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+	nano.Draw(wnd.Gfx(), transform);
+	
 	light.Draw(wnd.Gfx());
 
 	// imgui windows
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
+	ShowModelWindow();
 
 	wnd.Gfx().EndFrame();
+}
+
+void App::ShowModelWindow()
+{
+	if (ImGui::Begin("Model"))
+	{
+		using namespace std::string_literals;
+
+		ImGui::Text("Orientation");
+		ImGui::SliderAngle("Roll", &pos.roll, -180.0f, 180.0f);
+		ImGui::SliderAngle("Pitch", &pos.pitch, -180.0f, 180.0f);
+		ImGui::SliderAngle("Yaw", &pos.yaw, -180.0f, 180.0f);
+
+		ImGui::Text("Position");
+		ImGui::SliderFloat("X", &pos.x, -20.0f, 20.0f);
+		ImGui::SliderFloat("Y", &pos.y, -20.0f, 20.0f);
+		ImGui::SliderFloat("Z", &pos.z, -20.0f, 20.0f);
+	}
+	ImGui::End();
 }
 
 App::~App()

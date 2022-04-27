@@ -16,6 +16,7 @@ public:
 	~App();
 private:
 	void DoFrame();
+	void ShowModelWindow();
 private:
 	ImguiManager imgui;
 	Window wnd;
@@ -25,6 +26,15 @@ private:
 	Camera cam;
 	PointLight light;
 	Model nano{ wnd.Gfx(), "Models\\nanosuit.obj" };
+	struct // 모델 전체 월드 트랜스폼
+	{
+		float roll = 0.0f;
+		float pitch = 0.0f;
+		float yaw = 0.0f;
+		float x = 0.0f;
+		float y = 0.0f;
+		float z = 0.0f;
+	} pos;
 private:
 	float aspectRatio;
 	float nearZ;
