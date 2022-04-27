@@ -132,6 +132,7 @@
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
     <ClCompile Include="Windows\Window.cpp" />
     <ClCompile Include="Windows\WindowsMessageMap.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Drawable\DrawableBase.h" />
     <ClInclude Include="Drawable\ImportModelTest.h" />
     <ClInclude Include="Drawable\Melon.h" />
+    <ClInclude Include="Drawable\Model.h" />
     <ClInclude Include="Drawable\Primitive\Cone.h" />
     <ClInclude Include="Drawable\Primitive\Cube.h" />
     <ClInclude Include="Drawable\Primitive\IndexedTriangleList.h" />

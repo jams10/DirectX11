@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\DirectX11_App",
+    "\\DirectX11_App\\DirectX11_App"
   ],
-  "SelectedNode": "\\DirectX11_App.sln",
+  "SelectedNode": "\\DirectX11_App\\DirectX11_App\\WinMain.cpp",
   "PreviewInSolutionExplorer": false
 }

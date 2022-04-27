@@ -169,6 +169,9 @@
     <ClCompile Include="Drawable\ImportModelTest.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -347,6 +350,9 @@
     </ClInclude>
     <ClInclude Include="Bindable\Vertex.h">
       <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\Model.h">
+      <Filter>Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
