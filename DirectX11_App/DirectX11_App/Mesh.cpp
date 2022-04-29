@@ -62,17 +62,17 @@ DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept
 }
 
 // Node
-Node::Node(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noxnd
+Node::Node(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform_in) noxnd
 	:
 	meshPtrs(std::move(meshPtrs)),
 	name(name)
 {
-	DirectX::XMStoreFloat4x4(&baseTransform, transform);
+	DirectX::XMStoreFloat4x4(&transform, transform_in);
 	DirectX::XMStoreFloat4x4(&appliedTransform, DirectX::XMMatrixIdentity());
 }
 void Node::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noxnd
 {
-	const auto built = XMLoadFloat4x4(&baseTransform) * XMLoadFloat4x4(&appliedTransform) * accumulatedTransform;
+	const auto built = XMLoadFloat4x4(&appliedTransform) * XMLoadFloat4x4(&transform) * accumulatedTransform;
 	for (const auto pm : meshPtrs)
 	{
 		pm->Draw(gfx, built);
@@ -99,16 +99,21 @@ void Node::ShowTree(int& nodeIndexTracked, std::optional<int>& selectedIndex, No
 		| ((currentNodeIndex == selectedIndex.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
 		| ((childPtrs.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
 
-	// 트리 노드가 펼쳐지면, 재귀적으로 모든 자식 노드들에 대해 ShowTree 호출.
-	if (ImGui::TreeNodeEx((void*)(intptr_t)currentNodeIndex, node_flags, name.c_str()))
-	{
-		// 선택한 노드를 포착하고 설정함.
-		if (ImGui::IsItemClicked())
-		{
-			selectedIndex = currentNodeIndex;
-			pSelectedNode = const_cast<Node*>(this);
-		}
+	// 노드 그려주기
+	const auto expanded = ImGui::TreeNodeEx(
+		(void*)(intptr_t)currentNodeIndex, node_flags, name.c_str()
+	);
 
+	// 선택한 노드를 포착하고 설정함.
+	if (ImGui::IsItemClicked())
+	{
+		selectedIndex = currentNodeIndex;
+		pSelectedNode = const_cast<Node*>(this);
+	}
+
+	// 트리 노드가 펼쳐지면, 재귀적으로 모든 자식 노드들에 대해 ShowTree 호출.
+	if (expanded)
+	{
 		for (const auto& pChild : childPtrs)
 		{
 			pChild->ShowTree(nodeIndexTracked, selectedIndex, pSelectedNode);
