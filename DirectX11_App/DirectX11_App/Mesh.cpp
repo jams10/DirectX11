@@ -1,6 +1,32 @@
 #include "Mesh.h"
 #include "../Imgui/imgui.h"
 #include <unordered_map>
+#include <sstream>
+
+ModelException::ModelException(int line, const char* file, std::string note) noexcept
+	:
+	CustomException(line, file),
+	note(std::move(note))
+{}
+
+const char* ModelException::what() const noexcept
+{
+	std::ostringstream oss;
+	oss << CustomException::what() << std::endl
+		<< "[Note] " << GetNote();
+	whatBuffer = oss.str();
+	return whatBuffer.c_str();
+}
+
+const char* ModelException::GetType() const noexcept
+{
+	return "Chili Model Exception";
+}
+
+const std::string& ModelException::GetNote() const noexcept
+{
+	return note;
+}
 
 // Mesh
 Mesh::Mesh(Graphics& gfx, std::vector<std::unique_ptr<Bind::Bindable>> bindPtrs)
@@ -162,8 +188,15 @@ Model::Model(Graphics& gfx, const std::string fileName)
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(fileName.c_str(),
 		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices
+		aiProcess_JoinIdenticalVertices |
+		aiProcess_ConvertToLeftHanded |
+		aiProcess_GenNormals
 	);
+
+	if (pScene == nullptr)
+	{
+		throw ModelException(__LINE__, __FILE__, imp.GetErrorString());
+	}
 
 	for (size_t i = 0; i < pScene->mNumMeshes; i++)
 	{
