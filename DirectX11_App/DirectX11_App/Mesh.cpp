@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "../Imgui/imgui.h"
+#include <unordered_map>
 
 // Mesh
 Mesh::Mesh(Graphics& gfx, std::vector<std::unique_ptr<Bind::Bindable>> bindPtrs)
@@ -40,11 +41,12 @@ Node::Node(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::
 	meshPtrs(std::move(meshPtrs)),
 	name(name)
 {
-	DirectX::XMStoreFloat4x4(&this->transform, transform);
+	DirectX::XMStoreFloat4x4(&baseTransform, transform);
+	DirectX::XMStoreFloat4x4(&appliedTransform, DirectX::XMMatrixIdentity());
 }
 void Node::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noxnd
 {
-	const auto built = DirectX::XMLoadFloat4x4(&transform) * accumulatedTransform;
+	const auto built = XMLoadFloat4x4(&baseTransform) * XMLoadFloat4x4(&appliedTransform) * accumulatedTransform;
 	for (const auto pm : meshPtrs)
 	{
 		pm->Draw(gfx, built);
@@ -60,7 +62,7 @@ void Node::AddChild(std::unique_ptr<Node> pChild) noxnd
 	childPtrs.push_back(std::move(pChild));
 }
 
-void Node::ShowTree(int& nodeIndexTracked, std::optional<int>& selectedIndex) const noexcept
+void Node::ShowTree(int& nodeIndexTracked, std::optional<int>& selectedIndex, Node*& pSelectedNode) const noexcept
 {
 	// nodeIndex는 gui 트리 노드들을 위한 uid(고유 식별자) 역할을 하며, 재귀를 통해 증가됨.
 	const int currentNodeIndex = nodeIndexTracked;
@@ -74,13 +76,24 @@ void Node::ShowTree(int& nodeIndexTracked, std::optional<int>& selectedIndex) co
 	// 트리 노드가 펼쳐지면, 재귀적으로 모든 자식 노드들에 대해 ShowTree 호출.
 	if (ImGui::TreeNodeEx((void*)(intptr_t)currentNodeIndex, node_flags, name.c_str()))
 	{
-		selectedIndex = ImGui::IsItemClicked() ? currentNodeIndex : selectedIndex;
+		// 선택한 노드를 포착하고 설정함.
+		if (ImGui::IsItemClicked())
+		{
+			selectedIndex = currentNodeIndex;
+			pSelectedNode = const_cast<Node*>(this);
+		}
+
 		for (const auto& pChild : childPtrs)
 		{
-			pChild->ShowTree(nodeIndexTracked, selectedIndex);
+			pChild->ShowTree(nodeIndexTracked, selectedIndex, pSelectedNode);
 		}
 		ImGui::TreePop();
 	}
+}
+
+void Node::SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept
+{
+	DirectX::XMStoreFloat4x4(&appliedTransform, transform);
 }
 
 class ModelWindow // pImpl. 오직 구현부에서만 클래스를 선언하고 정의함.
@@ -97,28 +110,39 @@ public:
 		if (ImGui::Begin(windowName))
 		{
 			ImGui::Columns(2, nullptr, true);
-			root.ShowTree(nodeIndexTracker, selectedIndex);
+			root.ShowTree(nodeIndexTracker, selectedIndex, pSelectedNode);
 
 			ImGui::NextColumn();
-			ImGui::Text("Orientation");
-			ImGui::SliderAngle("Roll", &pos.roll, -180.0f, 180.0f);
-			ImGui::SliderAngle("Pitch", &pos.pitch, -180.0f, 180.0f);
-			ImGui::SliderAngle("Yaw", &pos.yaw, -180.0f, 180.0f);
-			ImGui::Text("Position");
-			ImGui::SliderFloat("X", &pos.x, -20.0f, 20.0f);
-			ImGui::SliderFloat("Y", &pos.y, -20.0f, 20.0f);
-			ImGui::SliderFloat("Z", &pos.z, -20.0f, 20.0f);
+			if (pSelectedNode != nullptr)
+			{
+				auto& transform = transforms[*selectedIndex];
+				ImGui::Text("Orientation");
+				ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
+				ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
+				ImGui::SliderAngle("Yaw", &transform.yaw, -180.0f, 180.0f);
+				ImGui::Text("Position");
+				ImGui::SliderFloat("X", &transform.x, -20.0f, 20.0f);
+				ImGui::SliderFloat("Y", &transform.y, -20.0f, 20.0f);
+				ImGui::SliderFloat("Z", &transform.z, -20.0f, 20.0f);
+			}
 		}
 		ImGui::End();
 	}
 	DirectX::XMMATRIX GetTransform() const noexcept
 	{
-		return DirectX::XMMatrixRotationRollPitchYaw(pos.roll, pos.pitch, pos.yaw) *
-			   DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+		const auto& transform = transforms.at(*selectedIndex);
+		return
+			DirectX::XMMatrixRotationRollPitchYaw(transform.roll, transform.pitch, transform.yaw) *
+			DirectX::XMMatrixTranslation(transform.x, transform.y, transform.z);
+	}
+	Node* GetSelectedNode() const noexcept
+	{
+		return pSelectedNode;
 	}
 private:
 	std::optional<int> selectedIndex;
-	struct
+	Node* pSelectedNode;
+	struct TransformParameters
 	{
 		float roll = 0.0f;
 		float pitch = 0.0f;
@@ -126,7 +150,8 @@ private:
 		float x = 0.0f;
 		float y = 0.0f;
 		float z = 0.0f;
-	} pos;
+	};
+	std::unordered_map<int, TransformParameters> transforms;
 };
 
 // Model
@@ -149,7 +174,11 @@ Model::Model(Graphics& gfx, const std::string fileName)
 }
 void Model::Draw(Graphics& gfx) const noxnd
 {
-	pRoot->Draw(gfx, pWindow->GetTransform());
+	if (auto node = pWindow->GetSelectedNode())
+	{
+		node->SetAppliedTransform(pWindow->GetTransform());
+	}
+	pRoot->Draw(gfx, DirectX::XMMatrixIdentity());
 }
 
 void Model::ShowWindow(const char* windowName) noexcept
