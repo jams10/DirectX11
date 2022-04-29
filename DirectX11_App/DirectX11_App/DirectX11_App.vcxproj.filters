@@ -148,9 +148,6 @@
     <ClCompile Include="Light\PointLight.cpp">
       <Filter>Light</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable\ImportModelTest.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
@@ -234,19 +231,7 @@
     <ClInclude Include="Drawable\Primitive\IndexedTriangleList.h">
       <Filter>Drawable\Primitive</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable\Primitive\Plane.h">
-      <Filter>Drawable\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\Primitive\Prism.h">
-      <Filter>Drawable\Primitive</Filter>
-    </ClInclude>
     <ClInclude Include="Drawable\Primitive\Sphere.h">
-      <Filter>Drawable\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\Primitive\Cone.h">
-      <Filter>Drawable\Primitive</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\Primitive\Cube.h">
       <Filter>Drawable\Primitive</Filter>
     </ClInclude>
     <ClInclude Include="Input\Keyboard.h">
@@ -308,12 +293,6 @@
     </ClInclude>
     <ClInclude Include="Light\PointLight.h">
       <Filter>Light</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\TestObject.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\ImportModelTest.h">
-      <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Bindable\Vertex.h">
       <Filter>Bindable</Filter>

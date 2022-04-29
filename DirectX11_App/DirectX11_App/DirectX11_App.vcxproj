@@ -108,7 +108,6 @@
     <ClCompile Include="Bindable\VertexShader.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable\Drawable.cpp" />
-    <ClCompile Include="Drawable\ImportModelTest.cpp" />
     <ClCompile Include="Drawable\SolidSphere.cpp" />
     <ClCompile Include="ErrorHandling\CustomException.cpp" />
     <ClCompile Include="ErrorHandling\dxerr.cpp" />
@@ -153,16 +152,10 @@
     <ClInclude Include="ConditionalNoexcept.h" />
     <ClInclude Include="Drawable\Drawable.h" />
     <ClInclude Include="Drawable\DrawableBase.h" />
-    <ClInclude Include="Drawable\ImportModelTest.h" />
     <ClInclude Include="Drawable\Mesh.h" />
-    <ClInclude Include="Drawable\Primitive\Cone.h" />
-    <ClInclude Include="Drawable\Primitive\Cube.h" />
     <ClInclude Include="Drawable\Primitive\IndexedTriangleList.h" />
-    <ClInclude Include="Drawable\Primitive\Plane.h" />
-    <ClInclude Include="Drawable\Primitive\Prism.h" />
     <ClInclude Include="Drawable\Primitive\Sphere.h" />
     <ClInclude Include="Drawable\SolidSphere.h" />
-    <ClInclude Include="Drawable\TestObject.h" />
     <ClInclude Include="ErrorHandling\CustomException.h" />
     <ClInclude Include="ErrorHandling\dxerr.h" />
     <ClInclude Include="ErrorHandling\DxgiInfoManager.h" />
