@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "../Imgui/imgui.h"
 
 // Mesh
 Mesh::Mesh(Graphics& gfx, std::vector<std::unique_ptr<Bind::Bindable>> bindPtrs)
@@ -23,7 +24,7 @@ Mesh::Mesh(Graphics& gfx, std::vector<std::unique_ptr<Bind::Bindable>> bindPtrs)
 
 	AddBind(std::make_unique<Bind::TransformCbuf>(gfx, *this));
 }
-void Mesh::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept(!IS_DEBUG)
+void Mesh::Draw(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noxnd
 {
 	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
 	Drawable::Draw(gfx);
@@ -33,11 +34,11 @@ DirectX::XMMATRIX Mesh::GetTransformXM() const noexcept
 	return DirectX::XMLoadFloat4x4(&transform);
 }
 
-
 // Node
-Node::Node(std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noxnd
+Node::Node(const std::string& name, std::vector<Mesh*> meshPtrs, const DirectX::XMMATRIX& transform) noxnd
 	:
-meshPtrs(std::move(meshPtrs))
+	meshPtrs(std::move(meshPtrs)),
+	name(name)
 {
 	DirectX::XMStoreFloat4x4(&this->transform, transform);
 }
@@ -59,6 +60,19 @@ void Node::AddChild(std::unique_ptr<Node> pChild) noxnd
 	childPtrs.push_back(std::move(pChild));
 }
 
+void Node::RenderTree() const noexcept
+{
+	// 트리 노드가 펼쳐지면, 재귀적으로 모든 자식 노드들에 대해 RenderTree 호출.
+	if (ImGui::TreeNode(name.c_str()))
+	{
+		for (const auto& pChild : childPtrs)
+		{
+			pChild->RenderTree();
+		}
+		ImGui::TreePop();
+	}
+}
+
 
 // Model
 Model::Model(Graphics& gfx, const std::string fileName)
@@ -76,10 +90,34 @@ Model::Model(Graphics& gfx, const std::string fileName)
 
 	pRoot = ParseNode(*pScene->mRootNode);
 }
-void Model::Draw(Graphics& gfx, DirectX::FXMMATRIX transform) const
+void Model::Draw(Graphics& gfx) const noxnd
 {
+	const auto transform = DirectX::XMMatrixRotationRollPitchYaw(pos.roll, pos.pitch, pos.yaw) *
+						   DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
 	pRoot->Draw(gfx, transform);
 }
+
+void Model::ShowWindow(const char* windowName) noexcept
+{
+	windowName = windowName ? windowName : "Model";
+	if (ImGui::Begin(windowName))
+	{
+		ImGui::Columns(2, nullptr, true);
+		pRoot->RenderTree();
+
+		ImGui::NextColumn();
+		ImGui::Text("Orientation");
+		ImGui::SliderAngle("Roll", &pos.roll, -180.0f, 180.0f);
+		ImGui::SliderAngle("Pitch", &pos.pitch, -180.0f, 180.0f);
+		ImGui::SliderAngle("Yaw", &pos.yaw, -180.0f, 180.0f);
+		ImGui::Text("Position");
+		ImGui::SliderFloat("X", &pos.x, -20.0f, 20.0f);
+		ImGui::SliderFloat("Y", &pos.y, -20.0f, 20.0f);
+		ImGui::SliderFloat("Z", &pos.z, -20.0f, 20.0f);
+	}
+	ImGui::End();
+}
+
 std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 {
 	namespace dx = DirectX;
@@ -135,7 +173,7 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
-std::unique_ptr<Node> Model::ParseNode(const aiNode& node)
+std::unique_ptr<Node> Model::ParseNode(const aiNode& node) noexcept
 {
 	namespace dx = DirectX;
 	const auto transform = dx::XMMatrixTranspose(dx::XMLoadFloat4x4(
@@ -150,7 +188,7 @@ std::unique_ptr<Node> Model::ParseNode(const aiNode& node)
 		curMeshPtrs.push_back(meshPtrs.at(meshIdx).get());
 	}
 
-	auto pNode = std::make_unique<Node>(std::move(curMeshPtrs), transform);
+	auto pNode = std::make_unique<Node>(node.mName.C_Str(), std::move(curMeshPtrs), transform);
 	for (size_t i = 0; i < node.mNumChildren; i++)
 	{
 		pNode->AddChild(ParseNode(*node.mChildren[i]));
@@ -158,3 +196,4 @@ std::unique_ptr<Node> Model::ParseNode(const aiNode& node)
 
 	return pNode;
 }
+

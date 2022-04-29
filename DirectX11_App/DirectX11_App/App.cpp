@@ -38,37 +38,26 @@ void App::DoFrame()
 	light.Bind(wnd.Gfx(), cam.GetMatrix()); // 라이트 업데이트.
 	
 	// 3D 모델 그리기
-	const auto transform = DirectX::XMMatrixRotationRollPitchYaw(pos.roll, pos.pitch, pos.yaw) *
-						   DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
-	nano.Draw(wnd.Gfx(), transform);
+	nano.Draw(wnd.Gfx());
 	
 	light.Draw(wnd.Gfx());
 
 	// imgui windows
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
-	ShowModelWindow();
+	ShowImguiDemoWindow();
+	nano.ShowWindow();
 
 	wnd.Gfx().EndFrame();
 }
 
-void App::ShowModelWindow()
+void App::ShowImguiDemoWindow()
 {
-	if (ImGui::Begin("Model"))
+	static bool show_demo_window = true;
+	if (show_demo_window)
 	{
-		using namespace std::string_literals;
-
-		ImGui::Text("Orientation");
-		ImGui::SliderAngle("Roll", &pos.roll, -180.0f, 180.0f);
-		ImGui::SliderAngle("Pitch", &pos.pitch, -180.0f, 180.0f);
-		ImGui::SliderAngle("Yaw", &pos.yaw, -180.0f, 180.0f);
-
-		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &pos.x, -20.0f, 20.0f);
-		ImGui::SliderFloat("Y", &pos.y, -20.0f, 20.0f);
-		ImGui::SliderFloat("Z", &pos.z, -20.0f, 20.0f);
+		ImGui::ShowDemoWindow(&show_demo_window);
 	}
-	ImGui::End();
 }
 
 App::~App()
