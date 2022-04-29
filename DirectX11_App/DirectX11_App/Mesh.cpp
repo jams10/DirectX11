@@ -60,22 +60,64 @@ void Node::AddChild(std::unique_ptr<Node> pChild) noxnd
 	childPtrs.push_back(std::move(pChild));
 }
 
-void Node::RenderTree() const noexcept
+void Node::ShowTree() const noexcept
 {
-	// 트리 노드가 펼쳐지면, 재귀적으로 모든 자식 노드들에 대해 RenderTree 호출.
+	// 트리 노드가 펼쳐지면, 재귀적으로 모든 자식 노드들에 대해 ShowTree 호출.
 	if (ImGui::TreeNode(name.c_str()))
 	{
 		for (const auto& pChild : childPtrs)
 		{
-			pChild->RenderTree();
+			pChild->ShowTree();
 		}
 		ImGui::TreePop();
 	}
 }
 
+class ModelWindow // pImpl. 오직 구현부에서만 클래스를 선언하고 정의함.
+{
+public:
+	void Show(const char* windowName, const Node& root) noexcept
+	{
+		// window name defaults to "Model"
+		windowName = windowName ? windowName : "Model";
+		if (ImGui::Begin(windowName))
+		{
+			ImGui::Columns(2, nullptr, true);
+			root.ShowTree();
+
+			ImGui::NextColumn();
+			ImGui::Text("Orientation");
+			ImGui::SliderAngle("Roll", &pos.roll, -180.0f, 180.0f);
+			ImGui::SliderAngle("Pitch", &pos.pitch, -180.0f, 180.0f);
+			ImGui::SliderAngle("Yaw", &pos.yaw, -180.0f, 180.0f);
+			ImGui::Text("Position");
+			ImGui::SliderFloat("X", &pos.x, -20.0f, 20.0f);
+			ImGui::SliderFloat("Y", &pos.y, -20.0f, 20.0f);
+			ImGui::SliderFloat("Z", &pos.z, -20.0f, 20.0f);
+		}
+		ImGui::End();
+	}
+	DirectX::XMMATRIX GetTransform() const noexcept
+	{
+		return DirectX::XMMatrixRotationRollPitchYaw(pos.roll, pos.pitch, pos.yaw) *
+			   DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+	}
+private:
+	struct
+	{
+		float roll = 0.0f;
+		float pitch = 0.0f;
+		float yaw = 0.0f;
+		float x = 0.0f;
+		float y = 0.0f;
+		float z = 0.0f;
+	} pos;
+};
 
 // Model
 Model::Model(Graphics& gfx, const std::string fileName)
+	:
+	pWindow(std::make_unique<ModelWindow>())
 {
 	Assimp::Importer imp;
 	const auto pScene = imp.ReadFile(fileName.c_str(),
@@ -92,30 +134,16 @@ Model::Model(Graphics& gfx, const std::string fileName)
 }
 void Model::Draw(Graphics& gfx) const noxnd
 {
-	const auto transform = DirectX::XMMatrixRotationRollPitchYaw(pos.roll, pos.pitch, pos.yaw) *
-						   DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
-	pRoot->Draw(gfx, transform);
+	pRoot->Draw(gfx, pWindow->GetTransform());
 }
 
 void Model::ShowWindow(const char* windowName) noexcept
 {
-	windowName = windowName ? windowName : "Model";
-	if (ImGui::Begin(windowName))
-	{
-		ImGui::Columns(2, nullptr, true);
-		pRoot->RenderTree();
+	pWindow->Show(windowName, *pRoot);
+}
 
-		ImGui::NextColumn();
-		ImGui::Text("Orientation");
-		ImGui::SliderAngle("Roll", &pos.roll, -180.0f, 180.0f);
-		ImGui::SliderAngle("Pitch", &pos.pitch, -180.0f, 180.0f);
-		ImGui::SliderAngle("Yaw", &pos.yaw, -180.0f, 180.0f);
-		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &pos.x, -20.0f, 20.0f);
-		ImGui::SliderFloat("Y", &pos.y, -20.0f, 20.0f);
-		ImGui::SliderFloat("Z", &pos.z, -20.0f, 20.0f);
-	}
-	ImGui::End();
+Model::~Model() noexcept
+{
 }
 
 std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
