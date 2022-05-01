@@ -109,18 +109,20 @@ void Window::SetTitle(const std::wstring& title)
 	}
 }
 
-void Window::EnableCursor()
+void Window::EnableCursor() noexcept
 {
 	cursorEnabled = true;
 	ShowCursor();
 	EnableImGuiMouse();
+	FreeCursor();
 }
 
-void Window::DisableCursor()
+void Window::DisableCursor() noexcept
 {
 	cursorEnabled = false;
 	HideCursor();
 	DisableImGuiMouse();
+	ConfineCursor();
 }
 
 // 윈도우 메시지 루프. 윈도우 메시지를 프로시져로 보내주는 함수.
@@ -162,22 +164,35 @@ Graphics& Window::Gfx()
 	return *pGfx;
 }
 
-void Window::HideCursor()
+void Window::ConfineCursor() noexcept
+{
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	ClipCursor(&rect);
+}
+
+void Window::FreeCursor() noexcept
+{
+	ClipCursor(nullptr);
+}
+
+void Window::HideCursor() noexcept
 {
 	while (::ShowCursor(FALSE) >= 0);
 }
 
-void Window::ShowCursor()
+void Window::ShowCursor() noexcept
 {
 	while (::ShowCursor(TRUE) < 0);
 }
 
-void Window::EnableImGuiMouse()
+void Window::EnableImGuiMouse() noexcept
 {
 	ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
 }
 
-void Window::DisableImGuiMouse()
+void Window::DisableImGuiMouse() noexcept
 {
 	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
@@ -270,6 +285,8 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 #pragma region MouseMSG
 	case WM_MOUSEMOVE:
 	{
+		const POINTS pt = MAKEPOINTS(lParam);
+
 		// 커서를 감추는 옵션이 설정되면, 먼저 커서를 감춰줌.
 		if (!cursorEnabled)
 		{
@@ -287,8 +304,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		{
 			break;
 		}
-
-		const POINTS pt = MAKEPOINTS(lParam);
 
 		// 마우스 좌표가 클라이언트 영역 안에 있는 경우
 		if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
