@@ -109,6 +109,18 @@ void Window::SetTitle(const std::wstring& title)
 	}
 }
 
+void Window::EnableCursor()
+{
+	cursorEnabled = true;
+	ShowCursor();
+}
+
+void Window::DisableCursor()
+{
+	cursorEnabled = false;
+	HideCursor();
+}
+
 // 윈도우 메시지 루프. 윈도우 메시지를 프로시져로 보내주는 함수.
 std::optional<int> Window::ProcessMessages() noexcept
 {
@@ -146,6 +158,16 @@ Graphics& Window::Gfx()
 		throw WND_NOGFX_EXCEPT();
 	}
 	return *pGfx;
+}
+
+void Window::HideCursor()
+{
+	while (::ShowCursor(FALSE) >= 0);
+}
+
+void Window::ShowCursor()
+{
+	while (::ShowCursor(TRUE) < 0);
 }
 
 // 직접 만들어준 멤버 함수를 윈도우 프로시져로 사용하기 위한 기본 설정을 담당하는 함수.
@@ -236,6 +258,18 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 #pragma region MouseMSG
 	case WM_MOUSEMOVE:
 	{
+		// 커서를 감추는 옵션이 설정되면, 먼저 커서를 감춰줌.
+		if (!cursorEnabled)
+		{
+			if (!mouse.IsInWindow())
+			{
+				SetCapture(hWnd);
+				mouse.OnMouseEnter();
+				HideCursor();
+			}
+			break;
+		}
+
 		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
 		if (imio.WantCaptureKeyboard)
 		{
