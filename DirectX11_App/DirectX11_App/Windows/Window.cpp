@@ -112,7 +112,7 @@ void Window::SetTitle(const std::wstring& title)
 void Window::EnableCursor() noexcept
 {
 	cursorEnabled = true;
-	ShowCursor();
+	//ShowCursor();
 	EnableImGuiMouse();
 	FreeCursor();
 }
@@ -120,7 +120,7 @@ void Window::EnableCursor() noexcept
 void Window::DisableCursor() noexcept
 {
 	cursorEnabled = false;
-	HideCursor();
+	//HideCursor();
 	DisableImGuiMouse();
 	ConfineCursor();
 }
@@ -251,6 +251,22 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	case WM_KILLFOCUS:    // 윈도우에 대한 포커스를 잃어버리면 키 입력 상태를 모두 초기화 해줌.
 		kbd.ClearState();
 		break;
+	case WM_ACTIVATE:
+		// confine/free cursor on window to foreground/background if cursor disabled
+		if (!cursorEnabled)
+		{
+			if (wParam & WA_ACTIVE)
+			{
+				ConfineCursor();
+				HideCursor();
+			}
+			else
+			{
+				FreeCursor();
+				ShowCursor();
+			}
+		}
+		break;
 #pragma region KeyboardMSG
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
@@ -333,6 +349,13 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 	}
 	case WM_LBUTTONDOWN:
 	{
+		SetForegroundWindow(hWnd);
+		if (!cursorEnabled)
+		{
+			ConfineCursor();
+			HideCursor();
+		}
+
 		// imgui가 입력을 캡쳐하고 싶은 경우, 우리의 프로시져 에서 입력 메시지에 대한 처리를 하지 않도록 함.
 		if (imio.WantCaptureKeyboard)
 		{
