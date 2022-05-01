@@ -113,12 +113,14 @@ void Window::EnableCursor()
 {
 	cursorEnabled = true;
 	ShowCursor();
+	EnableImGuiMouse();
 }
 
 void Window::DisableCursor()
 {
 	cursorEnabled = false;
 	HideCursor();
+	DisableImGuiMouse();
 }
 
 // 윈도우 메시지 루프. 윈도우 메시지를 프로시져로 보내주는 함수.
@@ -168,6 +170,16 @@ void Window::HideCursor()
 void Window::ShowCursor()
 {
 	while (::ShowCursor(TRUE) < 0);
+}
+
+void Window::EnableImGuiMouse()
+{
+	ImGui::GetIO().ConfigFlags &= ~ImGuiConfigFlags_NoMouse;
+}
+
+void Window::DisableImGuiMouse()
+{
+	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouse;
 }
 
 // 직접 만들어준 멤버 함수를 윈도우 프로시져로 사용하기 위한 기본 설정을 담당하는 함수.
@@ -265,7 +277,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 			{
 				SetCapture(hWnd);
 				mouse.OnMouseEnter();
-				HideCursor();
+				DisableCursor();
 			}
 			break;
 		}
