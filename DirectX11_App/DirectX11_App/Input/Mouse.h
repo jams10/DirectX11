@@ -96,6 +96,9 @@ public:
 		return buffer.empty();
 	}
 	void Flush() noexcept;
+	void EnableRaw() noexcept;
+	void DisableRaw() noexcept;
+	bool RawEnabled() const noexcept;
 private:
 	void OnMouseMove(int x, int y) noexcept;
 	void OnMouseLeave() noexcept;
@@ -117,6 +120,7 @@ private:
 	bool leftIsPressed = false;
 	bool rightIsPressed = false;
 	bool isInWindow = false;			 // 마우스가 윈도우 안에 들어와있는지 여부.
+	bool rawEnabled = false;             
 	int wheelDeltaCarry = 0;			 // 마우스 휠 이동 누적 값.
 	std::queue<Event> buffer;			 // 마우스 Event 저장해줄 버퍼.
 	std::queue<RawDelta> rawDeltaBuffer; // 마우스 raw input을 저장해줄 버퍼.

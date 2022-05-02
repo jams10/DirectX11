@@ -69,6 +69,21 @@ void Mouse::Flush() noexcept
 	buffer = std::queue<Event>();
 }
 
+void Mouse::EnableRaw() noexcept
+{
+	rawEnabled = true;
+}
+
+void Mouse::DisableRaw() noexcept
+{
+	rawEnabled = false;
+}
+
+bool Mouse::RawEnabled() const noexcept
+{
+	return rawEnabled;
+}
+
 // 마우스가 움직인 경우, 마우스 좌표를 갱신하고 마우스 Event 버퍼에 Move Event를 넣어주는 함수.
 void Mouse::OnMouseMove(int newx, int newy) noexcept
 {

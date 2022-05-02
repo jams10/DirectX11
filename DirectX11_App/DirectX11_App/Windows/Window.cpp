@@ -136,6 +136,11 @@ void Window::DisableCursor() noexcept
 	ConfineCursor();
 }
 
+bool Window::CursorEnabled() const noexcept
+{
+	return cursorEnabled;
+}
+
 // 윈도우 메시지 루프. 윈도우 메시지를 프로시져로 보내주는 함수.
 std::optional<int> Window::ProcessMessages() noexcept
 {
@@ -442,6 +447,11 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 #pragma region RawMouseMSG
 	case WM_INPUT:
 	{
+		if (!mouse.RawEnabled())
+		{
+			break;
+		}
+
 		UINT size;
 		// first get the size of the input data
 		if (GetRawInputData(
