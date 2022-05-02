@@ -7,6 +7,17 @@ std::pair<int, int> Mouse::GetPos() const noexcept
 	return { x,y };
 }
 
+std::optional<Mouse::RawDelta> Mouse::ReadRawDelta() noexcept
+{
+	if (rawDeltaBuffer.empty())
+	{
+		return std::nullopt;
+	}
+	const RawDelta d = rawDeltaBuffer.front();
+	rawDeltaBuffer.pop();
+	return d;
+}
+
 // 마우스 X 좌표를 리턴하는 함수.
 int Mouse::GetPosX() const noexcept
 {
@@ -84,6 +95,12 @@ void Mouse::OnMouseEnter() noexcept
 	TrimBuffer();
 }
 
+void Mouse::OnRawDelta(int dx, int dy) noexcept
+{
+	rawDeltaBuffer.push({ dx,dy });
+	TrimBuffer();
+}
+
 // 마우스 왼쪽 버튼이 눌린 경우를 처리해주는 함수.
 void Mouse::OnLeftPressed(int x, int y) noexcept
 {
@@ -140,6 +157,14 @@ void Mouse::TrimBuffer() noexcept
 	while (buffer.size() > bufferSize)
 	{
 		buffer.pop();
+	}
+}
+
+void Mouse::TrimRawInputBuffer() noexcept
+{
+	while (rawDeltaBuffer.size() > bufferSize)
+	{
+		rawDeltaBuffer.pop();
 	}
 }
 

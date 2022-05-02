@@ -17,6 +17,7 @@ public:
 private:
 	void DoFrame();
 	void ShowImguiDemoWindow();
+	void ShowRawInputWindow();
 private:
 	ImguiManager imgui;
 	Window wnd;
@@ -27,6 +28,7 @@ private:
 	PointLight light;
 	Model nano{ wnd.Gfx(), "Models\\nano.gltf" };
 private:
+	int x = 0, y = 0;
 	float aspectRatio;
 	float nearZ;
 	float farZ;
