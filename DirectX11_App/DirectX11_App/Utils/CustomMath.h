@@ -20,7 +20,7 @@ T wrap_angle(T theta)
 	// 따라서 -pi ~ pi 범위로 각도를 제한시켜 줌.
 	// fmod : 나머지 계산 함수.
 	const T modded = fmod(theta, (T)2.0 * (T)PI_D); // 분자 : theta / 분모 : 2π
-	return (modded > (T)PI_D) ? // 나머지가 π보타 클 경우, 나머지에서 -2π만큼 빼서 -π ~ π 범위로 맞춰줌.(주기 함수이기 때문에 2π 뺀 값과 같음.)
+	return (modded > (T)PI_D) ? // 나머지가 π보다 클 경우, 나머지에서 -2π만큼 빼서 -π ~ π 범위로 맞춰줌.(주기 함수이기 때문에 2π 뺀 값과 같음.)
 		(modded - (T)2.0 * (T)PI_D) :
 		modded;
 }

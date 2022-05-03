@@ -17,18 +17,16 @@ public:
 private:
 	void DoFrame();
 	void ShowImguiDemoWindow();
-	void ShowRawInputWindow();
 private:
 	ImguiManager imgui;
 	Window wnd;
 	GameTimer gt;
-	bool show_demo_window = true;
+	bool show_demo_window = false;
 	float speed_factor = 1.0f;
 	Camera cam;
 	PointLight light;
 	Model nano{ wnd.Gfx(), "Models\\nano.gltf" };
 private:
-	int x = 0, y = 0;
 	float aspectRatio;
 	float nearZ;
 	float farZ;
