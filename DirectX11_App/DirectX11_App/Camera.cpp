@@ -9,8 +9,19 @@ Camera::Camera() noexcept
 
 DirectX::XMMATRIX Camera::GetMatrix() const noexcept
 {
-	return DirectX::XMMatrixTranslation(-pos.x, -pos.y, -pos.z) *
-		   DirectX::XMMatrixRotationRollPitchYaw(-pitch, -yaw, 0.0f);	
+	const DirectX::XMVECTOR forwardBaseVector = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+	
+	// 앞 양의 z축 방향을 바라보는 기본 벡터에 카메라의 회전 값을 적용해줌.
+	const auto lookVector = DirectX::XMVector3Transform(forwardBaseVector,
+		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, 0.0f)
+	);
+
+	// 카메라 변환 행렬을 만들어줌.
+	// 해당 행렬은 모든 오브젝트에 적용되며, 모든 오브젝트들이 카메라의 위치와 회전 기준으로 놓여지게 함. 즉, 뷰 변환 행렬.
+	// 이 때, 카메라의 위를 향하는 벡터를 항상 양의 y축 방향이 되게 하여 오브젝트들이 barrel roll 되는 현상을 막아줌.
+	const auto camPosition = DirectX::XMLoadFloat3(&pos);
+	const auto camTarget = DirectX::XMVectorAdd(camPosition, lookVector);
+	return DirectX::XMMatrixLookAtLH(camPosition, camTarget, DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 }
 
 // 카메라 컨트롤 ui 생성 함수.
