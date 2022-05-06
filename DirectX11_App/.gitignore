@@ -50,7 +50,7 @@ artifacts/
 *.ilk
 *.meta
 *.obj
-!DirectX11_App/Models/*.obj
+!DirectX11_App/Models/**/*.obj
 *.pch
 *.pdb
 *.pgc
