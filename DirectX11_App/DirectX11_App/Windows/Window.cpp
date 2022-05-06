@@ -123,7 +123,7 @@ void Window::SetTitle(const std::wstring& title)
 void Window::EnableCursor() noexcept
 {
 	cursorEnabled = true;
-	//ShowCursor();
+	ShowCursor();
 	EnableImGuiMouse();
 	FreeCursor();
 }
@@ -131,7 +131,7 @@ void Window::EnableCursor() noexcept
 void Window::DisableCursor() noexcept
 {
 	cursorEnabled = false;
-	//HideCursor();
+	HideCursor();
 	DisableImGuiMouse();
 	ConfineCursor();
 }
