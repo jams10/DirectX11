@@ -89,11 +89,14 @@ void Node::AddChild(std::unique_ptr<Node> pChild) noxnd
 	childPtrs.push_back(std::move(pChild));
 }
 
-void Node::ShowTree(std::optional<int>& selectedIndex, Node*& pSelectedNode) const noexcept
+void Node::ShowTree(Node*& pSelectedNode) const noexcept
 {
+	// 선택한 노드가 없다면 selectedId를 -1로 설정해줌.
+	const int selectedId = (pSelectedNode == nullptr) ? -1 : pSelectedNode->GetId();
+
 	// 현재 노드를 위한 flag들을 바인딩해줌.
 	const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
-		| ((GetId() == selectedIndex.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
+		| ((GetId() == selectedId) ? ImGuiTreeNodeFlags_Selected : 0)
 		| ((childPtrs.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
 
 	// 노드 그려주기
@@ -104,7 +107,6 @@ void Node::ShowTree(std::optional<int>& selectedIndex, Node*& pSelectedNode) con
 	// 선택한 노드를 포착하고 설정함.
 	if (ImGui::IsItemClicked())
 	{
-		selectedIndex = GetId();
 		pSelectedNode = const_cast<Node*>(this);
 	}
 
@@ -113,7 +115,7 @@ void Node::ShowTree(std::optional<int>& selectedIndex, Node*& pSelectedNode) con
 	{
 		for (const auto& pChild : childPtrs)
 		{
-			pChild->ShowTree(selectedIndex, pSelectedNode);
+			pChild->ShowTree(pSelectedNode);
 		}
 		ImGui::TreePop();
 	}
@@ -143,12 +145,12 @@ public:
 		if (ImGui::Begin(windowName))
 		{
 			ImGui::Columns(2, nullptr, true);
-			root.ShowTree(selectedIndex, pSelectedNode);
+			root.ShowTree(pSelectedNode);
 
 			ImGui::NextColumn();
 			if (pSelectedNode != nullptr)
 			{
-				auto& transform = transforms[*selectedIndex];
+				auto& transform = transforms[pSelectedNode->GetId()];
 				ImGui::Text("Orientation");
 				ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
 				ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
@@ -163,7 +165,8 @@ public:
 	}
 	DirectX::XMMATRIX GetTransform() const noexcept
 	{
-		const auto& transform = transforms.at(*selectedIndex);
+		assert(pSelectedNode != nullptr);
+		const auto& transform = transforms.at(pSelectedNode->GetId());
 		return
 			DirectX::XMMatrixRotationRollPitchYaw(transform.roll, transform.pitch, transform.yaw) *
 			DirectX::XMMatrixTranslation(transform.x, transform.y, transform.z);
