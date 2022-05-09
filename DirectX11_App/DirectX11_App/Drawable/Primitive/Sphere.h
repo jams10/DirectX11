@@ -1,4 +1,6 @@
 #pragma once
+#include <optional>
+#include "Vertex.h"
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
 #include "CustomMath.h"
@@ -8,8 +10,7 @@ class Sphere
 {
 public:
 	// 구체를 위한 정점과 인덱스를 구성해주는 템플릿 클래스. latDiv : 위도(y축) 분할 정점 개수 / longDiv : 경도(x축) 분할 정점 개수.
-	template<class V>
-	static IndexedTriangleList<V> MakeTesselated(int latDiv, int longDiv)
+	static IndexedTriangleList MakeTesselated(TemplateVertex::VertexLayout layout, int latDiv, int longDiv)
 	{
 		assert(latDiv >= 3);
 		assert(longDiv >= 3);
@@ -19,7 +20,7 @@ public:
 		const float lattitudeAngle = PI / latDiv;
 		const float longitudeAngle = 2.0f * PI / longDiv;
 
-		std::vector<V> vertices;
+		TemplateVertex::VertexBuffer vb{ std::move(layout) };
 		for (int iLat = 1; iLat < latDiv; iLat++)
 		{
 			const auto latBase = DirectX::XMVector3Transform(
@@ -28,22 +29,29 @@ public:
 			);
 			for (int iLong = 0; iLong < longDiv; iLong++)
 			{
-				vertices.emplace_back();
+				DirectX::XMFLOAT3 calculatedPos;
 				auto v = DirectX::XMVector3Transform(
 					latBase,
 					DirectX::XMMatrixRotationZ(longitudeAngle * iLong)
 				);
-				DirectX::XMStoreFloat3(&vertices.back().pos, v);
+				DirectX::XMStoreFloat3(&calculatedPos, v);
+				vb.EmplaceBack(calculatedPos);
 			}
 		}
 
 		// 위 뚜껑을 덮어주기 위한 정점들을 만들어줌.
-		const auto iNorthPole = (unsigned short)vertices.size(); // 위쪽 뚜껑 가운데 정점.
-		vertices.emplace_back();
-		DirectX::XMStoreFloat3(&vertices.back().pos, base);
-		const auto iSouthPole = (unsigned short)vertices.size(); // 아래쪽 뚜껑 가운데 정점.
-		vertices.emplace_back();
-		DirectX::XMStoreFloat3(&vertices.back().pos, DirectX::XMVectorNegate(base));
+		const auto iNorthPole = (unsigned short)vb.Size();
+		{
+			DirectX::XMFLOAT3 northPos;
+			DirectX::XMStoreFloat3(&northPos, base);
+			vb.EmplaceBack(northPos);
+		}
+		const auto iSouthPole = (unsigned short)vb.Size();
+		{
+			DirectX::XMFLOAT3 southPos;
+			DirectX::XMStoreFloat3(&southPos, DirectX::XMVectorNegate(base));
+			vb.EmplaceBack(southPos);
+		}
 
 		const auto calcIdx = [latDiv, longDiv](unsigned short iLat, unsigned short iLong) // 인덱스 계산을 위한 람다 함수.
 		{ return iLat * longDiv + iLong; };
@@ -91,11 +99,15 @@ public:
 		indices.push_back(calcIdx(latDiv - 2, longDiv - 1));
 		indices.push_back(iSouthPole);
 
-		return { std::move(vertices),std::move(indices) };
+		return { std::move(vb),std::move(indices) };
 	}
-	template<class V>
-	static IndexedTriangleList<V> Make()
+	static IndexedTriangleList Make(std::optional<TemplateVertex::VertexLayout> layout = std::nullopt)
 	{
-		return MakeTesselated<V>(12, 24);
+		using Element = TemplateVertex::VertexLayout::ElementType;
+		if (!layout)
+		{
+			layout = TemplateVertex::VertexLayout{}.Append(Element::Position3D);
+		}
+		return MakeTesselated(std::move(*layout), 12, 24);
 	}
 };
