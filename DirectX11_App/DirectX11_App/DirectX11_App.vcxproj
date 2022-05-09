@@ -151,7 +151,6 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConditionalNoexcept.h" />
     <ClInclude Include="Drawable\Drawable.h" />
-    <ClInclude Include="Drawable\DrawableBase.h" />
     <ClInclude Include="Drawable\Mesh.h" />
     <ClInclude Include="Drawable\Primitive\IndexedTriangleList.h" />
     <ClInclude Include="Drawable\Primitive\Sphere.h" />

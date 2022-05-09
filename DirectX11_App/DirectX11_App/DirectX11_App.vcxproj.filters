@@ -189,9 +189,6 @@
     <ClInclude Include="Drawable\Drawable.h">
       <Filter>Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable\DrawableBase.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="ErrorHandling\DxgiInfoManager.h">
       <Filter>ErrorHandling</Filter>
     </ClInclude>
