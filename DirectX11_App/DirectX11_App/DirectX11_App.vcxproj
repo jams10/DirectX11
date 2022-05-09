@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Bindable\Bindable.h" />
+    <ClInclude Include="Bindable\BindableCodex.h" />
     <ClInclude Include="Bindable\BindableCommon.h" />
     <ClInclude Include="Bindable\ConstantBuffers.h" />
     <ClInclude Include="Bindable\IndexBuffer.h" />

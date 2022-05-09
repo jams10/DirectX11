@@ -303,6 +303,9 @@
     <ClInclude Include="ConditionalNoexcept.h">
       <Filter>Main</Filter>
     </ClInclude>
+    <ClInclude Include="Bindable\BindableCodex.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

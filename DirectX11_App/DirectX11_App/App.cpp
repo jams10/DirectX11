@@ -6,6 +6,7 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include "StringEncoding.h"
+#include "VertexBuffer.h"
 
 GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
@@ -19,6 +20,8 @@ App::App()
 {
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
+	auto a = Bind::VertexShader::Resolve(wnd.Gfx(), "PhongVS.cso");
+	auto b = Bind::VertexShader::Resolve(wnd.Gfx(), "PhongVS.cso");
 };
 
 void App::DoFrame()
