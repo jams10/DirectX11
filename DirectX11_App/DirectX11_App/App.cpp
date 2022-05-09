@@ -21,7 +21,8 @@ App::App()
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 	auto a = Bind::VertexShader::Resolve(wnd.Gfx(), "PhongVS.cso");
-	auto b = Bind::VertexShader::Resolve(wnd.Gfx(), "PhongVS.cso");
+	auto b = Bind::Sampler::Resolve(wnd.Gfx());
+	auto c = Bind::Sampler::Resolve(wnd.Gfx());
 };
 
 void App::DoFrame()
