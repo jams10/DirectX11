@@ -154,6 +154,9 @@
     <ClCompile Include="Bindable\Vertex.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="TestPlane.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -305,6 +308,12 @@
     </ClInclude>
     <ClInclude Include="Bindable\BindableCodex.h">
       <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\Primitive\Plane.h">
+      <Filter>Drawable\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\TestPlane.h">
+      <Filter>Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

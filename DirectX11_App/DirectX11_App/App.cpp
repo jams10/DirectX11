@@ -16,8 +16,10 @@ App::App()
 	aspectRatio(800.f / 600.f),
 	nearZ(0.5f),
 	farZ(40.f),
-	light(wnd.Gfx())
+	light(wnd.Gfx()),
+	plane(wnd.Gfx(), 3.0f)
 {
+	plane.SetPos({ 1.0f,17.0f,-1.0f });
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -41,6 +43,7 @@ void App::DoFrame()
 	nano.Draw(wnd.Gfx());
 	nano2.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
+	plane.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
 	{
