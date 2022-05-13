@@ -16,16 +16,24 @@ namespace Bind
 
 	void TransformCbuf::Bind(Graphics& gfx) noexcept
 	{
+		UpdateBindImpl(gfx, GetTransforms(gfx));
+	}
+
+	void TransformCbuf::UpdateBindImpl(Graphics& gfx, const Transforms& tf) noexcept
+	{
+		pVcbuf->Update(gfx, tf);
+		pVcbuf->Bind(gfx);
+	}
+
+	TransformCbuf::Transforms TransformCbuf::GetTransforms(Graphics& gfx) noexcept
+	{
 		const auto modelView = parent.GetTransformXM() * gfx.GetCamera();
-		const Transforms tf =
-		{
-			DirectX::XMMatrixTranspose(modelView), // 월드 + 뷰 변환
-			DirectX::XMMatrixTranspose(            // 월드+뷰+투영 변환
+		return {
+			DirectX::XMMatrixTranspose(modelView),
+			DirectX::XMMatrixTranspose(
 				modelView *
 				gfx.GetProjection()
 			)
 		};
-		pVcbuf->Update(gfx, tf);
-		pVcbuf->Bind(gfx);
 	}
 }
