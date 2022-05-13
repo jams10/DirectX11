@@ -103,6 +103,7 @@
     <ClCompile Include="Bindable\Texture.cpp" />
     <ClCompile Include="Bindable\Topology.cpp" />
     <ClCompile Include="Bindable\TransformCbuf.cpp" />
+    <ClCompile Include="Bindable\TransformCBufVtxPxl.cpp" />
     <ClCompile Include="Bindable\Vertex.cpp" />
     <ClCompile Include="Bindable\VertexBuffer.cpp" />
     <ClCompile Include="Bindable\VertexShader.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="Bindable\Texture.h" />
     <ClInclude Include="Bindable\Topology.h" />
     <ClInclude Include="Bindable\TransformCbuf.h" />
+    <ClInclude Include="Bindable\TransformCBufVtxPxl.h" />
     <ClInclude Include="Bindable\Vertex.h" />
     <ClInclude Include="Bindable\VertexBuffer.h" />
     <ClInclude Include="Bindable\VertexShader.h" />

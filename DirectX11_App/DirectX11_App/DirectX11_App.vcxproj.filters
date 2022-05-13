@@ -157,6 +157,7 @@
     <ClCompile Include="TestPlane.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="Bindable\TransformCBufVtxPxl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -314,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="Drawable\TestPlane.h">
       <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\TransformCBufVtxPxl.h">
+      <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
