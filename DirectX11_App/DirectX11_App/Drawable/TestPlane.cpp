@@ -2,7 +2,7 @@
 #include "Primitive/Plane.h"
 #include "BindableCommon.h"
 #include "TransformCBufVtxPxl.h"
-#include "Imgui\imgui.h"
+#include "imgui.h"
 
 TestPlane::TestPlane(Graphics& gfx, float size)
 {

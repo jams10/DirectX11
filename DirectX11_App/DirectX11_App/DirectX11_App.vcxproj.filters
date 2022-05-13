@@ -154,10 +154,13 @@
     <ClCompile Include="Bindable\Vertex.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="TestPlane.cpp">
+    <ClCompile Include="Bindable\TransformCBufVtxPxl.cpp" />
+    <ClCompile Include="Drawable\TestPlane.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="Bindable\TransformCBufVtxPxl.cpp" />
+    <ClCompile Include="Drawable\TestCube.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -318,6 +321,12 @@
     </ClInclude>
     <ClInclude Include="Bindable\TransformCBufVtxPxl.h">
       <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\Primitive\Cube.h">
+      <Filter>Drawable\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\TestCube.h">
+      <Filter>Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

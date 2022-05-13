@@ -110,6 +110,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Drawable\Drawable.cpp" />
     <ClCompile Include="Drawable\SolidSphere.cpp" />
+    <ClCompile Include="Drawable\TestCube.cpp" />
+    <ClCompile Include="Drawable\TestPlane.cpp" />
     <ClCompile Include="ErrorHandling\CustomException.cpp" />
     <ClCompile Include="ErrorHandling\dxerr.cpp" />
     <ClCompile Include="ErrorHandling\DxgiInfoManager.cpp" />
@@ -128,7 +130,6 @@
     <ClCompile Include="Input\Mouse.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="TestPlane.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
     <ClCompile Include="Windows\Window.cpp" />
     <ClCompile Include="Windows\WindowsMessageMap.cpp" />
@@ -156,10 +157,12 @@
     <ClInclude Include="ConditionalNoexcept.h" />
     <ClInclude Include="Drawable\Drawable.h" />
     <ClInclude Include="Drawable\Mesh.h" />
+    <ClInclude Include="Drawable\Primitive\Cube.h" />
     <ClInclude Include="Drawable\Primitive\IndexedTriangleList.h" />
     <ClInclude Include="Drawable\Primitive\Plane.h" />
     <ClInclude Include="Drawable\Primitive\Sphere.h" />
     <ClInclude Include="Drawable\SolidSphere.h" />
+    <ClInclude Include="Drawable\TestCube.h" />
     <ClInclude Include="Drawable\TestPlane.h" />
     <ClInclude Include="ErrorHandling\CustomException.h" />
     <ClInclude Include="ErrorHandling\dxerr.h" />
