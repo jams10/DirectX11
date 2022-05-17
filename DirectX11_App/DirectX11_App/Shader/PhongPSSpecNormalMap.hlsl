@@ -22,7 +22,7 @@ Texture2D nmap;
 SamplerState splr;
 
 
-float4 main(float3 worldPos : Position, float3 n : Normal, float3 tan : Tangent, float3 bitan : Bitangent, float2 tc : Texcoord) : SV_Target
+float4 main(float3 viewPos : Position, float3 n : Normal, float3 tan : Tangent, float3 bitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
     // 노말맵을 적용할 경우 노말맵 텍스쳐를 샘플링 하여 노말값을 얻어옴.
     if (normalMapEnabled)
@@ -43,7 +43,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal, float3 tan : Tangent,
     }
     
 	// fragment to light vector data
-    const float3 vToL = lightPos - worldPos;
+    const float3 vToL = lightPos - viewPos;
     const float distToL = length(vToL);
     const float3 dirToL = vToL / distToL;
 	// attenuation
@@ -57,7 +57,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal, float3 tan : Tangent,
     const float4 specularSample = spec.Sample(splr, tc);
     const float3 specularReflectionColor = specularSample.rgb;
     const float specularPower = pow(2.0f, specularSample.a * 13.0f);
-    const float3 specular = att * (diffuseColor * diffuseIntensity) * pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower);
+    const float3 specular = att * (diffuseColor * diffuseIntensity) * pow(max(0.0f, dot(normalize(-r), normalize(viewPos))), specularPower);
 	// final color
     return float4(saturate((diffuse + ambient) * tex.Sample(splr, tc).rgb + specular * specularReflectionColor), 1.0f);
 }

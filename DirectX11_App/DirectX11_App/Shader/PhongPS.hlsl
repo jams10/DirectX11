@@ -20,10 +20,10 @@ Texture2D tex;
 
 SamplerState splr;
 
-float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
+float4 main(float3 viewPos : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
 {
 	// fragment to light vector data
-    const float3 vToL = lightPos - worldPos; // 카메라 좌표 기준, 도형에서 광원을 향하는 벡터.
+    const float3 vToL = lightPos - viewPos; // 카메라 좌표 기준, 도형에서 광원을 향하는 벡터.
     const float distToL = length(vToL);
     const float3 dirToL = vToL / distToL;
 	// diffuse 감쇠 값
@@ -35,7 +35,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord)
     const float3 w = n * dot(vToL, n);
     const float3 r = w * 2.0f - vToL;
     // 시야 벡터와 반사 벡터 사이의 각도를 기준으로 반사광 강도를 계산함. specularPower 지수 값을 통해 반사광 효과 범위를 조절.
-    const float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(r), normalize(worldPos))), specularPower);
+    const float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(viewPos))), specularPower);
     
 	// final color
     return float4(saturate((diffuse + ambient) * tex.Sample(splr, tc).rgb + specular), 1.0f);
