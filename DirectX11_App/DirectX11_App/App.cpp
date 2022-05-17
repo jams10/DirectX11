@@ -16,10 +16,8 @@ App::App()
 	aspectRatio(800.f / 600.f),
 	nearZ(0.5f),
 	farZ(40.f),
-	light(wnd.Gfx()),
-	plane(wnd.Gfx(), 3.0f)
+	light(wnd.Gfx())
 {
-	plane.SetPos({ -5.0f,17.0f,-1.0f });
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -40,10 +38,9 @@ void App::DoFrame()
 	light.Bind(wnd.Gfx(), cam.GetMatrix()); // 라이트 업데이트.
 	
 	// 3D 모델 그리기
-	nano.Draw(wnd.Gfx());
-	nano2.Draw(wnd.Gfx());
+	wall.Draw(wnd.Gfx());
+	//nano.Draw( wnd.Gfx() );
 	light.Draw(wnd.Gfx());
-	plane.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
 	{
@@ -113,9 +110,8 @@ void App::DoFrame()
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
-	nano.ShowWindow("Model 1");
-	nano2.ShowWindow("Model 2");
-	plane.SpawnControlWindow(wnd.Gfx());
+	wall.ShowWindow("Wall");
+	//nano.ShowWindow( "Model 1" );
 
 	wnd.Gfx().EndFrame();
 }

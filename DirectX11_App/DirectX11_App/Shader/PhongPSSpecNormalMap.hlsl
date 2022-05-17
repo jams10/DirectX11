@@ -9,14 +9,39 @@ cbuffer LightCBuf
     float attQuad;
 };
 
+cbuffer ObjectCBuf
+{
+    bool normalMapEnabled;
+    float padding[3];
+};
+
 Texture2D tex;
 Texture2D spec;
+Texture2D nmap;
 
 SamplerState splr;
 
 
-float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
+float4 main(float3 worldPos : Position, float3 n : Normal, float3 tan : Tangent, float3 bitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
+    // 노말맵을 적용할 경우 노말맵 텍스쳐를 샘플링 하여 노말값을 얻어옴.
+    if (normalMapEnabled)
+    {
+        // 접선 공간에서 뷰 공간으로 변환하기 위한 행렬 생성.
+        const float3x3 tanToView = float3x3(
+            normalize(tan),
+            normalize(bitan),
+            normalize(n)
+        );
+        // 노말 맵으로 부터 노말 값 얻어오기.
+        const float3 normalSample = nmap.Sample(splr, tc).xyz;
+        n.x = normalSample.x * 2.0f - 1.0f;
+        n.y = -normalSample.y * 2.0f + 1.0f;
+        n.z = normalSample.z;
+        // 얻어온 노말 값을 뷰 공간으로 변환.
+        n = mul(n, tanToView);
+    }
+    
 	// fragment to light vector data
     const float3 vToL = lightPos - worldPos;
     const float distToL = length(vToL);

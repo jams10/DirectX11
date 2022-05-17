@@ -359,10 +359,13 @@
     <FxCompile Include="Shader\SolidPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\PhongPSSpecMap.hlsl">
+    <FxCompile Include="Shader\PhongPSSpecNormalMap.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PhongPSNormalMap.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PhongVSNormalMap.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
