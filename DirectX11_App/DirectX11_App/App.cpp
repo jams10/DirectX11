@@ -17,11 +17,9 @@ App::App()
 	nearZ(0.5f),
 	farZ(40.f),
 	light(wnd.Gfx()),
-	plane(wnd.Gfx(), 3.0f),
-	cube(wnd.Gfx(), 4.0f)
+	plane(wnd.Gfx(), 3.0f)
 {
 	plane.SetPos({ -5.0f,17.0f,-1.0f });
-	cube.SetPos({ 3.0f,14.0f,-2.0f });
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -46,7 +44,6 @@ void App::DoFrame()
 	nano2.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
 	plane.Draw(wnd.Gfx());
-	cube.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
 	{
@@ -119,7 +116,6 @@ void App::DoFrame()
 	nano.ShowWindow("Model 1");
 	nano2.ShowWindow("Model 2");
 	plane.SpawnControlWindow(wnd.Gfx());
-	cube.SpawnControlWindow(wnd.Gfx());
 
 	wnd.Gfx().EndFrame();
 }
