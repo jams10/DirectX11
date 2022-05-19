@@ -35,9 +35,7 @@ float4 main(float3 viewPos : Position, float3 n : Normal, float3 tan : Tangent, 
         );
         // 노말 맵으로 부터 노말 값 얻어오기.
         const float3 normalSample = nmap.Sample(splr, tc).xyz;
-        n.x = normalSample.x * 2.0f - 1.0f;
-        n.y = -normalSample.y * 2.0f + 1.0f;
-        n.z = normalSample.z;
+        n = normalSample * 2.0f - 1.0f;
         // 얻어온 노말 값을 뷰 공간으로 변환.
         n = mul(n, tanToView);
     }

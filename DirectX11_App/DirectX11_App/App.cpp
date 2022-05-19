@@ -18,6 +18,8 @@ App::App()
 	farZ(40.f),
 	light(wnd.Gfx())
 {
+	wall.SetRootTransform(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f));
+	tp.SetPos({ 1.5f,0.0f,0.0f });
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -39,6 +41,7 @@ void App::DoFrame()
 	
 	// 3D 모델 그리기
 	wall.Draw(wnd.Gfx());
+	tp.Draw(wnd.Gfx());
 	//nano.Draw( wnd.Gfx() );
 	light.Draw(wnd.Gfx());
 
@@ -111,6 +114,7 @@ void App::DoFrame()
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
 	wall.ShowWindow("Wall");
+	tp.SpawnControlWindow(wnd.Gfx());
 	//nano.ShowWindow( "Model 1" );
 
 	wnd.Gfx().EndFrame();

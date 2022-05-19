@@ -2,6 +2,7 @@
 #include "Primitive/Plane.h"
 #include "BindableCommon.h"
 #include "imgui.h"
+#include "TransformCBufVtxPxl.h"
 
 TestPlane::TestPlane(Graphics& gfx, float size)
 {
@@ -21,7 +22,7 @@ TestPlane::TestPlane(Graphics& gfx, float size)
 	auto pvsbc = pvs->GetBytecode();
 	AddBind(std::move(pvs));
 	
-	AddBind(PixelShader::Resolve(gfx, "Shader\\PhongPSNormalMap.cso"));
+	AddBind(PixelShader::Resolve(gfx, "Shader\\PhongPSNormalMapObject.cso"));
 
 	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
 
@@ -29,7 +30,7 @@ TestPlane::TestPlane(Graphics& gfx, float size)
 
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
-	AddBind(std::make_shared<TransformCbuf>(gfx, *this));
+	AddBind(std::make_shared<TransformCBufVtxPxl>(gfx, *this, 0u, 2u));
 }
 
 void TestPlane::SetPos(DirectX::XMFLOAT3 pos) noexcept
