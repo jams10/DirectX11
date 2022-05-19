@@ -94,6 +94,8 @@ Surface Surface::FromFile(const std::string& name)
 	unsigned int height = 0;
 	std::unique_ptr<Color[]> pBuffer;
 
+	bool alphaLoaded = false;
+
 	{
 		// GDI+를 위해 파일 이름을 wide string으로 바꿔줌.
 		wchar_t wideName[512];
@@ -120,11 +122,15 @@ Surface Surface::FromFile(const std::string& name)
 				Gdiplus::Color c;
 				bitmap.GetPixel(x, y, &c);
 				pBuffer[y * width + x] = c.GetValue();
+				if (c.GetAlpha() != 255)
+				{
+					alphaLoaded = true;
+				}
 			}
 		}
 	}
 
-	return Surface(width, height, std::move(pBuffer)); // 파일로 부터 모든 픽셀의 색상 값을 받아온 뒤, Surface 객체를 만들어 리턴해줌.
+	return Surface(width, height, std::move(pBuffer), alphaLoaded); // 파일로 부터 모든 픽셀의 색상 값을 받아온 뒤, Surface 객체를 만들어 리턴해줌.
 }
 // Surface 객체를 저장해주는 함수.
 void Surface::Save(const std::string& filename) const
@@ -196,6 +202,13 @@ void Surface::Save(const std::string& filename) const
 		throw Exception(__LINE__, __FILE__, ss.str());
 	}
 }
+
+// 텍스쳐에 Alpha 채널이 있는지 여부를 리턴하는 함수.
+bool Surface::AlphaLoaded() const noexcept
+{
+	return alphaLoaded;
+}
+
 // Surface 객체를 복사해주는 함수.
 void Surface::Copy(const Surface& src) noxnd
 {
@@ -204,11 +217,12 @@ void Surface::Copy(const Surface& src) noxnd
 	memcpy(pBuffer.get(), src.pBuffer.get(), width * height * sizeof(Color));
 }
 
-Surface::Surface(unsigned int width, unsigned int height, std::unique_ptr<Color[]> pBufferParam) noexcept
+Surface::Surface(unsigned int width, unsigned int height, std::unique_ptr<Color[]> pBufferParam, bool alphaLoaded) noexcept
 	:
 	width(width),
 	height(height),
-	pBuffer(std::move(pBufferParam))
+	pBuffer(std::move(pBufferParam)),
+	alphaLoaded(alphaLoaded)
 {}
 
 #pragma region Exception

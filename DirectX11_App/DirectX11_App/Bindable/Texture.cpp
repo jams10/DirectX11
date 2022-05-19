@@ -15,6 +15,7 @@ namespace Bind
 		INFOMAN(gfx);
 		
 		const auto s = Surface::FromFile(path);
+		hasAlpha = s.AlphaLoaded();
 
 		// 咆胶媚 府家胶 积己.
 		D3D11_TEXTURE2D_DESC textureDesc = {};
@@ -66,5 +67,9 @@ namespace Bind
 	std::string Texture::GetUID() const noexcept
 	{
 		return GenerateUID(path, slot);
+	}
+	bool Texture::HasAlpha() const noexcept
+	{
+		return hasAlpha;
 	}
 }
