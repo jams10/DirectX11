@@ -18,8 +18,8 @@ App::App()
 	farZ(40.f),
 	light(wnd.Gfx())
 {
-	wall.SetRootTransform(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f));
-	tp.SetPos({ 1.5f,0.0f,0.0f });
+	//wall.SetRootTransform(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f));
+	//tp.SetPos({ 1.5f,0.0f,0.0f });
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -40,9 +40,10 @@ void App::DoFrame()
 	light.Bind(wnd.Gfx(), cam.GetMatrix()); // 라이트 업데이트.
 	
 	// 3D 모델 그리기
-	wall.Draw(wnd.Gfx());
-	tp.Draw(wnd.Gfx());
+	//wall.Draw(wnd.Gfx());
+	//tp.Draw(wnd.Gfx());
 	//nano.Draw( wnd.Gfx() );
+	gobber.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
@@ -113,8 +114,9 @@ void App::DoFrame()
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
-	wall.ShowWindow("Wall");
-	tp.SpawnControlWindow(wnd.Gfx());
+	gobber.ShowWindow("gobber");
+	//wall.ShowWindow("Wall");
+	//tp.SpawnControlWindow(wnd.Gfx());
 	//nano.ShowWindow( "Model 1" );
 
 	wnd.Gfx().EndFrame();
