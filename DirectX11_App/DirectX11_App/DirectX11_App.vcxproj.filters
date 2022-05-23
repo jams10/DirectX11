@@ -339,6 +339,12 @@
     <None Include="ErrorHandling\DXTrace.inl">
       <Filter>ErrorHandling</Filter>
     </None>
+    <None Include="Shader\ShaderOps.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\PointLight.hlsli">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ColorIndexPS.hlsl">
