@@ -18,8 +18,10 @@ App::App()
 	farZ(40.f),
 	light(wnd.Gfx())
 {
-	//wall.SetRootTransform(DirectX::XMMatrixTranslation(-1.5f, 0.0f, 0.0f));
-	//tp.SetPos({ 1.5f,0.0f,0.0f });
+	wall.SetRootTransform(DirectX::XMMatrixTranslation(-12.0f, 0.0f, 0.0f));
+	tp.SetPos({ 12.0f,0.0f,0.0f });
+	gobber.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, 0.0f, -4.0f));
+	nano.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, -7.0f, 6.0f));
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -40,9 +42,9 @@ void App::DoFrame()
 	light.Bind(wnd.Gfx(), cam.GetMatrix()); // 라이트 업데이트.
 	
 	// 3D 모델 그리기
-	//wall.Draw(wnd.Gfx());
-	//tp.Draw(wnd.Gfx());
-	//nano.Draw( wnd.Gfx() );
+	wall.Draw(wnd.Gfx());
+	tp.Draw(wnd.Gfx());
+	nano.Draw( wnd.Gfx() );
 	gobber.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
 
@@ -115,9 +117,9 @@ void App::DoFrame()
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
 	gobber.ShowWindow(wnd.Gfx(), "gobber");
-	//wall.ShowWindow("Wall");
-	//tp.SpawnControlWindow(wnd.Gfx());
-	//nano.ShowWindow( "Model 1" );
+	wall.ShowWindow(wnd.Gfx(), "Wall");
+	tp.SpawnControlWindow(wnd.Gfx());
+	nano.ShowWindow(wnd.Gfx(), "Model 1");
 
 	wnd.Gfx().EndFrame();
 }
