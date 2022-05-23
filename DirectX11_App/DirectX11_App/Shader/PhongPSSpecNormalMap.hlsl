@@ -41,7 +41,7 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 tan : 
         float3 tanNormal;
         tanNormal = normalSample * 2.0f - 1.0f;
         // 얻어온 노말 값을 뷰 공간으로 변환.
-        viewNormal = mul(tanNormal, tanToView);
+        viewNormal = normalize(mul(tanNormal, tanToView));
     }
     
 	// fragment to light vector data

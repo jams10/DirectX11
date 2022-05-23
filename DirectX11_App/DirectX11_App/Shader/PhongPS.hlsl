@@ -22,6 +22,8 @@ SamplerState splr;
 
 float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float2 tc : Texcoord) : SV_Target
 {
+    // 보간된 노말 값을 다시 정규화
+    viewNormal = normalize(viewNormal);
 	// fragment to light vector data
     const float3 vToL = lightPos - viewPos; // 카메라 좌표 기준, 도형에서 광원을 향하는 벡터.
     const float distToL = length(vToL);

@@ -34,13 +34,13 @@ float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 tan : 
             normalize(bitan),
             normalize(viewNormal)
         );
-        // 노말 맵으로 부터 노말 값 얻어오기.
+        // 노말 맵으로 부터 노말 값 얻어오기. 해당 노말 값은 탄젠트 공간임.
         const float3 normalSample = nmap.Sample(splr, tc).xyz;
         float3 tanNormal;
         tanNormal = normalSample * 2.0f - 1.0f;
         tanNormal.y = -tanNormal.y;
-        // 얻어온 노말 값을 뷰 공간으로 변환.
-        viewNormal = mul(tanNormal, tanToView);
+        // 얻어온 노말 값을 뷰 공간으로 변환하고, 정규화 함.
+        viewNormal = normalize(mul(tanNormal, tanToView));
     }
 	// fragment to light vector data
     const float3 vToL = lightPos - viewPos;
