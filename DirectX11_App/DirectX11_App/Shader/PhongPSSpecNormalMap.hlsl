@@ -79,12 +79,12 @@ float3 Speculate( // 정반사값 계산 함수.
     return att * specularColor * specularIntensity * pow(max(0.0f, dot(-r, viewCamToFrag)), specularPower);
 }
 
-float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 tan : Tangent, float3 bitan : Bitangent, float2 tc : Texcoord) : SV_Target
+float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
     // 노말맵을 적용할 경우 노말맵 텍스쳐를 샘플링 하여 노말값을 얻어옴.
     if (normalMapEnabled)
     {
-        viewNormal = MapNormal(tan, bitan, viewNormal, tc, nmap, splr);
+        viewNormal = MapNormal(viewTan, viewBitan, viewNormal, tc, nmap, splr);
     }
     
     // 표면을 나타내는 fragment에서 광원을 향하는 벡터
