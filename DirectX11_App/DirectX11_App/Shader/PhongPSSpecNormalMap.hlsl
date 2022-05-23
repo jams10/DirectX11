@@ -25,23 +25,27 @@ Texture2D nmap;
 
 SamplerState splr;
 
+float3 MapNormalViewSpace(const float3 tan, const float3 bitan, const float3 viewNormal, const float2 tc, Texture2D nmap, SamplerState splr)
+{
+    // 접선 공간에서 뷰 공간으로 변환하기 위한 행렬 생성.
+    const float3x3 tanToView = float3x3(
+        normalize(tan),
+        normalize(bitan),
+        normalize(viewNormal)
+    );
+    // 노말 맵으로 부터 노말 값 얻어온 뒤에 노말 값 범위에 맞는 값으로 수정해줌.
+    const float3 normalSample = nmap.Sample(splr, tc).xyz;
+    const float3 tanNormal = normalSample * 2.0f - 1.0f;
+    // 얻어온 노말 값을 뷰 공간으로 변환.
+    return normalize(mul(tanNormal, tanToView));
+}
+
 float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 tan : Tangent, float3 bitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
     // 노말맵을 적용할 경우 노말맵 텍스쳐를 샘플링 하여 노말값을 얻어옴.
     if (normalMapEnabled)
     {
-        // 접선 공간에서 뷰 공간으로 변환하기 위한 행렬 생성.
-        const float3x3 tanToView = float3x3(
-            normalize(tan),
-            normalize(bitan),
-            normalize(viewNormal)
-        );
-        // 노말 맵으로 부터 노말 값 얻어오기.
-        const float3 normalSample = nmap.Sample(splr, tc).xyz;
-        float3 tanNormal;
-        tanNormal = normalSample * 2.0f - 1.0f;
-        // 얻어온 노말 값을 뷰 공간으로 변환.
-        viewNormal = normalize(mul(tanNormal, tanToView));
+        viewNormal = MapNormalViewSpace(tan, bitan, viewNormal, tc, nmap, splr);
     }
     
 	// fragment to light vector data
