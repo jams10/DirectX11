@@ -34,11 +34,7 @@ float3 MapNormal(
     uniform SamplerState splr)
 {
     // 접선 공간에서 타겟 공간(tan/bitan/normal)으로 변환해주는 행렬 생성.
-    const float3x3 tanToTarget = float3x3(
-        normalize(tan),
-        normalize(bitan),
-        normalize(normal)
-    );
+    const float3x3 tanToTarget = float3x3(tan, bitan, normal);
     // 노말 맵으로 부터 노말 값 얻어온 뒤에 노말 값 범위에 맞는 값으로 수정해줌.
     const float3 normalSample = nmap.Sample(splr, tc).xyz;
     const float3 tanNormal = normalSample * 2.0f - 1.0f;
@@ -81,10 +77,12 @@ float3 Speculate( // 정반사값 계산 함수.
 
 float4 main(float3 viewPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
+    // 메쉬의 노말 값을 정규화
+    viewNormal = normalize(viewNormal);
     // 노말맵을 적용할 경우 노말맵 텍스쳐를 샘플링 하여 노말값을 얻어옴.
     if (normalMapEnabled)
     {
-        viewNormal = MapNormal(viewTan, viewBitan, viewNormal, tc, nmap, splr);
+        viewNormal = MapNormal(normalize(viewTan), normalize(viewBitan), viewNormal, tc, nmap, splr);
     }
     
     // 표면을 나타내는 fragment에서 광원을 향하는 벡터
