@@ -12,7 +12,7 @@
 class App
 {
 public:
-	App();
+	App(const std::string& commandLine = "");
 	int Go();
 	~App();
 private:
@@ -31,6 +31,7 @@ private:
 	TestPlane tp{ wnd.Gfx(),6.0 };
 	Model nano{ wnd.Gfx(),"Models\\nano_textured\\nanosuit.obj",2.0f };
 private:
+	std::string commandLine;
 	float aspectRatio;
 	float nearZ;
 	float farZ;

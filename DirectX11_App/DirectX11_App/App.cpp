@@ -7,17 +7,38 @@
 #include "imgui_impl_dx11.h"
 #include "StringEncoding.h"
 #include "VertexBuffer.h"
+#include "NormalMapTwerker.h"
+#include <shellapi.h>
 
 GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
-App::App()
+App::App(const std::string& commandLine)
 	:
+	commandLine(commandLine),
 	wnd(800, 600, L"윈도우!"),
 	aspectRatio(800.f / 600.f),
 	nearZ(0.5f),
 	farZ(40.f),
 	light(wnd.Gfx())
 {
+	// makeshift cli for doing some preprocessing bullshit (so many hacks here)
+	if (this->commandLine != "")
+	{
+		int nArgs;
+		const auto pLineW = GetCommandLineW();
+		const auto pArgs = CommandLineToArgvW(pLineW, &nArgs);
+		if (nArgs >= 4 && std::wstring(pArgs[1]) == L"--ntwerk-rotx180")
+		{
+			const std::wstring pathInWide = pArgs[2];
+			const std::wstring pathOutWide = pArgs[3];
+			NormalMapTwerker::RotateXAxis180(
+				std::string(pathInWide.begin(), pathInWide.end()),
+				std::string(pathOutWide.begin(), pathOutWide.end())
+			);
+			throw std::runtime_error("Normal map processed successfully. Just kidding about that whole runtime error thing.");
+		}
+	}
+
 	wall.SetRootTransform(DirectX::XMMatrixTranslation(-12.0f, 0.0f, 0.0f));
 	tp.SetPos({ 12.0f,0.0f,0.0f });
 	gobber.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, 0.0f, -4.0f));

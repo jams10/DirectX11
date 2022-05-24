@@ -328,6 +328,9 @@
     <ClInclude Include="Drawable\TestCube.h">
       <Filter>Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\NormalMapTwerker.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">
