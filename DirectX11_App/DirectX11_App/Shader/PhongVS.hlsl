@@ -1,8 +1,4 @@
-cbuffer CBuf
-{
-    matrix modelView;       // 모델의 카메라 기준 좌표. (월드 * 뷰 변환)
-    matrix modelViewProj;   // 모델의 투영 좌표. (월드 변환 * 뷰 변환 * 투영 변환)
-};
+#include "Transform.hlsli"
 
 struct VSOut
 {
