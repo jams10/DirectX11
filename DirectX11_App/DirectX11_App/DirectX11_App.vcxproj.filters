@@ -161,6 +161,9 @@
     <ClCompile Include="Drawable\TestCube.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\CustomXM.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -329,6 +332,9 @@
       <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Utils\NormalMapTwerker.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\CustomXM.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

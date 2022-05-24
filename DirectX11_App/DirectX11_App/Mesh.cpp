@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <sstream>
 #include <filesystem>
+#include "CustomXM.h"
 
 ModelException::ModelException(int line, const char* file, std::string note) noexcept
 	:
@@ -117,6 +118,11 @@ void Node::SetAppliedTransform(DirectX::FXMMATRIX transform) noexcept
 	DirectX::XMStoreFloat4x4(&appliedTransform, transform);
 }
 
+const DirectX::XMFLOAT4X4& Node::GetAppliedTransform() const noexcept
+{
+	return appliedTransform;
+}
+
 int Node::GetId() const noexcept
 {
 	return id;
@@ -141,7 +147,23 @@ public:
 			ImGui::NextColumn();
 			if (pSelectedNode != nullptr)
 			{
-				auto& transform = transforms[pSelectedNode->GetId()];
+				const auto id = pSelectedNode->GetId();
+				auto i = transforms.find(id);
+				if (i == transforms.end())
+				{
+					const auto& applied = pSelectedNode->GetAppliedTransform();
+					const auto angles = ExtractEulerAngles(applied);
+					const auto translation = ExtractTranslation(applied);
+					TransformParameters tp;
+					tp.roll = angles.z;
+					tp.pitch = angles.x;
+					tp.yaw = angles.y;
+					tp.x = translation.x;
+					tp.y = translation.y;
+					tp.z = translation.z;
+					std::tie(i, std::ignore) = transforms.insert({ id,tp });
+				}
+				auto& transform = i->second;
 				ImGui::Text("Orientation");
 				ImGui::SliderAngle("Roll", &transform.roll, -180.0f, 180.0f);
 				ImGui::SliderAngle("Pitch", &transform.pitch, -180.0f, 180.0f);
@@ -446,11 +468,11 @@ std::unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const 
 
 	bindablePtrs.push_back(IndexBuffer::Resolve(gfx, meshTag, indices));
 
-	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
+	auto pvs = VertexShader::Resolve(gfx, "Shader\\PhongVS.cso");
 	auto pvsbc = pvs->GetBytecode();
 	bindablePtrs.push_back(std::move(pvs));
 
-	bindablePtrs.push_back(PixelShader::Resolve(gfx, "PhongPSSpec.cso"));
+	bindablePtrs.push_back(PixelShader::Resolve(gfx, "Shader\\PhongPSSpec.cso"));
 
 	bindablePtrs.push_back(InputLayout::Resolve(gfx, vbuf.GetLayout(), pvsbc));
 
