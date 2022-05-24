@@ -345,6 +345,12 @@
     <None Include="Shader\PointLight.hlsli">
       <Filter>Shader</Filter>
     </None>
+    <None Include="Shader\LightVectorData.hlsli">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="Shader\Transform.hlsli">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ColorIndexPS.hlsl">

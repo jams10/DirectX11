@@ -196,8 +196,10 @@
     <None Include="ErrorHandling\DXGetErrorDescription.inl" />
     <None Include="ErrorHandling\DXGetErrorString.inl" />
     <None Include="ErrorHandling\DXTrace.inl" />
+    <None Include="Shader\LightVectorData.hlsli" />
     <None Include="Shader\PointLight.hlsli" />
     <None Include="Shader\ShaderOps.hlsli" />
+    <None Include="Shader\Transform.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ColorIndexPS.hlsl">
