@@ -70,6 +70,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -85,6 +89,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalIncludeDirectories>$(ProjectDir)\Models;$(ProjectDir)\Imgui;$(ProjectDir)\assimp\include;$(ProjectDir)\GDI+;$(ProjectDir)\Windows;$(ProjectDir)\Utils;$(ProjectDir)\Shader;$(ProjectDir)\Bindable\Primitive;$(ProjectDir)\Input;$(ProjectDir)\Image;$(ProjectDir)\ErrorHandling;$(ProjectDir)\Drawable;$(ProjectDir)\Bindable</AdditionalIncludeDirectories>
+      <AdditionalOptions>--twerk-objnorm %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,6 +137,7 @@
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Utils\CustomXM.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
+    <ClCompile Include="Utils\TexturePreprocessor.cpp" />
     <ClCompile Include="Windows\Window.cpp" />
     <ClCompile Include="Windows\WindowsMessageMap.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -191,6 +197,7 @@
     <ClInclude Include="Utils\GameTimer.h" />
     <ClInclude Include="Utils\NormalMapTwerker.h" />
     <ClInclude Include="Utils\StringEncoding.h" />
+    <ClInclude Include="Utils\TexturePreprocessor.h" />
     <ClInclude Include="Windows\Window.h" />
     <ClInclude Include="Windows\WindowsHeader.h" />
     <ClInclude Include="Windows\WindowsMessageMap.h" />
