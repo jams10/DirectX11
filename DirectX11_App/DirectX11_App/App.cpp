@@ -27,9 +27,9 @@ App::App(const std::string& commandLine)
 		int nArgs;
 		const auto pLineW = GetCommandLineW();
 		const auto pArgs = CommandLineToArgvW(pLineW, &nArgs);
-		if (nArgs >= 2 && std::wstring(pArgs[1]) == L"--twerk-objnorm")
+		if (nArgs >= 3 && std::wstring(pArgs[1]) == L"--twerk-objnorm")
 		{
-			const std::wstring pathInWide = pArgs[0];
+			const std::wstring pathInWide = pArgs[2];
 			TexturePreprocessor::FlipYAllNormalMapsInObj(
 				std::string(pathInWide.begin(), pathInWide.end())
 			);
