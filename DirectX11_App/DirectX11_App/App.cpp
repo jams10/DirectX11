@@ -15,10 +15,10 @@ GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함
 App::App(const std::string& commandLine)
 	:
 	commandLine(commandLine),
-	wnd(800, 600, L"윈도우!"),
-	aspectRatio(800.f / 600.f),
+	wnd(1280, 720, L"윈도우!"),
+	aspectRatio(720.f / 1280.f),
 	nearZ(0.5f),
-	farZ(40.f),
+	farZ(400.f),
 	light(wnd.Gfx())
 {
 	// makeshift cli for doing some preprocessing bullshit (so many hacks here)
@@ -39,10 +39,10 @@ App::App(const std::string& commandLine)
 		}
 	}
 
-	wall.SetRootTransform(DirectX::XMMatrixTranslation(-12.0f, 0.0f, 0.0f));
-	tp.SetPos({ 12.0f,0.0f,0.0f });
-	gobber.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, 0.0f, -4.0f));
-	nano.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, -7.0f, 6.0f));
+	//wall.SetRootTransform(DirectX::XMMatrixTranslation(-12.0f, 0.0f, 0.0f));
+	//tp.SetPos({ 12.0f,0.0f,0.0f });
+	//gobber.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, 0.0f, -4.0f));
+	//nano.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, -7.0f, 6.0f));
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -63,11 +63,12 @@ void App::DoFrame()
 	light.Bind(wnd.Gfx(), cam.GetMatrix()); // 라이트 업데이트.
 	
 	// 3D 모델 그리기
-	wall.Draw(wnd.Gfx());
-	tp.Draw(wnd.Gfx());
-	nano.Draw( wnd.Gfx() );
-	gobber.Draw(wnd.Gfx());
+	//wall.Draw(wnd.Gfx());
+	//tp.Draw(wnd.Gfx());
+	//nano.Draw( wnd.Gfx() );
+	//gobber.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
+	sponza.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
 	{
@@ -137,10 +138,11 @@ void App::DoFrame()
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
-	gobber.ShowWindow(wnd.Gfx(), "gobber");
-	wall.ShowWindow(wnd.Gfx(), "Wall");
-	tp.SpawnControlWindow(wnd.Gfx());
-	nano.ShowWindow(wnd.Gfx(), "Model 1");
+	//gobber.ShowWindow(wnd.Gfx(), "gobber");
+	//wall.ShowWindow(wnd.Gfx(), "Wall");
+	//tp.SpawnControlWindow(wnd.Gfx());
+	//nano.ShowWindow(wnd.Gfx(), "Model 1");
+	sponza.ShowWindow(wnd.Gfx(), "Sponza");
 
 	wnd.Gfx().EndFrame();
 }
