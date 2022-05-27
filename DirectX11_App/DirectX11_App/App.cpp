@@ -43,6 +43,17 @@ App::App(const std::string& commandLine)
 				std::string(pathInWide.begin(), pathInWide.end()),
 				std::string(pathOutWide.begin(), pathOutWide.end())
 			);
+			throw std::runtime_error("Normal map processed successfully. Just kidding about that whole runtime error thing.");
+		}
+		else if (nArgs >= 4 && std::wstring(pArgs[1]) == L"--twerk-validate")
+		{
+			const std::wstring minWide = pArgs[2];
+			const std::wstring maxWide = pArgs[3];
+			const std::wstring pathWide = pArgs[4];
+			TexturePreprocessor::ValidateNormalMap(
+				std::string(pathWide.begin(), pathWide.end()), std::stof(minWide), std::stof(maxWide)
+			);
+			throw std::runtime_error("Normal map validated successfully. Just kidding about that whole runtime error thing.");
 		}
 	}
 
