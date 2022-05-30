@@ -9,10 +9,14 @@ namespace Bind
 		INFOMAN(gfx);
 
 		D3D11_SAMPLER_DESC samplerDesc = {};
-		samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; // 텍스쳐 필터링 모드.
+		samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;		  // 텍스쳐 필터링 모드.
 		samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;    // 텍스쳐 좌표가 표준 텍스쳐 좌표를 벗어나는 경우 텍스쳐를 지정해줄 모드.
 		samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		samplerDesc.MaxAnisotropy = D3D11_REQ_MAXANISOTROPY;
+		samplerDesc.MipLODBias = 0.0f;
+		samplerDesc.MinLOD = 0.0f;
+		samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
 		GFX_THROW_INFO(GetDevice(gfx)->CreateSamplerState(&samplerDesc, &pSampler));
 	}
