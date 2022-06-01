@@ -55,6 +55,8 @@ float4 main(float3 viewFragPos : Position, float3 viewNormal : Normal, float3 vi
         specularReflectionColor, 1.0f, viewNormal,
         lv.vToL, viewFragPos, att, specularPower
     );
+    // 디퓨즈 텍스쳐를 샘플링.
+    float4 dtex = tex.Sample(splr, tc);
     // 난반사 텍스쳐 색상을 통해 감쇠된 난반사, 주변광 색상에 반사된 정반사광을 더해줌.
-    return float4(saturate((diffuse + ambient) * tex.Sample(splr, tc).rgb + specularReflected), 1.0f);
+    return float4(saturate((diffuse + ambient) * dtex.rgb + specularReflected), dtex.a);
 }
