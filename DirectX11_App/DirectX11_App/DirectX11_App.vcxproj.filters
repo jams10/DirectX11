@@ -419,6 +419,9 @@
     <FxCompile Include="Shader\PhongPSSpec.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Shader\PhongPSSpecNormMask.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DirectX11_App.rc">
