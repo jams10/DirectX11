@@ -62,6 +62,8 @@ App::App(const std::string& commandLine)
 	//gobber.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, 0.0f, -4.0f));
 	//nano.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, -7.0f, 6.0f));
 	bluePlane.SetPos( cam.GetPos() );
+	redPlane.SetPos(cam.GetPos());
+
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
 };
@@ -89,6 +91,7 @@ void App::DoFrame()
 	light.Draw(wnd.Gfx());
 	sponza.Draw(wnd.Gfx());
 	bluePlane.Draw(wnd.Gfx());
+	redPlane.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
 	{
@@ -163,6 +166,8 @@ void App::DoFrame()
 	//tp.SpawnControlWindow(wnd.Gfx());
 	//nano.ShowWindow(wnd.Gfx(), "Model 1");
 	sponza.ShowWindow(wnd.Gfx(), "Sponza");
+	bluePlane.SpawnControlWindow(wnd.Gfx(), "Blue Plane");
+	redPlane.SpawnControlWindow(wnd.Gfx(), "Red Plane");
 
 	wnd.Gfx().EndFrame();
 }
