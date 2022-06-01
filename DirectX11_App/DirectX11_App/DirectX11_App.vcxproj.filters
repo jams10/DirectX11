@@ -170,6 +170,9 @@
     <ClCompile Include="Bindable\Blender.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="Bindable\Rasterizer.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -347,6 +350,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Bindable\Blender.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\Rasterizer.h">
       <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>

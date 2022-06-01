@@ -20,9 +20,16 @@ SamplerState splr;
 
 float4 main(float3 viewFragPos : Position, float3 viewNormal : Normal, float3 viewTan : Tangent, float3 viewBitan : Bitangent, float2 tc : Texcoord) : SV_Target
 {
-    // do alpha test    
+    // sample diffuse texture
     float4 dtex = tex.Sample(splr, tc);
+    // bail if highly translucent
     clip(dtex.a < 0.1f ? -1 : 1);
+    
+    // flip normal when backface
+    if (dot(viewNormal, viewFragPos) >= 0.0f)
+    {
+        viewNormal = -viewNormal;
+    }
     
     // 메쉬의 노말 값을 정규화
     viewNormal = normalize(viewNormal);
