@@ -4,6 +4,7 @@
 #include <sstream>
 #include <cassert>
 #include <filesystem>
+#include "CustomUtil.h"
 
 Surface::Surface(unsigned int width, unsigned int height)
 {
@@ -77,11 +78,9 @@ const Surface::Color* Surface::GetBufferPtrConst() const noexcept
 // 파일로 부터 Surface 객체를 생성해 리턴하는 함수.
 Surface Surface::FromFile(const std::string& name)
 {
-	wchar_t wideName[512];
-	mbstowcs_s(nullptr, wideName, name.c_str(), _TRUNCATE);
 
 	DirectX::ScratchImage scratch;
-	HRESULT hr = DirectX::LoadFromWICFile(wideName, DirectX::WIC_FLAGS_NONE, nullptr, scratch);
+	HRESULT hr = DirectX::LoadFromWICFile(ToWide(name).c_str(), DirectX::WIC_FLAGS_NONE, nullptr, scratch);
 
 	if (FAILED(hr))
 	{
@@ -137,7 +136,7 @@ void Surface::Save(const std::string& filename) const
 		*scratch.GetImage(0, 0, 0),
 		DirectX::WIC_FLAGS_NONE,
 		GetWICCodec(GetCodecID(filename)),
-		wideName
+		ToWide(filename).c_str()
 	);
 	if (FAILED(hr))
 	{
