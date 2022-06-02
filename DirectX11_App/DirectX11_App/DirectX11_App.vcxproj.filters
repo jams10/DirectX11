@@ -169,6 +169,9 @@
     <ClCompile Include="Surface.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\CustomUitl.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -347,6 +350,9 @@
     </ClInclude>
     <ClInclude Include="Surface.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\CustomUtil.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

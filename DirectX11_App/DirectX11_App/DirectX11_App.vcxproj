@@ -138,6 +138,7 @@
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Utils\CustomUitl.cpp" />
     <ClCompile Include="Utils\CustomXM.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
     <ClCompile Include="Utils\TexturePreprocessor.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Utils\CustomMath.h" />
+    <ClInclude Include="Utils\CustomUtil.h" />
     <ClInclude Include="Utils\CustomXM.h" />
     <ClInclude Include="Utils\GameTimer.h" />
     <ClInclude Include="Utils\NormalMapTwerker.h" />
