@@ -1,5 +1,5 @@
 #include "Texture.h"
-#include "../GDI+/Surface.h"
+#include "../Surface.h"
 #include "../ErrorHandling/GraphicsThrowMacros.h"
 #include "BindableCodex.h"
 

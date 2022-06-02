@@ -1,7 +1,6 @@
 #include "App.h"
 #include <memory>
 #include "CustomMath.h"
-#include "GDIPlusManager.h"
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
@@ -10,8 +9,6 @@
 #include "TexturePreprocessor.h"
 #include <shellapi.h>
 #include <dxtex\DirectXTex.h>
-
-GDIPlusManager gdipm; // GDI+ 라이브러리를 사용하기 위해 앞서 초기화 해주어야 함. 생성자 호출을 통해 초기화를 진행.
 
 App::App(const std::string& commandLine)
 	:
@@ -22,14 +19,6 @@ App::App(const std::string& commandLine)
 	farZ(400.f),
 	light(wnd.Gfx())
 {
-	auto scratch = DirectX::ScratchImage{};
-	DirectX::LoadFromWICFile(L"Images\\brickwall.jpg", DirectX::WIC_FLAGS_NONE, nullptr, scratch);
-	auto image = scratch.GetImage(0, 0, 0);
-	auto a = image->pixels[0];
-	auto b = image->pixels[1];
-	auto c = image->pixels[2];
-	auto d = image->pixels[3];
-
 	// makeshift cli for doing some preprocessing bullshit (so many hacks here)
 	if (this->commandLine != "")
 	{

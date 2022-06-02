@@ -124,8 +124,6 @@
     <ClCompile Include="ErrorHandling\CustomException.cpp" />
     <ClCompile Include="ErrorHandling\dxerr.cpp" />
     <ClCompile Include="ErrorHandling\DxgiInfoManager.cpp" />
-    <ClCompile Include="GDI+\GDIPlusManager.cpp" />
-    <ClCompile Include="GDI+\Surface.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
     <ClCompile Include="Imgui\ImguiManager.cpp" />
@@ -139,6 +137,7 @@
     <ClCompile Include="Input\Mouse.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Utils\CustomXM.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
     <ClCompile Include="Utils\TexturePreprocessor.cpp" />
@@ -182,8 +181,6 @@
     <ClInclude Include="ErrorHandling\DxgiInfoManager.h" />
     <ClInclude Include="ErrorHandling\GraphicsThrowMacros.h" />
     <ClInclude Include="ErrorHandling\WindowsThrowMacros.h" />
-    <ClInclude Include="GDI+\GDIPlusManager.h" />
-    <ClInclude Include="GDI+\Surface.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Imgui\imconfig.h" />
     <ClInclude Include="Imgui\imgui.h" />
@@ -198,6 +195,7 @@
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Surface.h" />
     <ClInclude Include="Utils\CustomMath.h" />
     <ClInclude Include="Utils\CustomXM.h" />
     <ClInclude Include="Utils\GameTimer.h" />

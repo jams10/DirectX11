@@ -2,9 +2,9 @@
 #include "../Windows/WindowsHeader.h"
 #include "../ErrorHandling/CustomException.h"
 #include <string>
-#include <assert.h>
-#include <memory>
+#include <optional>
 #include "../ConditionalNoexcept.h"
+#include <dxtex/DirectXTex.h>
 
 // Surface : 이미지 파일을 코드에서 다루기 위해 형상화한 클래스.
 class Surface
@@ -41,7 +41,7 @@ public:
 		// 각각의 r,g,b 값을 따로 받아 dword 값을 초기화 해주는 생성자.
 		constexpr Color(unsigned char r, unsigned char g, unsigned char b) noexcept
 			:
-			dword((r << 16u) | (g << 8u) | b)
+			dword((255u << 24u) | (r << 16u) | (g << 8u) | b)
 		{}
 		// r,g,b 값은 Color 객체를, a값은 따로 받아 dword 값을 초기화 해주는 생성자.
 		constexpr Color(Color col, unsigned char x) noexcept
@@ -110,23 +110,25 @@ public:
 	class Exception : public CustomException
 	{
 	public:
-		Exception(int line, const char* file, std::string note) noexcept;
+		Exception(int line, const char* file, std::string note, std::optional<HRESULT> hr = {}) noexcept;
+		Exception(int line, const char* file, std::string filename, std::string note, std::optional<HRESULT> hr = {}) noexcept;
 		const char* what() const noexcept override;
 		const char* GetType() const noexcept override;
 		const std::string& GetNote() const noexcept;
 	private:
+		std::optional<HRESULT> hr;
 		std::string note;
 	};
 public:
 	//
 	// Surface 클래스관련
 	//
-	Surface(unsigned int width, unsigned int height) noexcept;
-	Surface(Surface&& source) noexcept;
+	Surface(unsigned int width, unsigned int height);
+	Surface(Surface&& source) noexcept = default;
 	Surface(Surface&) = delete;
-	Surface& operator=(Surface&& donor) noexcept;
+	Surface& operator=(Surface&& donor) noexcept = default;
 	Surface& operator=(const Surface&) = delete;
-	~Surface();
+	~Surface() = default;
 	//
 	// Color 값 관련
 	//
@@ -146,10 +148,8 @@ public:
 	void Copy(const Surface& src) noxnd;
 	bool AlphaLoaded() const noexcept;
 private:
-	Surface(unsigned int width, unsigned int height, std::unique_ptr<Color[]> pBufferParam, bool alphaLoaded = false) noexcept;
+	Surface( DirectX::ScratchImage scratch ) noexcept;
 private:
-	std::unique_ptr<Color[]> pBuffer;
-	unsigned int width;  // Surface(이미지) 너비
-	unsigned int height; // Surface(이미지) 높이
-	bool alphaLoaded = false;
+	static constexpr DXGI_FORMAT format = DXGI_FORMAT::DXGI_FORMAT_B8G8R8A8_UNORM;
+	DirectX::ScratchImage scratch;
 };

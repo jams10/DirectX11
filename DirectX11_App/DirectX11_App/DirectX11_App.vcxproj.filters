@@ -29,9 +29,6 @@
     <Filter Include="Main">
       <UniqueIdentifier>{a7b21ef6-4a7d-4d36-865f-aa793d443098}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GDI+">
-      <UniqueIdentifier>{80573802-48a4-48cf-b031-04c61a539a49}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Drawable\Primitive">
       <UniqueIdentifier>{ebb4dafc-6b87-491f-86b7-1af10932143e}</UniqueIdentifier>
     </Filter>
@@ -103,12 +100,6 @@
     <ClCompile Include="Input\Keyboard.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="GDI+\Surface.cpp">
-      <Filter>GDI+</Filter>
-    </ClCompile>
-    <ClCompile Include="GDI+\GDIPlusManager.cpp">
-      <Filter>GDI+</Filter>
-    </ClCompile>
     <ClCompile Include="Bindable\Texture.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
@@ -174,6 +165,9 @@
     </ClCompile>
     <ClCompile Include="Bindable\TransformCBufVtxPxl.cpp">
       <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,12 +254,6 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="GDI+\Surface.h">
-      <Filter>GDI+</Filter>
-    </ClInclude>
-    <ClInclude Include="GDI+\GDIPlusManager.h">
-      <Filter>GDI+</Filter>
     </ClInclude>
     <ClInclude Include="Bindable\Texture.h">
       <Filter>Bindable</Filter>
@@ -356,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="Bindable\Rasterizer.h">
       <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
