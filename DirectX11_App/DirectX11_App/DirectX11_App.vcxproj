@@ -141,6 +141,7 @@
     <ClCompile Include="Utils\CustomUitl.cpp" />
     <ClCompile Include="Utils\CustomXM.cpp" />
     <ClCompile Include="Utils\GameTimer.cpp" />
+    <ClCompile Include="Utils\ScriptCommander.cpp" />
     <ClCompile Include="Utils\TexturePreprocessor.cpp" />
     <ClCompile Include="Windows\Window.cpp" />
     <ClCompile Include="Windows\WindowsMessageMap.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Utils\CustomXM.h" />
     <ClInclude Include="Utils\GameTimer.h" />
     <ClInclude Include="Utils\NormalMapTwerker.h" />
+    <ClInclude Include="Utils\ScriptCommander.h" />
     <ClInclude Include="Utils\StringEncoding.h" />
     <ClInclude Include="Utils\TexturePreprocessor.h" />
     <ClInclude Include="Windows\Window.h" />

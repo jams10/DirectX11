@@ -172,6 +172,9 @@
     <ClCompile Include="Utils\CustomUitl.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Utils\ScriptCommander.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -352,6 +355,9 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Utils\CustomUtil.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ScriptCommander.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

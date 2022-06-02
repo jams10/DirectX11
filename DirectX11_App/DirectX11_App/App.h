@@ -7,6 +7,7 @@
 #include "TestPlane.h"
 #include "Mesh.h"
 #include <set>
+#include "ScriptCommander.h"
 
 // App : 애플리케이션 클래스. 프로그램의 전체 실행 루프를 가짐.
 class App
@@ -21,6 +22,7 @@ private:
 private:
 	ImguiManager imgui;
 	Window wnd;
+	ScriptCommander scriptCommander;
 	GameTimer gt;
 	bool show_demo_window = false;
 	float speed_factor = 1.0f;
