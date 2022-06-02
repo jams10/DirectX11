@@ -154,7 +154,6 @@
     <ClCompile Include="Bindable\Vertex.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Bindable\TransformCBufVtxPxl.cpp" />
     <ClCompile Include="Drawable\TestPlane.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
@@ -171,6 +170,9 @@
       <Filter>Bindable</Filter>
     </ClCompile>
     <ClCompile Include="Bindable\Rasterizer.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\TransformCBufVtxPxl.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
   </ItemGroup>
