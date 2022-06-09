@@ -119,6 +119,7 @@
     <ClCompile Include="Bindable\VertexBuffer.cpp" />
     <ClCompile Include="Bindable\VertexShader.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DCBTesting.cpp" />
     <ClCompile Include="Drawable\Drawable.cpp" />
     <ClCompile Include="Drawable\SolidSphere.cpp" />
     <ClCompile Include="Drawable\TestCube.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="ConditionalNoexcept.h" />
+    <ClInclude Include="DCBTesting.h" />
     <ClInclude Include="Drawable\Drawable.h" />
     <ClInclude Include="Drawable\Mesh.h" />
     <ClInclude Include="Drawable\Primitive\Cube.h" />

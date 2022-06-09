@@ -181,6 +181,7 @@
     <ClCompile Include="Bindable\LayoutCodex.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="DCBTesting.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -375,6 +376,7 @@
     <ClInclude Include="Bindable\LayoutCodex.h">
       <Filter>Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="DCBTesting.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">
