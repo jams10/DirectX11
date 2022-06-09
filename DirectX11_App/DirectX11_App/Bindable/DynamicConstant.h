@@ -40,6 +40,12 @@ eltype::SystemType& operator=( const eltype::SystemType& rhs ) noxnd \
 	return static_cast<eltype::SystemType&>(*this) = rhs; \
 }
 
+#define PTR_CONVERSION(eltype) \
+operator eltype::SystemType*() noxnd \
+{ \
+	return &static_cast<eltype::SystemType&>(ref); \
+}
+
 
 namespace Dcb
 {
@@ -53,6 +59,8 @@ namespace Dcb
 		LayoutElement(size_t offset)
 			:
 			offset(offset)
+		{}
+		virtual ~LayoutElement()
 		{}
 
 		virtual LayoutElement& operator[](const char*)
@@ -171,8 +179,60 @@ namespace Dcb
 		std::unique_ptr<LayoutElement> pElement;
 	};
 
+
+
+	class Layout
+	{
+	public:
+		Layout()
+			:
+			pLayout(std::make_shared<Struct>(0))
+		{}
+		LayoutElement& operator[](const char* key)
+		{
+			assert(!finalized && "cannot modify finalized layout");
+			return (*pLayout)[key];
+		}
+		size_t GetSizeInBytes() const noexcept
+		{
+			return pLayout->GetSizeInBytes();
+		}
+		template<typename T>
+		LayoutElement& Add(const std::string& key) noxnd
+		{
+			assert(!finalized && "cannot modify finalized layout");
+			return pLayout->Add<T>(key);
+		}
+		std::shared_ptr<LayoutElement> Finalize()
+		{
+			finalized = true;
+			return pLayout;
+		}
+	private:
+		bool finalized = false;
+		std::shared_ptr<LayoutElement> pLayout;
+	};
+
 	class ElementRef
 	{
+	public:
+		class Ptr
+		{
+		public:
+			Ptr(ElementRef& ref)
+				:
+				ref(ref)
+			{}
+
+			PTR_CONVERSION(Matrix)
+				PTR_CONVERSION(Float4)
+				PTR_CONVERSION(Float3)
+				PTR_CONVERSION(Float2)
+				PTR_CONVERSION(Float)
+				PTR_CONVERSION(Bool)
+		private:
+			ElementRef& ref;
+		};
 	public:
 		ElementRef(const LayoutElement* pLayout, char* pBytes, size_t offset)
 			:
@@ -188,6 +248,10 @@ namespace Dcb
 		{
 			const auto& t = pLayout->T();
 			return { &t,pBytes,offset + t.GetSizeInBytes() * index };
+		}
+		Ptr operator&() noxnd
+		{
+			return { *this };
 		}
 
 		REF_CONVERSION(Matrix)
@@ -205,9 +269,9 @@ namespace Dcb
 	class Buffer
 	{
 	public:
-		Buffer(std::shared_ptr<Struct> pLayout)
+		Buffer(Layout& lay)
 			:
-			pLayout(pLayout),
+			pLayout(std::static_pointer_cast<Struct>(lay.Finalize())),
 			bytes(pLayout->GetOffsetEnd())
 		{}
 		ElementRef operator[](const char* key) noxnd
