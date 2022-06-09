@@ -107,6 +107,7 @@
     <ClCompile Include="Bindable\DynamicConstant.cpp" />
     <ClCompile Include="Bindable\IndexBuffer.cpp" />
     <ClCompile Include="Bindable\InputLayout.cpp" />
+    <ClCompile Include="Bindable\LayoutCodex.cpp" />
     <ClCompile Include="Bindable\PixelShader.cpp" />
     <ClCompile Include="Bindable\Rasterizer.cpp" />
     <ClCompile Include="Bindable\Sampler.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Bindable\DynamicConstant.h" />
     <ClInclude Include="Bindable\IndexBuffer.h" />
     <ClInclude Include="Bindable\InputLayout.h" />
+    <ClInclude Include="Bindable\LayoutCodex.h" />
     <ClInclude Include="Bindable\PixelShader.h" />
     <ClInclude Include="Bindable\Rasterizer.h" />
     <ClInclude Include="Bindable\Sampler.h" />

@@ -178,6 +178,9 @@
     <ClCompile Include="Bindable\DynamicConstant.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="Bindable\LayoutCodex.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -367,6 +370,9 @@
       <Filter>Bindable</Filter>
     </ClInclude>
     <ClInclude Include="Bindable\ConstantBuffersEx.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\LayoutCodex.h">
       <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>
