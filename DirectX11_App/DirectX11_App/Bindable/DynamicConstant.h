@@ -5,8 +5,6 @@
 #include <vector>
 #include <memory>
 #include <unordered_map>
-#include <type_traits>
-#include <numeric>
 
 #define DCB_RESOLVE_BASE(eltype) \
 virtual size_t Resolve ## eltype() const noxnd;
@@ -18,6 +16,7 @@ public: \
 	using SystemType = systype; \
 	size_t Resolve ## eltype() const noxnd override final;\
 	size_t GetOffsetEnd() const noexcept override final;\
+	std::string GetSignature() const noxnd final; \
 protected: \
 	size_t Finalize( size_t offset_in ) override final;\
 	size_t ComputeSize() const noxnd override final;\
@@ -47,6 +46,13 @@ namespace Dcb
 	public:
 		virtual ~LayoutElement();
 
+		// get a string signature for this element (recursive)
+		virtual std::string GetSignature() const noxnd = 0;
+		// Check if element is "real"
+		virtual bool Exists() const noexcept
+		{
+			return true;
+		}
 		// [] only works for Structs; access member by name
 		virtual LayoutElement& operator[](const std::string&);
 		const LayoutElement& operator[](const std::string& key) const;
@@ -99,6 +105,7 @@ namespace Dcb
 	public:
 		LayoutElement& operator[](const std::string& key) override final;
 		size_t GetOffsetEnd() const noexcept override final;
+		std::string GetSignature() const noxnd final;
 		void Add(const std::string& name, std::unique_ptr<LayoutElement> pElement) noxnd;
 	protected:
 		size_t Finalize(size_t offset_in) override final;
@@ -116,6 +123,9 @@ namespace Dcb
 		size_t GetOffsetEnd() const noexcept override final;
 		void Set(std::unique_ptr<LayoutElement> pElement, size_t size_in) noxnd;
 		LayoutElement& T() override final;
+		const LayoutElement& T() const;
+		std::string GetSignature() const noxnd final;
+		bool IndexInBounds(size_t index) const noexcept;
 	protected:
 		size_t Finalize(size_t offset_in) override final;
 		size_t ComputeSize() const noxnd override final;
@@ -140,6 +150,7 @@ namespace Dcb
 			return pLayout->Add<T>(key);
 		}
 		std::shared_ptr<LayoutElement> Finalize();
+		std::string GetSignature() const noxnd;
 	private:
 		bool finalized = false;
 		std::shared_ptr<LayoutElement> pLayout;
@@ -165,6 +176,7 @@ namespace Dcb
 		};
 	public:
 		ConstElementRef(const LayoutElement* pLayout, char* pBytes, size_t offset);
+		bool Exists() const noexcept;
 		ConstElementRef operator[](const std::string& key) noxnd;
 		ConstElementRef operator[](size_t index) noxnd;
 		Ptr operator&() noxnd;
@@ -201,6 +213,7 @@ namespace Dcb
 	public:
 		ElementRef(const LayoutElement* pLayout, char* pBytes, size_t offset);
 		operator ConstElementRef() const noexcept;
+		bool Exists() const noexcept;
 		ElementRef operator[](const std::string& key) noxnd;
 		ElementRef operator[](size_t index) noxnd;
 		Ptr operator&() noxnd;
@@ -228,6 +241,7 @@ namespace Dcb
 		size_t GetSizeInBytes() const noexcept;
 		const LayoutElement& GetLayout() const noexcept;
 		std::shared_ptr<LayoutElement> CloneLayout() const;
+		std::string GetSignature() const noxnd;
 	private:
 		std::shared_ptr<Struct> pLayout;
 		std::vector<char> bytes;

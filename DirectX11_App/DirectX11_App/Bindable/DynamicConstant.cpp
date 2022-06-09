@@ -1,4 +1,6 @@
 #include "DynamicConstant.h"
+#include <string>
+#include <algorithm>
 
 #define DCB_RESOLVE_BASE(eltype) \
 size_t LayoutElement::Resolve ## eltype() const noxnd \
@@ -23,6 +25,10 @@ size_t eltype::Finalize( size_t offset_in ) \
 size_t eltype::ComputeSize() const noxnd \
 { \
 	return (hlslSize); \
+} \
+std::string eltype::GetSignature() const noxnd \
+{ \
+	return #eltype; \
 }
 #define DCB_LEAF_ELEMENT(eltype,systype) DCB_LEAF_ELEMENT_IMPL(eltype,systype,sizeof(systype))
 
@@ -82,6 +88,39 @@ namespace Dcb
 	}
 
 
+
+	class Empty : public LayoutElement
+	{
+	public:
+		size_t GetOffsetEnd() const noexcept override final
+		{
+			return 0u;
+		}
+		bool Exists() const noexcept override final
+		{
+			return false;
+		}
+		std::string GetSignature() const noxnd final
+		{
+			assert(false);
+			return "";
+		}
+	protected:
+		size_t Finalize(size_t offset_in) override final
+		{
+			return 0u;
+		}
+		size_t ComputeSize() const noxnd override final
+		{
+			return 0u;
+		}
+	private:
+		size_t size = 0u;
+		std::unique_ptr<LayoutElement> pElement;
+	} emptyLayoutElement;
+
+
+
 	DCB_RESOLVE_BASE(Matrix)
 		DCB_RESOLVE_BASE(Float4)
 		DCB_RESOLVE_BASE(Float3)
@@ -102,7 +141,12 @@ namespace Dcb
 
 		LayoutElement& Struct::operator[](const std::string& key)
 	{
-		return *map.at(key);
+		const auto i = map.find(key);
+		if (i == map.end())
+		{
+			return emptyLayoutElement;
+		}
+		return *i->second;
 	}
 	size_t Struct::GetOffsetEnd() const noexcept
 	{
@@ -149,6 +193,24 @@ namespace Dcb
 		}
 		return offset;
 	}
+	std::string Struct::GetSignature() const noxnd
+	{
+		using namespace std::string_literals;
+		auto sig = "Struct{"s;
+		for (const auto& el : elements)
+		{
+			auto i = std::find_if(
+				map.begin(), map.end(),
+				[&el](const std::pair<std::string, LayoutElement*>& v)
+				{
+					return &*el == v.second;
+				}
+			);
+			sig += i->first + ":"s + el->GetSignature() + ";"s;
+		}
+		sig += "}"s;
+		return sig;
+	}
 
 
 
@@ -178,6 +240,19 @@ namespace Dcb
 		// arrays are not packed in hlsl
 		return LayoutElement::GetNextBoundaryOffset(pElement->ComputeSize()) * size;
 	}
+	bool Array::IndexInBounds(size_t index) const noexcept
+	{
+		return index < size;
+	}
+	const LayoutElement& Array::T() const
+	{
+		return const_cast<Array*>(this)->T();
+	}
+	std::string Array::GetSignature() const noxnd
+	{
+		using namespace std::string_literals;
+		return "Array:"s + std::to_string(size) + "{"s + T().GetSignature() + "}"s;
+	}
 
 
 
@@ -204,6 +279,10 @@ namespace Dcb
 		finalized = true;
 		return pLayout;
 	}
+	std::string Layout::GetSignature() const noxnd
+	{
+		return pLayout->GetSignature();
+	}
 
 
 
@@ -223,6 +302,10 @@ namespace Dcb
 		pLayout(pLayout),
 		pBytes(pBytes)
 	{}
+	bool ConstElementRef::Exists() const noexcept
+	{
+		return pLayout->Exists();
+	}
 	ConstElementRef ConstElementRef::operator[](const std::string& key) noxnd
 	{
 		return { &(*pLayout)[key],pBytes,offset };
@@ -230,6 +313,8 @@ namespace Dcb
 	ConstElementRef ConstElementRef::operator[](size_t index) noxnd
 	{
 		const auto& t = pLayout->T();
+		// previous call didn't fail assert implies that layout is Array
+		assert(static_cast<const Array&>(*pLayout).IndexInBounds(index));
 		// arrays are not packed in hlsl
 		const auto elementSize = LayoutElement::GetNextBoundaryOffset(t.GetSizeInBytes());
 		return { &t,pBytes,offset + elementSize * index };
@@ -266,6 +351,10 @@ namespace Dcb
 	{
 		return { pLayout,pBytes,offset };
 	}
+	bool ElementRef::Exists() const noexcept
+	{
+		return pLayout->Exists();
+	}
 	ElementRef ElementRef::operator[](const std::string& key) noxnd
 	{
 		return { &(*pLayout)[key],pBytes,offset };
@@ -273,6 +362,8 @@ namespace Dcb
 	ElementRef ElementRef::operator[](size_t index) noxnd
 	{
 		const auto& t = pLayout->T();
+		// previous call didn't fail assert implies that layout is Array
+		assert(static_cast<const Array&>(*pLayout).IndexInBounds(index));
 		// arrays are not packed in hlsl
 		const auto elementSize = LayoutElement::GetNextBoundaryOffset(t.GetSizeInBytes());
 		return { &t,pBytes,offset + elementSize * index };
@@ -319,5 +410,9 @@ namespace Dcb
 	std::shared_ptr<LayoutElement> Buffer::CloneLayout() const
 	{
 		return pLayout;
+	}
+	std::string Buffer::GetSignature() const noxnd
+	{
+		return pLayout->GetSignature();
 	}
 }
