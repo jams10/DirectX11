@@ -155,6 +155,7 @@
     <ClInclude Include="Bindable\BindableCommon.h" />
     <ClInclude Include="Bindable\Blender.h" />
     <ClInclude Include="Bindable\ConstantBuffers.h" />
+    <ClInclude Include="Bindable\ConstantBuffersEx.h" />
     <ClInclude Include="Bindable\DynamicConstant.h" />
     <ClInclude Include="Bindable\IndexBuffer.h" />
     <ClInclude Include="Bindable\InputLayout.h" />

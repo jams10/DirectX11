@@ -366,6 +366,9 @@
     <ClInclude Include="Bindable\DynamicConstant.h">
       <Filter>Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Bindable\ConstantBuffersEx.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

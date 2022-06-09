@@ -19,12 +19,6 @@ App::App(const std::string& commandLine)
 	farZ(400.f),
 	light(wnd.Gfx())
 {
-	Dcb::Struct s(0);
-	s.Add<Dcb::Struct>("STRUCT");
-	static_cast<Dcb::Struct&>(s["STRUCT"]).Add<Dcb::Float3>("FLOAT3");
-	Dcb::Buffer b(s);
-	b["STRUCT"]["FLOAT3"] = DirectX::XMFLOAT3{ 3.0f,0.0f,0.0f };
-	DirectX::XMFLOAT3 v = b["STRUCT"]["FLOAT3"];
 
 	//wall.SetRootTransform(DirectX::XMMatrixTranslation(-12.0f, 0.0f, 0.0f));
 	//tp.SetPos({ 12.0f,0.0f,0.0f });
