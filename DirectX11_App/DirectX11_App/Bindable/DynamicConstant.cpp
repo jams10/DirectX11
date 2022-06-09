@@ -1,6 +1,8 @@
 #include "DynamicConstant.h"
 #include <string>
 #include <algorithm>
+#include <cctype>
+#include "LayoutCodex.h"
 
 #define DCB_RESOLVE_BASE(eltype) \
 size_t LayoutElement::Resolve ## eltype() const noxnd \
@@ -50,6 +52,7 @@ reftype::Ptr::operator __VA_ARGS__ eltype::SystemType*() noxnd \
 { \
 	return &static_cast<__VA_ARGS__ eltype::SystemType&>(ref); \
 }
+
 
 
 namespace Dcb
@@ -153,12 +156,23 @@ namespace Dcb
 		// bump up to next boundary (because structs are multiple of 16 in size)
 		return LayoutElement::GetNextBoundaryOffset(elements.back()->GetOffsetEnd());
 	}
+	bool ValidateSymbolName(const std::string& name) noexcept
+	{
+		// symbols can contain alphanumeric and underscore, must not start with digit
+		return !name.empty() && !std::isdigit(name.front()) &&
+			std::all_of(name.begin(), name.end(), [](char c) {
+			return std::isalnum(c) || c == '_';
+				}
+		);
+	}
 	void Struct::Add(const std::string& name, std::unique_ptr<LayoutElement> pElement) noxnd
 	{
+		assert(ValidateSymbolName(name) && "invalid symbol name in Struct");
 		elements.push_back(std::move(pElement));
+		// do not allow overwriting of existing symbol
 		if (!map.emplace(name, elements.back().get()).second)
 		{
-			assert(false);
+			assert(false && "duplicate symbol name in Struct");
 		}
 	}
 	size_t Struct::Finalize(size_t offset_in)
@@ -199,6 +213,7 @@ namespace Dcb
 		auto sig = "Struct{"s;
 		for (const auto& el : elements)
 		{
+			// lookup element name in the map (reverse lookup)
 			auto i = std::find_if(
 				map.begin(), map.end(),
 				[&el](const std::pair<std::string, LayoutElement*>& v)
@@ -262,7 +277,8 @@ namespace Dcb
 	{}
 	Layout::Layout(std::shared_ptr<LayoutElement> pLayout)
 		:
-		pLayout(std::move(pLayout))
+		pLayout(std::move(pLayout)),
+		finalized(true)
 	{}
 	LayoutElement& Layout::operator[](const std::string& key)
 	{
@@ -273,15 +289,23 @@ namespace Dcb
 	{
 		return pLayout->GetSizeInBytes();
 	}
-	std::shared_ptr<LayoutElement> Layout::Finalize()
+	void Layout::Finalize()
 	{
-		pLayout->Finalize(0);
+		pLayout->Finalize(0u);
 		finalized = true;
-		return pLayout;
+	}
+	bool Layout::IsFinalized() const noexcept
+	{
+		return finalized;
 	}
 	std::string Layout::GetSignature() const noxnd
 	{
+		assert(finalized);
 		return pLayout->GetSignature();
+	}
+	std::shared_ptr<LayoutElement> Layout::ShareRoot() const noexcept
+	{
+		return pLayout;
 	}
 
 
@@ -382,9 +406,17 @@ namespace Dcb
 
 
 
-		Buffer::Buffer(Layout& lay)
+		Buffer Buffer::Make(Layout& lay) noxnd
+	{
+		return { LayoutCodex::Resolve(lay) };
+	}
+	Buffer::Buffer(Layout&& lay)
 		:
-		pLayout(std::static_pointer_cast<Struct>(lay.Finalize())),
+		Buffer(lay)
+	{}
+	Buffer::Buffer(Layout& lay)
+		:
+		pLayout(lay.ShareRoot()),
 		bytes(pLayout->GetOffsetEnd())
 	{}
 	ElementRef Buffer::operator[](const std::string& key) noxnd
@@ -407,7 +439,7 @@ namespace Dcb
 	{
 		return *pLayout;
 	}
-	std::shared_ptr<LayoutElement> Buffer::CloneLayout() const
+	std::shared_ptr<LayoutElement> Buffer::ShareLayout() const
 	{
 		return pLayout;
 	}
