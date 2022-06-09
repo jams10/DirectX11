@@ -6,7 +6,7 @@
 #include <memory>
 #include <unordered_map>
 #include <type_traits>
-#include "../Windows/WindowsHeader.h"
+#include "WindowsHeader.h"
 
 #define RESOLVE_BASE(eltype) \
 virtual size_t Resolve ## eltype() const noxnd \
@@ -19,7 +19,6 @@ class eltype : public LayoutElement \
 { \
 public: \
 	using SystemType = systype; \
-	using LayoutElement::LayoutElement; \
 	size_t Resolve ## eltype() const noxnd override final \
 	{ \
 		return GetOffsetBegin(); \
@@ -27,6 +26,12 @@ public: \
 	size_t GetOffsetEnd() const noexcept override final \
 	{ \
 		return GetOffsetBegin() + sizeof( systype ); \
+	} \
+protected: \
+	size_t Finalize( size_t offset_in ) override \
+	{ \
+		offset = offset_in; \
+		return offset_in + sizeof( systype ); \
 	} \
 };
 
@@ -51,15 +56,15 @@ namespace Dcb
 {
 	class Struct;
 	class Array;
+	class Layout;
 	namespace dx = DirectX;
 
 	class LayoutElement
 	{
+		friend class Layout;
+		friend class Array;
+		friend class Struct;
 	public:
-		LayoutElement(size_t offset)
-			:
-			offset(offset)
-		{}
 		virtual ~LayoutElement()
 		{}
 
@@ -105,8 +110,10 @@ namespace Dcb
 			RESOLVE_BASE(Float2)
 			RESOLVE_BASE(Float)
 			RESOLVE_BASE(Bool)
-	private:
-		size_t offset;
+	protected:
+		virtual size_t Finalize(size_t offset) = 0;
+	protected:
+		size_t offset = 0u;
 	};
 
 
@@ -121,7 +128,6 @@ namespace Dcb
 		class Struct : public LayoutElement
 	{
 	public:
-		using LayoutElement::LayoutElement;
 		LayoutElement& operator[](const char* key) override final
 		{
 			return *map.at(key);
@@ -137,12 +143,24 @@ namespace Dcb
 		template<typename T>
 		Struct& Add(const std::string& name) noxnd
 		{
-			elements.push_back(std::make_unique<T>(GetOffsetEnd()));
+			elements.push_back(std::make_unique<T>());
 			if (!map.emplace(name, elements.back().get()).second)
 			{
 				assert(false);
 			}
 			return *this;
+		}
+	protected:
+		size_t Finalize(size_t offset_in) override
+		{
+			assert(elements.size() != 0u);
+			offset = offset_in;
+			auto offsetNext = offset;
+			for (auto& el : elements)
+			{
+				offsetNext = (*el).Finalize(offsetNext);
+			}
+			return GetOffsetEnd();
 		}
 	private:
 		std::unordered_map<std::string, LayoutElement*> map;
@@ -152,7 +170,6 @@ namespace Dcb
 	class Array : public LayoutElement
 	{
 	public:
-		using LayoutElement::LayoutElement;
 		size_t GetOffsetEnd() const noexcept override final
 		{
 			assert(pElement);
@@ -161,7 +178,7 @@ namespace Dcb
 		template<typename T>
 		Array& Set(size_t size_in) noxnd
 		{
-			pElement = std::make_unique<T>(GetOffsetBegin());
+			pElement = std::make_unique<T>();
 			size = size_in;
 			return *this;
 		}
@@ -173,7 +190,14 @@ namespace Dcb
 		{
 			return *pElement;
 		}
-
+	protected:
+		size_t Finalize(size_t offset_in) override
+		{
+			assert(size != 0u && pElement);
+			offset = offset_in;
+			pElement->Finalize(offset_in);
+			return offset + pElement->GetSizeInBytes() * size;
+		}
 	private:
 		size_t size = 0u;
 		std::unique_ptr<LayoutElement> pElement;
@@ -186,7 +210,7 @@ namespace Dcb
 	public:
 		Layout()
 			:
-			pLayout(std::make_shared<Struct>(0))
+			pLayout(std::make_shared<Struct>())
 		{}
 		LayoutElement& operator[](const char* key)
 		{
@@ -205,6 +229,7 @@ namespace Dcb
 		}
 		std::shared_ptr<LayoutElement> Finalize()
 		{
+			pLayout->Finalize(0);
 			finalized = true;
 			return pLayout;
 		}
