@@ -175,6 +175,9 @@
     <ClCompile Include="Utils\ScriptCommander.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Bindable\DynamicConstant.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -359,6 +362,9 @@
     </ClInclude>
     <ClInclude Include="Utils\ScriptCommander.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\DynamicConstant.h">
+      <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

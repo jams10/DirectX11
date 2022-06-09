@@ -104,6 +104,7 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Bindable\Bindable.cpp" />
     <ClCompile Include="Bindable\Blender.cpp" />
+    <ClCompile Include="Bindable\DynamicConstant.cpp" />
     <ClCompile Include="Bindable\IndexBuffer.cpp" />
     <ClCompile Include="Bindable\InputLayout.cpp" />
     <ClCompile Include="Bindable\PixelShader.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Bindable\BindableCommon.h" />
     <ClInclude Include="Bindable\Blender.h" />
     <ClInclude Include="Bindable\ConstantBuffers.h" />
+    <ClInclude Include="Bindable\DynamicConstant.h" />
     <ClInclude Include="Bindable\IndexBuffer.h" />
     <ClInclude Include="Bindable\InputLayout.h" />
     <ClInclude Include="Bindable\PixelShader.h" />
