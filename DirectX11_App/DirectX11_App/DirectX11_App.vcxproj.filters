@@ -377,6 +377,9 @@
       <Filter>Bindable</Filter>
     </ClInclude>
     <ClInclude Include="DCBTesting.h" />
+    <ClInclude Include="Bindable\Stencil.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

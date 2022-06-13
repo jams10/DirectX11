@@ -165,6 +165,7 @@
     <ClInclude Include="Bindable\PixelShader.h" />
     <ClInclude Include="Bindable\Rasterizer.h" />
     <ClInclude Include="Bindable\Sampler.h" />
+    <ClInclude Include="Bindable\Stencil.h" />
     <ClInclude Include="Bindable\Texture.h" />
     <ClInclude Include="Bindable\Topology.h" />
     <ClInclude Include="Bindable\TransformCbuf.h" />

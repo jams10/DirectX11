@@ -24,8 +24,8 @@ App::App(const std::string& commandLine)
 	//tp.SetPos({ 12.0f,0.0f,0.0f });
 	//gobber.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, 0.0f, -4.0f));
 	//nano.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, -7.0f, 6.0f));
-	bluePlane.SetPos( cam.GetPos() );
-	redPlane.SetPos(cam.GetPos());
+	//bluePlane.SetPos( cam.GetPos() );
+	//redPlane.SetPos(cam.GetPos());
 
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
@@ -53,8 +53,12 @@ void App::DoFrame()
 	//gobber.Draw(wnd.Gfx());
 	light.Draw(wnd.Gfx());
 	sponza.Draw(wnd.Gfx());
-	bluePlane.Draw(wnd.Gfx());
-	redPlane.Draw(wnd.Gfx());
+	cube.Draw(wnd.Gfx());
+	cube2.Draw(wnd.Gfx());
+	cube.DrawOutline(wnd.Gfx());
+	cube2.DrawOutline(wnd.Gfx());
+	//bluePlane.Draw(wnd.Gfx());
+	//redPlane.Draw(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
 	{
@@ -124,13 +128,16 @@ void App::DoFrame()
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
+	cube.SpawnControlWindow(wnd.Gfx(), "Cube 1");
+	cube2.SpawnControlWindow(wnd.Gfx(), "Cube 2");
 	//gobber.ShowWindow(wnd.Gfx(), "gobber");
 	//wall.ShowWindow(wnd.Gfx(), "Wall");
 	//tp.SpawnControlWindow(wnd.Gfx());
 	//nano.ShowWindow(wnd.Gfx(), "Model 1");
 	sponza.ShowWindow(wnd.Gfx(), "Sponza");
-	bluePlane.SpawnControlWindow(wnd.Gfx(), "Blue Plane");
-	redPlane.SpawnControlWindow(wnd.Gfx(), "Red Plane");
+	//bluePlane.SpawnControlWindow(wnd.Gfx(), "Blue Plane");
+	//redPlane.SpawnControlWindow(wnd.Gfx(), "Red Plane");
+
 
 	wnd.Gfx().EndFrame();
 }
