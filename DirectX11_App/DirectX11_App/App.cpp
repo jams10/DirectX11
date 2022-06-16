@@ -19,7 +19,8 @@ App::App(const std::string& commandLine)
 	farZ(400.f),
 	light(wnd.Gfx())
 {
-
+	cube.SetPos({ 4.0f,0.0f,0.0f });
+	cube2.SetPos({ 0.0f,4.0f,0.0f });
 	//wall.SetRootTransform(DirectX::XMMatrixTranslation(-12.0f, 0.0f, 0.0f));
 	//tp.SetPos({ 12.0f,0.0f,0.0f });
 	//gobber.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, 0.0f, -4.0f));
@@ -51,14 +52,13 @@ void App::DoFrame()
 	//tp.Draw(wnd.Gfx());
 	//nano.Draw( wnd.Gfx() );
 	//gobber.Draw(wnd.Gfx());
-	light.Draw(wnd.Gfx());
-	sponza.Draw(wnd.Gfx());
-	cube.Draw(wnd.Gfx());
-	cube2.Draw(wnd.Gfx());
-	cube.DrawOutline(wnd.Gfx());
-	cube2.DrawOutline(wnd.Gfx());
+	light.Submit(fc);
+	//sponza.Draw( wnd.Gfx() );
+	cube.Submit(fc);
+	cube2.Submit(fc);
 	//bluePlane.Draw(wnd.Gfx());
 	//redPlane.Draw(wnd.Gfx());
+	fc.Execute(wnd.Gfx());
 
 	while (const auto e = wnd.kbd.ReadKey())
 	{
@@ -134,12 +134,13 @@ void App::DoFrame()
 	//wall.ShowWindow(wnd.Gfx(), "Wall");
 	//tp.SpawnControlWindow(wnd.Gfx());
 	//nano.ShowWindow(wnd.Gfx(), "Model 1");
-	sponza.ShowWindow(wnd.Gfx(), "Sponza");
+	//sponza.ShowWindow(wnd.Gfx(), "Sponza");
 	//bluePlane.SpawnControlWindow(wnd.Gfx(), "Blue Plane");
 	//redPlane.SpawnControlWindow(wnd.Gfx(), "Red Plane");
 
 
 	wnd.Gfx().EndFrame();
+	fc.Reset();
 }
 
 void App::ShowImguiDemoWindow()

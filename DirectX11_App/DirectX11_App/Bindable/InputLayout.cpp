@@ -23,6 +23,11 @@ namespace Bind
 		));
 	}
 
+	const TemplateVertex::VertexLayout InputLayout::GetLayout() const noexcept
+	{
+		return layout;
+	}
+
 	void InputLayout::Bind(Graphics& gfx) noexcept
 	{
 		GetContext(gfx)->IASetInputLayout(pInputLayout.Get());

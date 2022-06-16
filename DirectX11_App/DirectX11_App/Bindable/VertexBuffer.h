@@ -11,6 +11,7 @@ namespace Bind
 		VertexBuffer(Graphics& gfx, const std::string& tag, const TemplateVertex::VertexBuffer& vbuf);
 		VertexBuffer(Graphics& gfx, const TemplateVertex::VertexBuffer& vbuf);
 		void Bind(Graphics& gfx) noexcept override;
+		const TemplateVertex::VertexLayout& GetLayout() const noexcept;
 		static std::shared_ptr<VertexBuffer> Resolve(Graphics& gfx, const std::string& tag,
 												const TemplateVertex::VertexBuffer& vbuf);
 		template<typename...Ignore>
@@ -25,5 +26,6 @@ namespace Bind
 		std::string tag;
 		UINT stride;
 		Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
+		TemplateVertex::VertexLayout layout;
 	};
 }

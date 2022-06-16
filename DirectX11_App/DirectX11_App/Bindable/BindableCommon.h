@@ -11,4 +11,6 @@
 #include "Texture.h"
 #include "Sampler.h"
 #include "Blender.h"
-#include "Rasterizer.h" 
+#include "Rasterizer.h"
+#include "Stencil.h"
+#include "NullPixelShader.h"

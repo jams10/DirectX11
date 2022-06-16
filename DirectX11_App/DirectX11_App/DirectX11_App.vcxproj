@@ -108,6 +108,7 @@
     <ClCompile Include="Bindable\IndexBuffer.cpp" />
     <ClCompile Include="Bindable\InputLayout.cpp" />
     <ClCompile Include="Bindable\LayoutCodex.cpp" />
+    <ClCompile Include="Bindable\NullPixelShader.cpp" />
     <ClCompile Include="Bindable\PixelShader.cpp" />
     <ClCompile Include="Bindable\Rasterizer.cpp" />
     <ClCompile Include="Bindable\Sampler.cpp" />
@@ -138,6 +139,9 @@
     <ClCompile Include="Imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
+    <ClCompile Include="Jobber\Job.cpp" />
+    <ClCompile Include="Jobber\Step.cpp" />
+    <ClCompile Include="Jobber\Technique.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Surface.cpp" />
@@ -162,6 +166,7 @@
     <ClInclude Include="Bindable\IndexBuffer.h" />
     <ClInclude Include="Bindable\InputLayout.h" />
     <ClInclude Include="Bindable\LayoutCodex.h" />
+    <ClInclude Include="Bindable\NullPixelShader.h" />
     <ClInclude Include="Bindable\PixelShader.h" />
     <ClInclude Include="Bindable\Rasterizer.h" />
     <ClInclude Include="Bindable\Sampler.h" />
@@ -203,6 +208,11 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Jobber\FrameCommander.h" />
+    <ClInclude Include="Jobber\Job.h" />
+    <ClInclude Include="Jobber\Pass.h" />
+    <ClInclude Include="Jobber\Step.h" />
+    <ClInclude Include="Jobber\Technique.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Surface.h" />

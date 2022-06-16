@@ -38,6 +38,9 @@
     <Filter Include="Light">
       <UniqueIdentifier>{069563d9-8548-47b1-a5c8-ffb73ffffaca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Jobber">
+      <UniqueIdentifier>{f6c8a224-c020-40e1-b5fb-2abd23578fbb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bindable\InputLayout.cpp">
@@ -182,6 +185,18 @@
       <Filter>Bindable</Filter>
     </ClCompile>
     <ClCompile Include="DCBTesting.cpp" />
+    <ClCompile Include="Jobber\Technique.cpp">
+      <Filter>Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="Jobber\Step.cpp">
+      <Filter>Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="Jobber\Job.cpp">
+      <Filter>Jobber</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\NullPixelShader.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
@@ -378,6 +393,24 @@
     </ClInclude>
     <ClInclude Include="DCBTesting.h" />
     <ClInclude Include="Bindable\Stencil.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Jobber\Technique.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Jobber\Step.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Jobber\FrameCommander.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Jobber\Pass.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Jobber\Job.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\NullPixelShader.h">
       <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>
