@@ -1,0 +1,482 @@
+[Begin] 0.000ms
+[Resolve 2x] 0.097ms
+[Begin] 0.000ms
+[Resolve 2x] 22.423ms
+[Begin] 0.000ms
+[Resolve 2x] 10.422ms
+[Begin] 0.000ms
+[Resolve 2x] 15.310ms
+[Begin] 0.000ms
+[Resolve 2x] 16.625ms
+[Begin] 0.000ms
+[Resolve 2x] 16.664ms
+[Begin] 0.000ms
+[Resolve 2x] 16.605ms
+[Begin] 0.000ms
+[Resolve 2x] 16.757ms
+[Begin] 0.000ms
+[Resolve 2x] 16.857ms
+[Begin] 0.000ms
+[Resolve 2x] 16.413ms
+[Begin] 0.000ms
+[Resolve 2x] 16.879ms
+[Begin] 0.000ms
+[Resolve 2x] 17.086ms
+[Begin] 0.000ms
+[Resolve 2x] 16.074ms
+[Begin] 0.000ms
+[Resolve 2x] 16.666ms
+[Begin] 0.000ms
+[Resolve 2x] 16.731ms
+[Begin] 0.000ms
+[Resolve 2x] 16.590ms
+[Begin] 0.000ms
+[Resolve 2x] 16.567ms
+[Begin] 0.000ms
+[Resolve 2x] 16.811ms
+[Begin] 0.000ms
+[Resolve 2x] 16.893ms
+[Begin] 0.000ms
+[Resolve 2x] 16.511ms
+[Begin] 0.000ms
+[Resolve 2x] 16.498ms
+[Begin] 0.000ms
+[Resolve 2x] 17.163ms
+[Begin] 0.000ms
+[Resolve 2x] 16.676ms
+[Begin] 0.000ms
+[Resolve 2x] 16.389ms
+[Begin] 0.000ms
+[Resolve 2x] 16.495ms
+[Begin] 0.000ms
+[Resolve 2x] 16.528ms
+[Begin] 0.000ms
+[Resolve 2x] 16.872ms
+[Begin] 0.000ms
+[Resolve 2x] 17.143ms
+[Begin] 0.000ms
+[Resolve 2x] 16.241ms
+[Begin] 0.000ms
+[Resolve 2x] 16.571ms
+[Begin] 0.000ms
+[Resolve 2x] 16.628ms
+[Begin] 0.000ms
+[Resolve 2x] 16.492ms
+[Begin] 0.000ms
+[Resolve 2x] 17.236ms
+[Begin] 0.000ms
+[Resolve 2x] 16.452ms
+[Begin] 0.000ms
+[Resolve 2x] 16.465ms
+[Begin] 0.000ms
+[Resolve 2x] 16.685ms
+[Begin] 0.000ms
+[Resolve 2x] 16.694ms
+[Begin] 0.000ms
+[Resolve 2x] 16.547ms
+[Begin] 0.000ms
+[Resolve 2x] 16.613ms
+[Begin] 0.000ms
+[Resolve 2x] 16.654ms
+[Begin] 0.000ms
+[Resolve 2x] 16.527ms
+[Begin] 0.000ms
+[Resolve 2x] 17.259ms
+[Begin] 0.000ms
+[Resolve 2x] 17.099ms
+[Begin] 0.000ms
+[Resolve 2x] 15.815ms
+[Begin] 0.000ms
+[Resolve 2x] 16.649ms
+[Begin] 0.000ms
+[Resolve 2x] 16.587ms
+[Begin] 0.000ms
+[Resolve 2x] 16.917ms
+[Begin] 0.000ms
+[Resolve 2x] 17.283ms
+[Begin] 0.000ms
+[Resolve 2x] 16.508ms
+[Begin] 0.000ms
+[Resolve 2x] 16.851ms
+[Begin] 0.000ms
+[Resolve 2x] 16.225ms
+[Begin] 0.000ms
+[Resolve 2x] 16.333ms
+[Begin] 0.000ms
+[Resolve 2x] 16.425ms
+[Begin] 0.000ms
+[Resolve 2x] 16.647ms
+[Begin] 0.000ms
+[Resolve 2x] 17.081ms
+[Begin] 0.000ms
+[Resolve 2x] 16.468ms
+[Begin] 0.000ms
+[Resolve 2x] 16.926ms
+[Begin] 0.000ms
+[Resolve 2x] 17.608ms
+[Begin] 0.000ms
+[Resolve 2x] 15.881ms
+[Begin] 0.000ms
+[Resolve 2x] 16.494ms
+[Begin] 0.000ms
+[Resolve 2x] 17.021ms
+[Begin] 0.000ms
+[Resolve 2x] 16.333ms
+[Begin] 0.000ms
+[Resolve 2x] 16.589ms
+[Begin] 0.000ms
+[Resolve 2x] 16.606ms
+[Begin] 0.000ms
+[Resolve 2x] 16.770ms
+[Begin] 0.000ms
+[Resolve 2x] 17.305ms
+[Begin] 0.000ms
+[Resolve 2x] 16.367ms
+[Begin] 0.000ms
+[Resolve 2x] 16.250ms
+[Begin] 0.000ms
+[Resolve 2x] 16.570ms
+[Begin] 0.000ms
+[Resolve 2x] 16.914ms
+[Begin] 0.000ms
+[Resolve 2x] 16.305ms
+[Begin] 0.000ms
+[Resolve 2x] 16.669ms
+[Begin] 0.000ms
+[Resolve 2x] 16.589ms
+[Begin] 0.000ms
+[Resolve 2x] 17.419ms
+[Begin] 0.000ms
+[Resolve 2x] 16.951ms
+[Begin] 0.000ms
+[Resolve 2x] 17.032ms
+[Begin] 0.000ms
+[Resolve 2x] 15.527ms
+[Begin] 0.000ms
+[Resolve 2x] 17.093ms
+[Begin] 0.000ms
+[Resolve 2x] 16.760ms
+[Begin] 0.000ms
+[Resolve 2x] 16.724ms
+[Begin] 0.000ms
+[Resolve 2x] 16.412ms
+[Begin] 0.000ms
+[Resolve 2x] 16.768ms
+[Begin] 0.000ms
+[Resolve 2x] 16.706ms
+[Begin] 0.000ms
+[Resolve 2x] 16.813ms
+[Begin] 0.000ms
+[Resolve 2x] 16.144ms
+[Begin] 0.000ms
+[Resolve 2x] 16.638ms
+[Begin] 0.000ms
+[Resolve 2x] 16.585ms
+[Begin] 0.000ms
+[Resolve 2x] 16.774ms
+[Begin] 0.000ms
+[Resolve 2x] 16.906ms
+[Begin] 0.000ms
+[Resolve 2x] 16.775ms
+[Begin] 0.000ms
+[Resolve 2x] 16.155ms
+[Begin] 0.000ms
+[Resolve 2x] 16.781ms
+[Begin] 0.000ms
+[Resolve 2x] 16.523ms
+[Begin] 0.000ms
+[Resolve 2x] 16.543ms
+[Begin] 0.000ms
+[Resolve 2x] 16.570ms
+[Begin] 0.000ms
+[Resolve 2x] 16.640ms
+[Begin] 0.000ms
+[Resolve 2x] 16.722ms
+[Begin] 0.000ms
+[Resolve 2x] 17.063ms
+[Begin] 0.000ms
+[Resolve 2x] 16.781ms
+[Begin] 0.000ms
+[Resolve 2x] 16.704ms
+[Begin] 0.000ms
+[Resolve 2x] 16.354ms
+[Begin] 0.000ms
+[Resolve 2x] 16.752ms
+[Begin] 0.000ms
+[Resolve 2x] 16.810ms
+[Begin] 0.000ms
+[Resolve 2x] 16.276ms
+[Begin] 0.000ms
+[Resolve 2x] 18.182ms
+[Begin] 0.000ms
+[Resolve 2x] 15.484ms
+[Begin] 0.000ms
+[Resolve 2x] 16.587ms
+[Begin] 0.000ms
+[Resolve 2x] 16.610ms
+[Begin] 0.000ms
+[Resolve 2x] 16.762ms
+[Begin] 0.000ms
+[Resolve 2x] 16.436ms
+[Begin] 0.000ms
+[Resolve 2x] 16.635ms
+[Begin] 0.000ms
+[Resolve 2x] 17.049ms
+[Begin] 0.000ms
+[Resolve 2x] 16.825ms
+[Begin] 0.000ms
+[Resolve 2x] 16.698ms
+[Begin] 0.000ms
+[Resolve 2x] 16.231ms
+[Begin] 0.000ms
+[Resolve 2x] 16.615ms
+[Begin] 0.000ms
+[Resolve 2x] 16.488ms
+[Begin] 0.000ms
+[Resolve 2x] 17.129ms
+[Begin] 0.000ms
+[Resolve 2x] 16.821ms
+[Begin] 0.000ms
+[Resolve 2x] 18.075ms
+[Begin] 0.000ms
+[Resolve 2x] 15.340ms
+[Begin] 0.000ms
+[Resolve 2x] 16.490ms
+[Begin] 0.000ms
+[Resolve 2x] 16.500ms
+[Begin] 0.000ms
+[Resolve 2x] 16.776ms
+[Begin] 0.000ms
+[Resolve 2x] 16.591ms
+[Begin] 0.000ms
+[Resolve 2x] 16.704ms
+[Begin] 0.000ms
+[Resolve 2x] 16.484ms
+[Begin] 0.000ms
+[Resolve 2x] 16.578ms
+[Begin] 0.000ms
+[Resolve 2x] 16.668ms
+[Begin] 0.000ms
+[Resolve 2x] 17.263ms
+[Begin] 0.000ms
+[Resolve 2x] 16.291ms
+[Begin] 0.000ms
+[Resolve 2x] 16.536ms
+[Begin] 0.000ms
+[Resolve 2x] 17.171ms
+[Begin] 0.000ms
+[Resolve 2x] 16.241ms
+[Begin] 0.000ms
+[Resolve 2x] 16.601ms
+[Begin] 0.000ms
+[Resolve 2x] 18.640ms
+[Begin] 0.000ms
+[Resolve 2x] 15.136ms
+[Begin] 0.000ms
+[Resolve 2x] 16.029ms
+[Begin] 0.000ms
+[Resolve 2x] 17.072ms
+[Begin] 0.000ms
+[Resolve 2x] 16.476ms
+[Begin] 0.000ms
+[Resolve 2x] 16.730ms
+[Begin] 0.000ms
+[Resolve 2x] 16.836ms
+[Begin] 0.000ms
+[Resolve 2x] 16.525ms
+[Begin] 0.000ms
+[Resolve 2x] 16.733ms
+[Begin] 0.000ms
+[Resolve 2x] 16.712ms
+[Begin] 0.000ms
+[Resolve 2x] 16.539ms
+[Begin] 0.000ms
+[Resolve 2x] 16.663ms
+[Begin] 0.000ms
+[Resolve 2x] 16.884ms
+[Begin] 0.000ms
+[Resolve 2x] 17.159ms
+[Begin] 0.000ms
+[Resolve 2x] 16.495ms
+[Begin] 0.000ms
+[Resolve 2x] 16.447ms
+[Begin] 0.000ms
+[Resolve 2x] 16.906ms
+[Begin] 0.000ms
+[Resolve 2x] 18.657ms
+[Begin] 0.000ms
+[Resolve 2x] 15.376ms
+[Begin] 0.000ms
+[Resolve 2x] 15.607ms
+[Begin] 0.000ms
+[Resolve 2x] 17.134ms
+[Begin] 0.000ms
+[Resolve 2x] 16.710ms
+[Begin] 0.000ms
+[Resolve 2x] 17.492ms
+[Begin] 0.000ms
+[Resolve 2x] 15.647ms
+[Begin] 0.000ms
+[Resolve 2x] 16.136ms
+[Begin] 0.000ms
+[Resolve 2x] 16.910ms
+[Begin] 0.000ms
+[Resolve 2x] 17.220ms
+[Begin] 0.000ms
+[Resolve 2x] 16.059ms
+[Begin] 0.000ms
+[Resolve 2x] 16.457ms
+[Begin] 0.000ms
+[Resolve 2x] 16.511ms
+[Begin] 0.000ms
+[Resolve 2x] 16.489ms
+[Begin] 0.000ms
+[Resolve 2x] 16.603ms
+[Begin] 0.000ms
+[Resolve 2x] 16.688ms
+[Begin] 0.000ms
+[Resolve 2x] 17.168ms
+[Begin] 0.000ms
+[Resolve 2x] 16.662ms
+[Begin] 0.000ms
+[Resolve 2x] 16.768ms
+[Begin] 0.000ms
+[Resolve 2x] 16.397ms
+[Begin] 0.000ms
+[Resolve 2x] 17.558ms
+[Begin] 0.000ms
+[Resolve 2x] 16.186ms
+[Begin] 0.000ms
+[Resolve 2x] 16.364ms
+[Begin] 0.000ms
+[Resolve 2x] 16.754ms
+[Begin] 0.000ms
+[Resolve 2x] 16.879ms
+[Begin] 0.000ms
+[Resolve 2x] 16.220ms
+[Begin] 0.000ms
+[Resolve 2x] 16.783ms
+[Begin] 0.000ms
+[Resolve 2x] 17.729ms
+[Begin] 0.000ms
+[Resolve 2x] 15.829ms
+[Begin] 0.000ms
+[Resolve 2x] 17.214ms
+[Begin] 0.000ms
+[Resolve 2x] 17.032ms
+[Begin] 0.000ms
+[Resolve 2x] 17.145ms
+[Begin] 0.000ms
+[Resolve 2x] 15.552ms
+[Begin] 0.000ms
+[Resolve 2x] 16.061ms
+[Begin] 0.000ms
+[Resolve 2x] 17.253ms
+[Begin] 0.000ms
+[Resolve 2x] 16.044ms
+[Begin] 0.000ms
+[Resolve 2x] 16.696ms
+[Begin] 0.000ms
+[Resolve 2x] 17.652ms
+[Begin] 0.000ms
+[Resolve 2x] 17.221ms
+[Begin] 0.000ms
+[Resolve 2x] 15.654ms
+[Begin] 0.000ms
+[Resolve 2x] 17.067ms
+[Begin] 0.000ms
+[Resolve 2x] 16.396ms
+[Begin] 0.000ms
+[Resolve 2x] 16.378ms
+[Begin] 0.000ms
+[Resolve 2x] 16.693ms
+[Begin] 0.000ms
+[Resolve 2x] 16.807ms
+[Begin] 0.000ms
+[Resolve 2x] 16.417ms
+[Begin] 0.000ms
+[Resolve 2x] 16.966ms
+[Begin] 0.000ms
+[Resolve 2x] 18.119ms
+[Begin] 0.000ms
+[Resolve 2x] 16.366ms
+[Begin] 0.000ms
+[Resolve 2x] 15.216ms
+[Begin] 0.000ms
+[Resolve 2x] 17.019ms
+[Begin] 0.000ms
+[Resolve 2x] 16.652ms
+[Begin] 0.000ms
+[Resolve 2x] 17.904ms
+[Begin] 0.000ms
+[Resolve 2x] 15.270ms
+[Begin] 0.000ms
+[Resolve 2x] 17.240ms
+[Begin] 0.000ms
+[Resolve 2x] 18.447ms
+[Begin] 0.000ms
+[Resolve 2x] 15.346ms
+[Begin] 0.000ms
+[Resolve 2x] 16.875ms
+[Begin] 0.000ms
+[Resolve 2x] 16.566ms
+[Begin] 0.000ms
+[Resolve 2x] 16.934ms
+[Begin] 0.000ms
+[Resolve 2x] 16.150ms
+[Begin] 0.000ms
+[Resolve 2x] 17.051ms
+[Begin] 0.000ms
+[Resolve 2x] 17.554ms
+[Begin] 0.000ms
+[Resolve 2x] 16.538ms
+[Begin] 0.000ms
+[Resolve 2x] 18.127ms
+[Begin] 0.000ms
+[Resolve 2x] 17.284ms
+[Begin] 0.000ms
+[Resolve 2x] 14.758ms
+[Begin] 0.000ms
+[Resolve 2x] 16.117ms
+[Begin] 0.000ms
+[Resolve 2x] 16.313ms
+[Begin] 0.000ms
+[Resolve 2x] 18.425ms
+[Begin] 0.000ms
+[Resolve 2x] 15.431ms
+[Begin] 0.000ms
+[Resolve 2x] 23.322ms
+[Begin] 0.000ms
+[Resolve 2x] 10.909ms
+[Begin] 0.000ms
+[Resolve 2x] 18.071ms
+[Begin] 0.000ms
+[Resolve 2x] 14.405ms
+[Begin] 0.000ms
+[Resolve 2x] 16.644ms
+[Begin] 0.000ms
+[Resolve 2x] 20.729ms
+[Begin] 0.000ms
+[Resolve 2x] 16.319ms
+[Begin] 0.000ms
+[Resolve 2x] 14.496ms
+[Begin] 0.000ms
+[Resolve 2x] 17.214ms
+[Begin] 0.000ms
+[Resolve 2x] 17.179ms
+[Begin] 0.000ms
+[Resolve 2x] 15.970ms
+[Begin] 0.000ms
+[Resolve 2x] 15.676ms
+[Begin] 0.000ms
+[Resolve 2x] 14.563ms
+[Begin] 0.000ms
+[Resolve 2x] 17.686ms
+[Begin] 0.000ms
+[Resolve 2x] 16.544ms
+[Begin] 0.000ms
+[Resolve 2x] 16.004ms
+[Begin] 0.000ms
+[Resolve 2x] 16.645ms
+[Begin] 0.000ms
+[Resolve 2x] 16.748ms

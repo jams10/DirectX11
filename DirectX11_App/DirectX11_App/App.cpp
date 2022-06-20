@@ -8,6 +8,7 @@
 #include "VertexBuffer.h"
 #include "CustomUtil.h"
 #include "DynamicConstant.h"
+#include "PerfLog.h"
 
 App::App(const std::string& commandLine)
 	:

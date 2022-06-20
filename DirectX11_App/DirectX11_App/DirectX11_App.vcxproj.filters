@@ -413,6 +413,9 @@
     <ClInclude Include="Bindable\NullPixelShader.h">
       <Filter>Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\PerfLog.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

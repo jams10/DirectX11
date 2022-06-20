@@ -221,6 +221,7 @@
     <ClInclude Include="Utils\CustomXM.h" />
     <ClInclude Include="Utils\GameTimer.h" />
     <ClInclude Include="Utils\NormalMapTwerker.h" />
+    <ClInclude Include="Utils\PerfLog.h" />
     <ClInclude Include="Utils\ScriptCommander.h" />
     <ClInclude Include="Utils\StringEncoding.h" />
     <ClInclude Include="Utils\TexturePreprocessor.h" />
