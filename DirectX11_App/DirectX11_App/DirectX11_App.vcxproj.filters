@@ -416,6 +416,9 @@
     <ClInclude Include="Utils\PerfLog.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Jobber\TechniqueProbe.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

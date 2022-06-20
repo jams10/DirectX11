@@ -213,6 +213,7 @@
     <ClInclude Include="Jobber\Pass.h" />
     <ClInclude Include="Jobber\Step.h" />
     <ClInclude Include="Jobber\Technique.h" />
+    <ClInclude Include="Jobber\TechniqueProbe.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Surface.h" />
