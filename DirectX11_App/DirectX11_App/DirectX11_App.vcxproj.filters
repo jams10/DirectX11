@@ -419,6 +419,9 @@
     <ClInclude Include="Jobber\TechniqueProbe.h">
       <Filter>Jobber</Filter>
     </ClInclude>
+    <ClInclude Include="Bindable\Material.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">

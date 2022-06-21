@@ -166,6 +166,7 @@
     <ClInclude Include="Bindable\IndexBuffer.h" />
     <ClInclude Include="Bindable\InputLayout.h" />
     <ClInclude Include="Bindable\LayoutCodex.h" />
+    <ClInclude Include="Bindable\Material.h" />
     <ClInclude Include="Bindable\NullPixelShader.h" />
     <ClInclude Include="Bindable\PixelShader.h" />
     <ClInclude Include="Bindable\Rasterizer.h" />
