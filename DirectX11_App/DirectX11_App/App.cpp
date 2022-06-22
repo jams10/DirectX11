@@ -257,7 +257,28 @@ void App::DoFrame()
 			// processing for selecting node
 			if (ImGui::IsItemClicked())
 			{
-				pSelectedNode = &node;
+				// used to change the highlighted node on selection change
+				struct Probe : public TechniqueProbe
+				{
+					virtual void OnSetTechnique()
+					{
+						if (pTech->GetName() == "Outline")
+						{
+							pTech->SetActiveState(highlighted);
+						}
+					}
+					bool highlighted = false;
+				} probe;
+
+				// remove highlight on prev-selected node
+				if (pSelectedNode != nullptr)
+				{
+					pSelectedNode->Accept(probe);
+				}
+				// add highlight to newly-selected node
+				probe.highlighted = true;
+				node.Accept(probe);
+
 			}
 			// signal if children should also be recursed
 			return expanded;
