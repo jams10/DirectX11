@@ -197,6 +197,9 @@
     <ClCompile Include="Bindable\NullPixelShader.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
+    <ClCompile Include="Bindable\Material.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bindable\InputLayout.h">
