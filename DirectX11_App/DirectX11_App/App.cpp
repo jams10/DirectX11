@@ -8,6 +8,7 @@
 #include "VertexBuffer.h"
 #include "CustomUtil.h"
 #include "DynamicConstant.h"
+#include "DCBTesting.h"
 #include "PerfLog.h"
 
 App::App(const std::string& commandLine)
@@ -20,6 +21,7 @@ App::App(const std::string& commandLine)
 	farZ(400.f),
 	light(wnd.Gfx())
 {
+	TestDynamicMeshLoading();
 	cube.SetPos({ 4.0f,0.0f,0.0f });
 	cube2.SetPos({ 0.0f,4.0f,0.0f });
 	//wall.SetRootTransform(DirectX::XMMatrixTranslation(-12.0f, 0.0f, 0.0f));

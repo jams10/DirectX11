@@ -46,7 +46,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(IncludePath);$(ProjectDir)\dxtex\include;</IncludePath>
-    <LibraryPath>$(SolutionDir)\lib;$(LibraryPath);$(ProjectDir)dxtex\bin</LibraryPath>
+    <LibraryPath>$(SolutionDir)\lib\Debug;$(LibraryPath);$(ProjectDir)dxtex\bin</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
