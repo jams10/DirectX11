@@ -220,6 +220,7 @@
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Jobber\FrameCommander.h" />
     <ClInclude Include="Jobber\Job.h" />
+    <ClInclude Include="Jobber\ModelProbe.h" />
     <ClInclude Include="Jobber\Pass.h" />
     <ClInclude Include="Jobber\Step.h" />
     <ClInclude Include="Jobber\Technique.h" />

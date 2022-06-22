@@ -15,6 +15,8 @@
 #include <assimp/postprocess.h>
 #include "Mesh.h"
 #include "DynamicConstant.h"
+#include "../Jobber/ModelProbe.h"
+#include "Node.h"
 
 App::App(const std::string& commandLine)
 	:
@@ -132,7 +134,7 @@ void App::DoFrame()
 	}
 
 	// Mesh techniques window
-	class Probe : public TechniqueProbe
+	class TP : public TechniqueProbe
 	{
 	public:
 		void OnSetTechnique() override
@@ -187,7 +189,54 @@ void App::DoFrame()
 		}
 	} probe;
 
+	class MP : ModelProbe
+	{
+	public:
+		void SpawnWindow(Model& model)
+		{
+			ImGui::Begin("Model");
+			ImGui::Columns(2, nullptr, true);
+			model.Accept(*this);
+
+			ImGui::NextColumn();
+			if (pSelectedNode != nullptr)
+			{
+			}
+			ImGui::End();
+		}
+	protected:
+		bool PushNode(Node& node) override
+		{
+			// if there is no selected node, set selectedId to an impossible value
+			const int selectedId = (pSelectedNode == nullptr) ? -1 : pSelectedNode->GetId();
+			// build up flags for current node
+			const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
+				| ((node.GetId() == selectedId) ? ImGuiTreeNodeFlags_Selected : 0)
+				| (node.HasChildren() ? 0 : ImGuiTreeNodeFlags_Leaf);
+			// render this node
+			const auto expanded = ImGui::TreeNodeEx(
+				(void*)(intptr_t)node.GetId(),
+				node_flags, node.GetName().c_str()
+			);
+			// processing for selecting node
+			if (ImGui::IsItemClicked())
+			{
+				pSelectedNode = &node;
+			}
+			// signal if children should also be recursed
+			return expanded;
+		}
+		void PopNode(Node& node) override
+		{
+			ImGui::TreePop();
+		}
+	protected:
+		Node* pSelectedNode = nullptr;
+	};
+	static MP modelProbe;
+
 	// imgui windows
+	modelProbe.SpawnWindow(sponza);
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();

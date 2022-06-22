@@ -449,6 +449,9 @@
     <ClInclude Include="Drawable\Node.h">
       <Filter>Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="Jobber\ModelProbe.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">
