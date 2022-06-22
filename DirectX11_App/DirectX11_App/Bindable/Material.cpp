@@ -15,7 +15,7 @@ modelPath(path.string())
 	{
 		Technique phong{ "Phong" };
 		Step step(0);
-		std::string shaderCode = "Phong";
+		std::string shaderCode = "Shader\\Phong";
 		aiString texFileName;
 
 		// common (pre)

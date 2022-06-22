@@ -8,11 +8,28 @@ namespace TemplateVertex
 	{
 		return elements[i];
 	}
+
 	VertexLayout& VertexLayout::Append(ElementType type) noxnd
 	{
-		elements.emplace_back(type, Size());
+		if (!Has(type))
+		{
+			elements.emplace_back(type, Size());
+		}
 		return *this;
 	}
+
+	bool VertexLayout::Has(ElementType type) const noexcept
+	{
+		for (auto& e : elements)
+		{
+			if (e.GetType() == type)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	size_t VertexLayout::Size() const noxnd
 	{
 		return elements.empty() ? 0u : elements.back().GetOffsetAfter();

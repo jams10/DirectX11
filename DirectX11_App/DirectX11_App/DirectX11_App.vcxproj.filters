@@ -471,10 +471,10 @@
     <FxCompile Include="Shader\PhongPSSpecNormalMap.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\PhongPSNormalMap.hlsl">
+    <FxCompile Include="Shader\PhongDifNrmPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\PhongVSNormalMap.hlsl">
+    <FxCompile Include="Shader\PhongDifNrmVS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PhongPSNormalMapObject.hlsl">
