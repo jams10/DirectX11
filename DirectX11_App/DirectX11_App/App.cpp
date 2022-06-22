@@ -279,6 +279,7 @@ void App::DoFrame()
 				probe.highlighted = true;
 				node.Accept(probe);
 
+				pSelectedNode = &node;
 			}
 			// signal if children should also be recursed
 			return expanded;
