@@ -34,10 +34,9 @@ private:
 	Camera cam;
 	FrameCommander fc;
 	PointLight light;
-	TestCube cube{ wnd.Gfx(),4.0f };
-	TestCube cube2{ wnd.Gfx(),4.0f };
-	std::unique_ptr<Mesh> pLoaded;
-	Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",6.0f };
+	//TestCube cube{ wnd.Gfx(),4.0f };
+	//TestCube cube2{ wnd.Gfx(),4.0f };
+	Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",4.0f };
 	/*Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",6.0f };
 	Model wall{ wnd.Gfx(),"Models\\brick_wall\\brick_wall.obj",6.0f };
 	TestPlane tp{ wnd.Gfx(),6.0 };
