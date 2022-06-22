@@ -1,23 +1,24 @@
 #pragma once
-#include <assimp/scene.h>
+#include "../Graphics.h"
 #include "BindableCommon.h"
 #include <vector>
 #include <filesystem>
 #include "../Jobber/Technique.h"
-#include "DynamicConstant.h"
-#include "ConstantBuffersEx.h"
+
+struct aiMaterial;
+struct aiMesh;
 
 class Material
 {
 public:
-	Material(Graphics& gfx, const aiMaterial& material, const std::filesystem::path& path) noxnd;
-	TemplateVertex::VertexBuffer ExtractVertices(const aiMesh& mesh) const noexcept;
-	std::vector<unsigned short> ExtractIndices(const aiMesh& mesh) const noexcept;
-	std::shared_ptr<Bind::VertexBuffer> MakeVertexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd;
-	std::shared_ptr<Bind::IndexBuffer> MakeIndexBindable(Graphics& gfx, const aiMesh& mesh) const noxnd;
+	Material( Graphics& gfx,const aiMaterial& material,const std::filesystem::path& path ) noxnd;
+	TemplateVertex::VertexBuffer ExtractVertices( const aiMesh& mesh ) const noexcept;
+	std::vector<unsigned short> ExtractIndices( const aiMesh& mesh ) const noexcept;
+	std::shared_ptr<Bind::VertexBuffer> MakeVertexBindable( Graphics& gfx,const aiMesh& mesh ) const noxnd;
+	std::shared_ptr<Bind::IndexBuffer> MakeIndexBindable( Graphics& gfx,const aiMesh& mesh ) const noxnd;
 	std::vector<Technique> GetTechniques() const noexcept;
 private:
-	std::string MakeMeshTag(const aiMesh& mesh) const noexcept;
+	std::string MakeMeshTag( const aiMesh& mesh ) const noexcept;
 private:
 	TemplateVertex::VertexLayout vtxLayout;
 	std::vector<Technique> techniques;

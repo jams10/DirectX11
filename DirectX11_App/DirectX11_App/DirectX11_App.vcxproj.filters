@@ -142,9 +142,6 @@
     <ClCompile Include="Light\PointLight.cpp">
       <Filter>Light</Filter>
     </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Bindable\Vertex.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
@@ -199,6 +196,21 @@
     </ClCompile>
     <ClCompile Include="Bindable\Material.cpp">
       <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable\Mesh.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable\Model.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable\ModelException.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable\ModelWindow.cpp">
+      <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable\Node.cpp">
+      <Filter>Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -424,6 +436,18 @@
     </ClInclude>
     <ClInclude Include="Bindable\Material.h">
       <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\Model.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\ModelException.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\ModelWindow.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable\Node.h">
+      <Filter>Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

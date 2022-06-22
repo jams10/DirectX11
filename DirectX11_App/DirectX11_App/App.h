@@ -12,6 +12,7 @@
 #include "Stencil.h"
 #include "../Jobber/FrameCommander.h"
 #include "Material.h"
+#include "Model.h"
 
 // App : 애플리케이션 클래스. 프로그램의 전체 실행 루프를 가짐.
 class App
@@ -36,6 +37,7 @@ private:
 	TestCube cube{ wnd.Gfx(),4.0f };
 	TestCube cube2{ wnd.Gfx(),4.0f };
 	std::unique_ptr<Mesh> pLoaded;
+	Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",6.0f };
 	/*Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",6.0f };
 	Model wall{ wnd.Gfx(),"Models\\brick_wall\\brick_wall.obj",6.0f };
 	TestPlane tp{ wnd.Gfx(),6.0 };
