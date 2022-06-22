@@ -37,6 +37,8 @@ App::App(const std::string& commandLine)
 	//nano.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, -7.0f, 6.0f));
 	//bluePlane.SetPos( cam.GetPos() );
 	//redPlane.SetPos(cam.GetPos());
+	cube.SetPos({ 4.0f,0.0f,0.0f });
+	cube2.SetPos({ 0.0f,4.0f,0.0f });
 
 	// 투영 행렬
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, aspectRatio, nearZ, farZ));
@@ -63,9 +65,9 @@ void App::DoFrame()
 	//nano.Draw( wnd.Gfx() );
 	//gobber.Submit(fc);
 	light.Submit(fc);
+	cube.Submit(fc);
 	sponza.Submit( fc );
-	//cube.Submit(fc);
-	//cube2.Submit(fc);	
+	cube2.Submit(fc);	
 	//bluePlane.Draw(wnd.Gfx());
 	//redPlane.Draw(wnd.Gfx());
 	fc.Execute(wnd.Gfx());
@@ -296,6 +298,8 @@ void App::DoFrame()
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
+	cube.SpawnControlWindow(wnd.Gfx(), "Cube 1");
+	cube2.SpawnControlWindow(wnd.Gfx(), "Cube 2");
 	//gobber.ShowWindow(wnd.Gfx(), "gobber");
 	//wall.ShowWindow(wnd.Gfx(), "Wall");
 	//tp.SpawnControlWindow(wnd.Gfx());
