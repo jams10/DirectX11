@@ -126,7 +126,6 @@
     <ClCompile Include="Drawable\Mesh.cpp" />
     <ClCompile Include="Drawable\Model.cpp" />
     <ClCompile Include="Drawable\ModelException.cpp" />
-    <ClCompile Include="Drawable\ModelWindow.cpp" />
     <ClCompile Include="Drawable\Node.cpp" />
     <ClCompile Include="Drawable\SolidSphere.cpp" />
     <ClCompile Include="Drawable\TestCube.cpp" />
@@ -192,7 +191,6 @@
     <ClInclude Include="Drawable\Mesh.h" />
     <ClInclude Include="Drawable\Model.h" />
     <ClInclude Include="Drawable\ModelException.h" />
-    <ClInclude Include="Drawable\ModelWindow.h" />
     <ClInclude Include="Drawable\Node.h" />
     <ClInclude Include="Drawable\Primitive\Cube.h" />
     <ClInclude Include="Drawable\Primitive\IndexedTriangleList.h" />

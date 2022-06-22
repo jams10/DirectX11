@@ -206,9 +206,6 @@
     <ClCompile Include="Drawable\ModelException.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable\ModelWindow.cpp">
-      <Filter>Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Drawable\Node.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
@@ -441,9 +438,6 @@
       <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\ModelException.h">
-      <Filter>Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="Drawable\ModelWindow.h">
       <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Drawable\Node.h">
