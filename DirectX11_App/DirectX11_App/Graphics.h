@@ -11,6 +11,8 @@
 #include "../ErrorHandling/DxgiInfoManager.h"
 #include "ConditionalNoexcept.h"
 
+class DepthStencil;
+
 namespace Bind
 {
 	class Bindable;
@@ -18,7 +20,7 @@ namespace Bind
 
 class Graphics
 {
-	friend Bind::Bindable;
+	friend class GraphicsResource;
 #pragma region Exception
 public:
 	class Exception : public CustomException
@@ -62,12 +64,14 @@ public:
 	};
 #pragma endregion
 public:
-	Graphics(HWND hWnd);
+	Graphics(HWND hWnd, int width, int height);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics() = default; // ComPtr을 사용하게 되면서 Com 객체들이 알아서 Release 되므로 기본 소멸자로 바꿔줌.
 	void BeginFrame(float red, float green, float blue) noexcept;
 	void EndFrame();
+	void BindSwapBuffer() noexcept;
+	void BindSwapBuffer(const DepthStencil& ds) noexcept;
 	void DrawIndexed(UINT count) noxnd;
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
@@ -80,7 +84,11 @@ public:
 	void EnableImgui() noexcept;
 	void DisableImgui() noexcept;
 	bool IsImguiEnabled() const noexcept;
+	UINT GetWidth() const noexcept;
+	UINT GetHeight() const noexcept;
 private:
+	UINT width;
+	UINT height;
 	DirectX::XMMATRIX projection; // 투영 행렬
 	DirectX::XMMATRIX camera;     // 뷰(카메라) 행렬
 	bool imguiEnabled = true;     // imgui 사용 허용 여부.

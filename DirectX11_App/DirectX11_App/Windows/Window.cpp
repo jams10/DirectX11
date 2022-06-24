@@ -90,7 +90,7 @@ Window::Window(int width, int height, const wchar_t* name)
 	ImGui_ImplWin32_Init(hWnd);
 
 	// Graphics 객체 생성.
-	pGfx = std::make_unique<Graphics>(hWnd);
+	pGfx = std::make_unique<Graphics>(hWnd, width, height);
 
 	// 마우스 raw input을 얻기 위해 마우스를 타겟으로 하는 raw input device 등록.
 	RAWINPUTDEVICE rid;
@@ -486,12 +486,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		break;
 	}
 #pragma endregion
-	case WM_SIZE : // 윈도우 창 크기 재설정
-		if (pGfx)
-		{
-			pGfx->ResizeWindow();
-		}
-		break;
+	//case WM_SIZE : // 윈도우 창 크기 재설정
+	//	if (pGfx)
+	//	{
+	//		pGfx->ResizeWindow();
+	//	}
+	//	break;
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);

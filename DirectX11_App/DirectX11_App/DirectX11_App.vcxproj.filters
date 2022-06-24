@@ -61,9 +61,6 @@
     <ClCompile Include="Bindable\VertexShader.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Bindable\Bindable.cpp">
-      <Filter>Bindable</Filter>
-    </ClCompile>
     <ClCompile Include="Bindable\IndexBuffer.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
@@ -208,6 +205,15 @@
     </ClCompile>
     <ClCompile Include="Drawable\Node.cpp">
       <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\RenderTarget.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\DepthStencil.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable\GraphicResource.cpp">
+      <Filter>Bindable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -445,6 +451,15 @@
     </ClInclude>
     <ClInclude Include="Jobber\ModelProbe.h">
       <Filter>Jobber</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\RenderTarget.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\DepthStencil.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable\GraphicsResource.h">
+      <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

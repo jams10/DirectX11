@@ -4,7 +4,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "ChiliMath.h"
+#include "CustomMath.h"
 #include "ModelException.h"
 
 

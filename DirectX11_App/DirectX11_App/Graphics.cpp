@@ -6,20 +6,16 @@
 #include "../ErrorHandling/GraphicsThrowMacros.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "DepthStencil.h"
 
 #pragma comment(lib,"d3d11.lib")        // Direct3D 함수들이 정의된 라이브러리를 링크해줌.
 #pragma comment(lib, "D3DCompiler.lib") // 셰이더를 런타임에 컴파일 해줄 때 사용할 수 있지만, 우리는 셰이더를 불러오는 함수를 사용하기 위해 연결해줬음. 
 
-Graphics::Graphics(HWND hWnd)
+Graphics::Graphics(HWND hWnd, int width, int height)
 	:
-	hWnd(hWnd)
+	width(width),
+	height(height)
 {
-	RECT clientRect;
-	GetClientRect(hWnd, &clientRect);
-
-	UINT width = clientRect.right - clientRect.left;
-	UINT height = clientRect.bottom - clientRect.top;
-
 	// 스왑 체인의 설정 정보를 담은 구조체
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferDesc.Width = 0;  // backbuffer 너비 0이면, 런타임에 알아서 출력 윈도우에 크기에 따라 잡아줌.
@@ -66,32 +62,6 @@ Graphics::Graphics(HWND hWnd)
 	GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTarget));
 	
-	// 깊이 스텐실용 텍스쳐 생성.
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
-	D3D11_TEXTURE2D_DESC descDepth = {};
-	descDepth.Width = width;                // 텍스쳐 크기는 스왑 체인의 프레임 버퍼와 맞춰줌.
-	descDepth.Height = height;
-	descDepth.MipLevels = 1u;
-	descDepth.ArraySize = 1u;
-	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	descDepth.SampleDesc.Count = 1u;
-	descDepth.SampleDesc.Quality = 0u;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
-
-	// 깊이 스텐실 텍스쳐에 대한 뷰 생성.
-	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-	descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	descDSV.Texture2D.MipSlice = 0u;
-	GFX_THROW_INFO(pDevice->CreateDepthStencilView(
-		pDepthStencil.Get(), &descDSV, &pDSV
-	));
-
-	// 출력 병합기에 렌더 타겟과 깊이 스텐실 뷰 묶기.
-	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
-
 	// 뷰포트 설정.
 	D3D11_VIEWPORT vp;
 	vp.Width = width;
@@ -119,7 +89,6 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept
 
 	const float color[] = { red,green,blue,1.0f };
 	pContext->ClearRenderTargetView(pTarget.Get(), color);
-	pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0u);
 }
 
 // 프레임 최종 결과 단계를 의미하는 함수. 프레임 끝에 처리해 줄 것들을 담고 있음.(스왑 체인 Present)
@@ -151,6 +120,16 @@ void Graphics::EndFrame()
 	}
 }
 
+void Graphics::BindSwapBuffer() noexcept
+{
+	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), nullptr);
+}
+
+void Graphics::BindSwapBuffer(const DepthStencil& ds) noexcept
+{
+	pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), ds.pDepthStencilView.Get());
+}
+
 void Graphics::DrawIndexed(UINT count) noxnd
 {
 	GFX_THROW_INFO_ONLY(pContext->DrawIndexed(count, 0u, 0u));
@@ -176,74 +155,85 @@ DirectX::XMMATRIX Graphics::GetCamera() const noexcept
 	return camera;
 }
 
-void Graphics::ResizeWindow()
+//void Graphics::ResizeWindow()
+//{
+//	if (pSwap)
+//	{
+//		pContext->OMSetRenderTargets(0, 0, 0);
+//
+//		// 스왑 체인의 버퍼들에 대한 모든 참조를 해제함.
+//		pTarget.Reset(); // ComPtr은 nullptr 초기화 혹은 Reset을 통해 COM 객체를 release 할 수 있음.
+//		pDSV.Reset();
+//
+//		HRESULT hr;
+//
+//		// 존재 하는 버퍼 카운트와 포맷을 보존함.
+//		// 윈도우 핸들에 대한 클라이언트 영역 크기에 맞는 높이와 너비를 자동으로 선택해줌.
+//		GFX_THROW_INFO(pSwap->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0));
+//
+//		// 스왑 체인 내부의 버퍼를 얻어오고, 렌더 타겟 뷰를 만들어줌.
+//		ID3D11Texture2D* pBuffer;
+//		GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBuffer));
+//		GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBuffer, NULL, &pTarget));
+//		
+//		pBuffer->Release(); // COM 객체를 직접 Release.
+//
+//		RECT clientRect;
+//		GetClientRect(hWnd, &clientRect);
+//
+//		UINT width = clientRect.right - clientRect.left;
+//		UINT height = clientRect.bottom - clientRect.top;
+//
+//		// 깊이 버퍼도 만들어줌. 깊이 스텐실 state의 경우 변경 사항이 없고 파이프라인에서 해제 해줄 필요 없기 때문에,
+//		// 텍스쳐 자원과 깊이 스텐실 뷰만 새로 생성해서 다시 파이프라인에 묶어줌.
+//		// 깊이 스텐실용 텍스쳐 생성.
+//		Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
+//		D3D11_TEXTURE2D_DESC descDepth = {};
+//		descDepth.Width = width;                // 새로 수정된 윈도우 크기(
+//		descDepth.Height = height;
+//		descDepth.MipLevels = 1u;
+//		descDepth.ArraySize = 1u;
+//		descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+//		descDepth.SampleDesc.Count = 1u;
+//		descDepth.SampleDesc.Quality = 0u;
+//		descDepth.Usage = D3D11_USAGE_DEFAULT;
+//		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+//		GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
+//
+//		// 깊이 스텐실 텍스쳐에 대한 뷰 생성.
+//		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
+//		descDSV.Format = DXGI_FORMAT_D32_FLOAT;
+//		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+//		descDSV.Texture2D.MipSlice = 0u;
+//		GFX_THROW_INFO(pDevice->CreateDepthStencilView(
+//			pDepthStencil.Get(), &descDSV, &pDSV
+//		));
+//
+//		// 렌더 타겟 뷰와 깊이 버퍼를 출력 병합기에 묶어줌.
+//		pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
+//
+//		// 뷰포트 재설정.
+//		D3D11_VIEWPORT vp;
+//		vp.Width = width;
+//		vp.Height = height;
+//		vp.MinDepth = 0.0f;
+//		vp.MaxDepth = 1.0f;
+//		vp.TopLeftX = 0;
+//		vp.TopLeftY = 0;
+//		pContext->RSSetViewports(1u, &vp);
+//	}
+//}
+
+UINT Graphics::GetWidth() const noexcept
 {
-	if (pSwap)
-	{
-		pContext->OMSetRenderTargets(0, 0, 0);
-
-		// 스왑 체인의 버퍼들에 대한 모든 참조를 해제함.
-		pTarget.Reset(); // ComPtr은 nullptr 초기화 혹은 Reset을 통해 COM 객체를 release 할 수 있음.
-		pDSV.Reset();
-
-		HRESULT hr;
-
-		// 존재 하는 버퍼 카운트와 포맷을 보존함.
-		// 윈도우 핸들에 대한 클라이언트 영역 크기에 맞는 높이와 너비를 자동으로 선택해줌.
-		GFX_THROW_INFO(pSwap->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, 0));
-
-		// 스왑 체인 내부의 버퍼를 얻어오고, 렌더 타겟 뷰를 만들어줌.
-		ID3D11Texture2D* pBuffer;
-		GFX_THROW_INFO(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBuffer));
-		GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBuffer, NULL, &pTarget));
-		
-		pBuffer->Release(); // COM 객체를 직접 Release.
-
-		RECT clientRect;
-		GetClientRect(hWnd, &clientRect);
-
-		UINT width = clientRect.right - clientRect.left;
-		UINT height = clientRect.bottom - clientRect.top;
-
-		// 깊이 버퍼도 만들어줌. 깊이 스텐실 state의 경우 변경 사항이 없고 파이프라인에서 해제 해줄 필요 없기 때문에,
-		// 텍스쳐 자원과 깊이 스텐실 뷰만 새로 생성해서 다시 파이프라인에 묶어줌.
-		// 깊이 스텐실용 텍스쳐 생성.
-		Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
-		D3D11_TEXTURE2D_DESC descDepth = {};
-		descDepth.Width = width;                // 새로 수정된 윈도우 크기(
-		descDepth.Height = height;
-		descDepth.MipLevels = 1u;
-		descDepth.ArraySize = 1u;
-		descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-		descDepth.SampleDesc.Count = 1u;
-		descDepth.SampleDesc.Quality = 0u;
-		descDepth.Usage = D3D11_USAGE_DEFAULT;
-		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-		GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
-
-		// 깊이 스텐실 텍스쳐에 대한 뷰 생성.
-		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
-		descDSV.Format = DXGI_FORMAT_D32_FLOAT;
-		descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-		descDSV.Texture2D.MipSlice = 0u;
-		GFX_THROW_INFO(pDevice->CreateDepthStencilView(
-			pDepthStencil.Get(), &descDSV, &pDSV
-		));
-
-		// 렌더 타겟 뷰와 깊이 버퍼를 출력 병합기에 묶어줌.
-		pContext->OMSetRenderTargets(1u, pTarget.GetAddressOf(), pDSV.Get());
-
-		// 뷰포트 재설정.
-		D3D11_VIEWPORT vp;
-		vp.Width = width;
-		vp.Height = height;
-		vp.MinDepth = 0.0f;
-		vp.MaxDepth = 1.0f;
-		vp.TopLeftX = 0;
-		vp.TopLeftY = 0;
-		pContext->RSSetViewports(1u, &vp);
-	}
+	return width;
 }
+
+UINT Graphics::GetHeight() const noexcept
+{
+	return height;
+}
+
 
 void Graphics::EnableImgui() noexcept
 {
