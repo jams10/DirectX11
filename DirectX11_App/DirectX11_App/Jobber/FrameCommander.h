@@ -79,13 +79,6 @@ public:
 		}
 	}
 private:
-	static TemplateVertex::VertexLayout MakeFullscreenQuadLayout()
-	{
-		TemplateVertex::VertexLayout lay;
-		lay.Append(TemplateVertex::VertexLayout::Position2D);
-		return lay;
-	}
-private:
 	std::array<Pass, 3> passes;
 	DepthStencil ds;
 	RenderTarget rt;
