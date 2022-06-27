@@ -543,7 +543,7 @@
     <FxCompile Include="Shader\Fullscreen_VS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\Funk_PS.hlsl">
+    <FxCompile Include="Shader\Blur_PS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

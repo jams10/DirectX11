@@ -146,7 +146,7 @@ Material::Material( Graphics& gfx,const aiMaterial& material,const std::filesyst
 			Step draw( 2 );
 
 			// these can be pass-constant (tricky due to layout issues)
-			auto pvs = VertexShader::Resolve( gfx,"Shader\\Offset_VS.cso" );
+			auto pvs = VertexShader::Resolve( gfx,"Shader\\Solid_VS.cso" );
 			auto pvsbc = pvs->GetBytecode();
 			draw.AddBindable( std::move( pvs ) );
 
