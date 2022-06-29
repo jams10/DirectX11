@@ -1,15 +1,18 @@
 #pragma once
 #include "BindableCommon.h"
 #include "CustomMath.h"
+#include "imgui.h"
 
 class BlurPack
 {
-public:
+public:	
 	BlurPack(Graphics& gfx, int radius = 7, float sigma = 2.6f)
 		:
 		shader(gfx, "Shader\\Blur_PS.cso"),
 		pcb(gfx, 0u),
-		ccb(gfx, 1u)
+		ccb(gfx, 1u),
+		radius(radius),
+		sigma(sigma)
 	{
 		SetKernel(gfx, radius, sigma);
 	}
@@ -27,11 +30,22 @@ public:
 	{
 		ccb.Update(gfx, { FALSE });
 	}
+	void ShowWindow(Graphics& gfx)
+	{
+		ImGui::Begin("Blur");
+		bool radChange = ImGui::SliderInt("Radius", &radius, 0, 15);
+		bool sigChange = ImGui::SliderFloat("Sigma", &sigma, 0.1f, 10.0f);
+		if (radChange || sigChange)
+		{
+			SetKernel(gfx, radius, sigma);
+		}
+		ImGui::End();
+	}
 	// nTaps should be 6sigma - 1
 	// for more accurate coefs, need to integrate, but meh :/
 	void SetKernel(Graphics& gfx, int radius, float sigma) noxnd
 	{
-		assert(radius <= 7);
+		assert(radius <= 15);
 		Kernel k;
 		k.nTaps = radius * 2 + 1;
 		float sum = 0.0f;
@@ -49,11 +63,13 @@ public:
 		pcb.Update(gfx, k);
 	}
 private:
+	int radius;
+	float sigma;
 	struct Kernel
 	{
 		int nTaps; // 커널의 너비.
 		float padding[3];
-		DirectX::XMFLOAT4 coefficients[15]; // 정렬로 인해 float4를 사용함.
+		DirectX::XMFLOAT4 coefficients[31]; // 정렬로 인해 float4를 사용함.
 	};
 	struct Control
 	{
