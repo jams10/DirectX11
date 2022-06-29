@@ -37,6 +37,7 @@ App::App(const std::string& commandLine)
 	//nano.SetRootTransform(DirectX::XMMatrixTranslation(0.0f, -7.0f, 6.0f));
 	//bluePlane.SetPos( cam.GetPos() );
 	//redPlane.SetPos(cam.GetPos());
+	TestDynamicConstant();
 	cube.SetPos({ 4.0f,0.0f,0.0f });
 	cube2.SetPos({ 0.0f,4.0f,0.0f });
 

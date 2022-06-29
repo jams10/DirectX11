@@ -461,6 +461,9 @@
     <ClInclude Include="Bindable\GraphicsResource.h">
       <Filter>Bindable</Filter>
     </ClInclude>
+    <ClInclude Include="Jobber\BlurPack.h">
+      <Filter>Jobber</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ErrorHandling\DXGetErrorDescription.inl">
@@ -544,6 +547,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\Blur_PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\BlurOutline_PS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

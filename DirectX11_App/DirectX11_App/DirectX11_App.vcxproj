@@ -222,6 +222,7 @@
     <ClInclude Include="Imgui\imstb_truetype.h" />
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Jobber\BlurPack.h" />
     <ClInclude Include="Jobber\FrameCommander.h" />
     <ClInclude Include="Jobber\Job.h" />
     <ClInclude Include="Jobber\ModelProbe.h" />
@@ -255,6 +256,12 @@
     <None Include="Shader\Transform.hlsli" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shader\BlurOutline_PS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shader\ColorIndexPS.hlsl">
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Shader\%(Filename).cso</ObjectFileOutput>
